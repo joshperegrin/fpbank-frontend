@@ -1,0 +1,7 @@
+{
+  "name": "fpbank",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
