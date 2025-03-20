@@ -1,9 +1,15 @@
 /* For information on how to create your own theme, please see:
 http://ionicframework.com/docs/theming/ */
 
+/* Full Port Bank Custom Fonts */ 
+@import url("./fpbank-fonts.css");
+
+
+:root {
+
+	--ion-font-family: 'PublicSans';
 
 /* Full Port Bank Custom Color Palette */
-:root {
 	--ion-color-primary: #292966;
 	--ion-color-primary-rgb: 41,41,102;
 	--ion-color-primary-contrast: #ffffff;
