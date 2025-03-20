@@ -59,6 +59,13 @@ http://ionicframework.com/docs/theming/ */
 	--ion-color-light-shade: #e0e0e0;
 	--ion-color-light-tint: #ffffff;
 
+	--ion-color-lightmedium: #afafaf;
+	--ion-color-lightmedium-rgb: 175,175,175;
+	--ion-color-lightmedium-contrast: #000000;
+	--ion-color-lightmedium-contrast-rgb: 0,0,0;
+	--ion-color-lightmedium-shade: #9a9a9a;
+	--ion-color-lightmedium-tint: #b7b7b7;
+
 	--ion-color-medium: #5f5f5f;
 	--ion-color-medium-rgb: 95,95,95;
 	--ion-color-medium-contrast: #ffffff;
@@ -73,6 +80,15 @@ http://ionicframework.com/docs/theming/ */
 	--ion-color-dark-shade: #292929;
 	--ion-color-dark-tint: #444444;
 
+}
+
+.ion-color-lightmedium {
+	--ion-color-base: var(--ion-color-lightmedium);
+	--ion-color-base-rgb: var(--ion-color-lightmedium-rgb);
+	--ion-color-contrast: var(--ion-color-lightmedium-contrast);
+	--ion-color-contrast-rgb: var(--ion-color-lightmedium-contrast-rgb);
+	--ion-color-shade: var(--ion-color-lightmedium-shade);
+	--ion-color-tint: var(--ion-color-lightmedium-tint);
 }
 
 ion-input {
