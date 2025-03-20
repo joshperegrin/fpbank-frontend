@@ -75,3 +75,8 @@ http://ionicframework.com/docs/theming/ */
 
 }
 
+ion-input {
+  --border-radius: 10px !important;
+  --highlight-color-focused: var(--ion-color-tertiary) !important;
+}
+
