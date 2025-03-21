@@ -97,7 +97,7 @@ ion-input {
 }
 
 
-ion-toggle.custom {
+ion-toggle {
   --track-background: var(--ion-color-lightmedium);
   --track-background-checked: var(--ion-color-secondary);
 
@@ -113,7 +113,7 @@ ion-toggle.custom {
   --handle-box-shadow: none;
 }
 
-ion-toggle.custom::part(track)  {
+ion-toggle::part(track)  {
   height: 24px;
   width: 40px;
 
