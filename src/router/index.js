@@ -29,6 +29,10 @@ const routes = [
       {
         path: 'tab4',
         component: () => import('@/views/Tab4Page.vue')
+      },
+      {
+        path: 'componentslibrarysample',
+        component: () => import('@/views/ComponentLibrarySample.vue')
       }
     ]
   }
