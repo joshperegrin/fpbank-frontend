@@ -16,8 +16,11 @@
   align-items: center;
   justify-content: space-between;
 
-  width: fit-content;
-  height: fit-content;
+  min-width: min-content;
+  min-height: min-content;
+
+  max-width: min-content;
+  max-height: min-content;
 
   padding: 10px;
 }
