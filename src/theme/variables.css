@@ -93,13 +93,13 @@ http://ionicframework.com/docs/theming/ */
 
 ion-input {
   --border-radius: 10px !important;
-  --highlight-color-focused: var(--ion-color-tertiary) !important;
+  --highlight-color-focused: var(--ion-color-secondary) !important;
 }
 
 
 ion-toggle.custom {
   --track-background: var(--ion-color-lightmedium);
-  --track-background-checked: var(--ion-color-tertiary);
+  --track-background-checked: var(--ion-color-secondary);
 
   --handle-background: #ffffff;
   --handle-background-checked: #ffffff;
