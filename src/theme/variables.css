@@ -127,3 +127,7 @@ ion-button {
 	font-weight: 700;
 }
 
+ion-checkbox {
+	--checkbox-background-checked: var(--ion-color-secondary);
+	--border-color-checked: var(--ion-color-secondary);
+}
