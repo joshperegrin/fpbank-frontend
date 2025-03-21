@@ -120,3 +120,10 @@ ion-toggle.custom::part(track)  {
   /* Required for iOS handle to overflow the height of the track */
   overflow: visible;
 }
+
+ion-button {
+	--box-shadow: none;
+	text-transform: none;
+	font-weight: 700;
+}
+
