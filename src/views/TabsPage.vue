@@ -39,6 +39,11 @@ ion-label {
   font-size: x-small;
   margin-bottom: 0px ;
 }
+ion-tab-button {
+  --color: var(--ion-color-primary);
+  --color-selected: var(--ion-color-secondary);
+  --ripple-color: var(--ion-color-secondary);
+}
 </style>
 
 <script setup>
