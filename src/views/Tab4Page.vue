@@ -11,7 +11,15 @@
       <span class="subtext">{{user_email}}</span>
       <span class="subtext">{{user_mobile}}</span>
     </ion-header>
-    <ion-content :fullscreen="true">
+    <ion-content :fullscreen="true" class="ion-padding">
+      <div class="content-body">
+        <CustomButton01 :icon_name="personCircleOutline"> Personal Info </CustomButton01>
+        <CustomButton01 :icon_name="walletOutline"> Manage Accounts </CustomButton01>
+        <CustomButton01 :icon_name="settingsOutline"> Settings </CustomButton01>
+        <CustomButton01 :icon_name="searchCircleOutline"> Find Us </CustomButton01>
+        <CustomButton01 :icon_name="helpCircleOutline"> Contact Us </CustomButton01>
+        <CustomButton01 :icon_name="logOutOutline"> Log out </CustomButton01>
+      </div>
     </ion-content>
   </ion-page>
 </template>
@@ -49,11 +57,19 @@ ion-avatar {
   height: 110px;
   width: 110px;
 }
+.content-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch; 
+  gap: 15px;
+}
 </style>
 
 <script>
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonAvatar } from '@ionic/vue';
-
+import CustomButton01 from '../components/CustomButton01.vue'
+import { personCircleOutline, walletOutline, settingsOutline, searchCircleOutline, helpCircleOutline, logOutOutline } from 'ionicons/icons';
 export default {
   components: {
     IonPage,
@@ -62,6 +78,7 @@ export default {
     IonTitle,
     IonContent,
     IonAvatar,
+    CustomButton01,
   },
   data(){
     return {
@@ -69,6 +86,12 @@ export default {
       user_name: "Washing Machine",
       user_email: "washing.machine@gmail.com",
       user_mobile: "+63-912-345-6789",
+      personCircleOutline,
+      walletOutline,
+      settingsOutline,
+      searchCircleOutline,
+      helpCircleOutline,
+      logOutOutline,
     }
   },
 }
