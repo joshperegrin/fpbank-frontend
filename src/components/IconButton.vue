@@ -35,9 +35,9 @@
 </style>
 
 <script>
-import { IonIcon, IonRippleEffect } from '@ionic/vue'
+import { IonIcon, IonRippleEffect, IonLabel } from '@ionic/vue'
 export default {
-  components: { IonIcon, IonRippleEffect },
+  components: { IonIcon, IonRippleEffect, IonLabel },
   props: {
     icon_src: {
       type: String,
