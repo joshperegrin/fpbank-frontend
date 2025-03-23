@@ -12,6 +12,7 @@
         </ion-toolbar>
       </ion-header>
 
+        <CustomButton01> Custom Button 01 </CustomButton01>
         <IconButton
          shape="circle"
          text_size="x-small"
@@ -78,4 +79,5 @@
 <script setup>
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton } from '@ionic/vue';
 import IconButton from '../components/IconButton.vue';
+import CustomButton01 from '../components/CustomButton01.vue'
 </script>
