@@ -1,7 +1,9 @@
 <template>
   <ion-page>
     <ion-header>
-      <span class="title">My Account</span>
+      <ion-toolbar color="primary">
+        <ion-title>My Account</ion-title>
+      </ion-toolbar>
       <ion-avatar>
         <img :src="avatar_src"/>
       </ion-avatar>
@@ -27,13 +29,9 @@ ion-header {
   align-items: center;
   flex-wrap: nowrap;
 
-  padding-top: 45px;
+  padding-top: 30px;
   padding-bottom: 15px;
-}
-.title {
-  font-size: x-large;
-  font-weight: 700;
-  color: var(--ion-color-primary-contrast)
+  border-radius: 0px 0px 16px 16px;
 }
 .username {
   font-size: medium;
@@ -44,13 +42,12 @@ ion-header {
 .subtext {
   font-size: xx-small;
   font-weight: 400;
-  color: var(--ion-color-primary-contrast)
+  color: var(--ion-color-primary-contrast);
 }
 ion-avatar {
   box-shadow: 1px 1px 25px -5px rgba(0,0,0,0.46);
   height: 110px;
   width: 110px;
-  margin-top: 15px;
 }
 </style>
 
