@@ -131,3 +131,16 @@ ion-checkbox {
 	--checkbox-background-checked: var(--ion-color-secondary);
 	--border-color-checked: var(--ion-color-secondary);
 }
+
+ion-title {
+  &.md {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    height: 0;
+    text-align: center;
+	  font-size: x-large;
+	  font-weight: 700;
+	  color: var(--ion-color-primary-contrast);
+  }
+}
