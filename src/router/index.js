@@ -33,10 +33,10 @@ const routes = [
       {
         path: 'componentslibrarysample',
         component: () => import('@/views/ComponentLibrarySample.vue')
-      }
+      },
     ]
   }
-]
+];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
