@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-header>
-      <ion-toolbar color="primary"> <!--Get rid of the tab shadow later-->
+      <ion-toolbar color="primary">
         <ion-title>Logo FP Bank</ion-title>
       </ion-toolbar>
     </ion-header>
@@ -14,8 +14,7 @@
         </div>
       </ion-text>
 
-      <!--This shit doesn't even scroll. Fix it later-->
-      <div class="head content-center"> <!--This is a div because it will be used as a sticky tab later-->
+      <div class="head content-center">
         <div class="savings-scroll">
           <ion-card v-for="(account, index) in savingsAccounts"
                     :key="index"
@@ -39,16 +38,16 @@
             </ion-card-content>
           </ion-card>
 
-          <ion-card class="accounts-card create-account-card" color="light" @click="createAccount">
+          <ion-card class="accounts-card create-account-card" @click="createAccount">
             <ion-card-content class="create-account-content">
-              <ion-icon size="large" :icon="addCircle" class="add-icon"></ion-icon>
+              <ion-icon :icon="addCircle" class="add-icon"></ion-icon>
               <ion-text>Create account</ion-text>
             </ion-card-content>
           </ion-card>
         </div>
       </div>
 
-      <div class="body content-center"> <!--NOTE: DOES NOT ADAPT TO DARK MODE!!!!-->
+      <div class="body content-center">
         <ion-card class="body-widgets">
           <ion-card-header>
             <ion-card-title>Favorite Accounts</ion-card-title>
@@ -206,7 +205,7 @@ export default {
         name: 'Juan Dela Cruz',
         expiry: '12/25',
         cvv: '123',
-        logo: 'src/assets/svgs/logo.svg', // FPBAnk logo goes hereee
+        logo: 'src/assets/svgs/logo.svg', // Example logo path
       },
       services: [
         { name: 'Service 1', avatar: 'src/assets/imgs/angry.jpg' },
@@ -224,11 +223,17 @@ export default {
   },
   methods: {
     formatCardNumber(number) {
-      //Format card number as "XXXX XXXX XXXX XXXX"
+      // Format card number as "XXXX XXXX XXXX XXXX"
       return number.replace(/(\d{4})(?=\d)/g, '$1 ');
     },
     createAccount() {
+      // Placeholder for create account logic
       alert('Create account clicked!');
+      // You could push a new account to savingsAccounts here, e.g.:
+      // this.savingsAccounts.push({ name: 'New Account', number: '002376543214', balance: '0.00', currency: 'PHP', bankIcon: 'src/assets/svgs/bank.svg' });
+    },
+    navigateAccount(){
+      alert('Account clicked!');
     },
     goToAccount(accountName) {
       alert(`I have gone to ${accountName}`);
@@ -238,7 +243,6 @@ export default {
 </script>
 
 <style scoped>
-/*NOTE TO SELF: Please ffs make this a seperate CSS File. Else I will vomit*/
 .content-center {
   display: flex;
   flex-direction: column;
@@ -294,6 +298,7 @@ ion-card.body-widgets {
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #f0f0f0; /* Light gray background */
   cursor: pointer;
 }
 
@@ -324,7 +329,7 @@ ion-card.body-widgets {
 .credit-card-widget {
   margin: 20px;
   border-radius: 15px;
-  background: linear-gradient(135deg, #292966, #5C5C99); /* Example gradient */
+  background: linear-gradient(135deg, #1e3c72, #2a5298); /* Example gradient */
   color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
