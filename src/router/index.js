@@ -1,11 +1,40 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import TabsPage from '../views/TabsPage.vue'
+import StartupPage from '../views/StartupPage.vue';
 
 const routes = [
   {
     path: '/',
-    redirect: '/tabs/tab1'
+    redirect: '/startup'
   },
+  {
+    path: '/startup',
+    component: StartupPage
+  },
+  {
+    path: '/login',
+    component: () => import('@/views/LoginPage.vue')
+  },
+  {
+    path: '/otp',
+    component: () => import('@/views/EnterOTPPage.vue')
+  }, 
+  {
+   path: '/loginBio',
+   component: () => import('@/views/LoginBiometrics.vue')
+  }, 
+  {
+  path: '/credentials',
+  component: () => import('@/views/EnterCredentials.vue')
+ }, 
+ {
+ path: '/openAccount',
+ component: () => import('@/views/OpenAccount.vue')
+ },
+ {
+  path: '/imAFilipino',
+  component: () => import('@/views/imAFilipino.vue')
+ },
   {
     path: '/tabs/',
     component: TabsPage,
@@ -36,7 +65,8 @@ const routes = [
       }
     ]
   }
-]
+];
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

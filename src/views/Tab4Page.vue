@@ -18,7 +18,7 @@
         <CustomButton01 :icon_name="settingsOutline"> Settings </CustomButton01>
         <CustomButton01 :icon_name="searchCircleOutline"> Find Us </CustomButton01>
         <CustomButton01 :icon_name="helpCircleOutline"> Contact Us </CustomButton01>
-        <CustomButton01 :icon_name="logOutOutline"> Log out </CustomButton01>
+        <CustomButton01 :icon_name="logOutOutline" @click="logout"> Log out </CustomButton01>
       </div>
     </ion-content>
   </ion-page>
@@ -70,6 +70,8 @@ ion-avatar {
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonAvatar } from '@ionic/vue';
 import CustomButton01 from '../components/CustomButton01.vue'
 import { personCircleOutline, walletOutline, settingsOutline, searchCircleOutline, helpCircleOutline, logOutOutline } from 'ionicons/icons';
+import { useRouter } from "vue-router";
+
 export default {
   components: {
     IonPage,
@@ -94,5 +96,10 @@ export default {
       logOutOutline,
     }
   },
+  methods:{
+    logout(){
+      this.$router.push("/loginBio"); 
+    }
+  }
 }
 </script>
