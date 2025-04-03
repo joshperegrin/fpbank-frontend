@@ -7,7 +7,15 @@
       <span class="greetings"> {{first_name}}, </span>
       <span class="greetings"> What would you like to do? </span> 
     </ion-header>
-    <ion-content :fullscreen="true">
+    <ion-content :fullscreen="true" class="ion-padding">
+      <div class="content-body">
+        <ServicesPageButton :icon_name="receiptOutline"> Pay Bills </ServicesPageButton>
+        <ServicesPageButton icon_name="src/assets/svgs/bank.svg"> Transfer to Other Banks </ServicesPageButton>
+        <ServicesPageButton :icon_name="walletOutline"> Topup eWallet </ServicesPageButton>
+        <ServicesPageButton :icon_name="sendOutline"> Transfer to Other FullPort </ServicesPageButton>
+        <ServicesPageButton :icon_name="cashOutline"> Cardless Withdrawal </ServicesPageButton>
+        <ServicesPageButton :icon_name="qrCodeOutline"> Generate QR Code </ServicesPageButton>
+      </div>
     </ion-content>
   </ion-page>
 </template>
@@ -42,22 +50,39 @@ ion-header span.greetings:first-of-type {
   font-weight: 600;
   color: var(--ion-color-primary-contrast);
 }
+.content-body {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 15px;
+}
+
 </style>
 
 <script>
-import { IonPage, IonHeader, IonContent, IonAvatar } from '@ionic/vue';
-
+import { IonLabel, IonIcon, IonPage, IonHeader, IonContent, IonAvatar } from '@ionic/vue';
+import CustomButton01 from '../components/CustomButton01.vue';
+import ServicesPageButton from '../components/ServicesPageButton.vue'
+import { cashOutline, walletOutline, sendOutline, receiptOutline, qrCodeOutline } from 'ionicons/icons';
 export default {
   components: {
     IonPage,
     IonHeader,
     IonContent,
-    IonAvatar
+    IonAvatar,
+    CustomButton01,
+    IonIcon,
+    ServicesPageButton,
+    IonLabel
   },
   data(){
     return {
       avatar_src: "src/assets/imgs/angry.jpg",
       first_name: "Washing",
+      receiptOutline,
+      qrCodeOutline,
+      sendOutline,
+      walletOutline,
+      cashOutline
     }
   },
 }
