@@ -1,38 +1,32 @@
 <template>
-  <div class="icon-button">
-    <div class="iconContainer ion-activatable">
-      <ion-icon :src="receiptOutline" size="large"/>
-      <ion-ripple-effect></ion-ripple-effect>
-    </div>
-    <ion-label class="ion-text-center" style="font-size: small"> <slot> Button </slot> </ion-label>
+  <div class="servicesPageButton ion-activatable">
+    <ion-icon :icon="icon_name"/>
+    <ion-label> <slot> Button </slot> </ion-label>
+    <ion-ripple-effect></ion-ripple-effect>
   </div>
 </template>
 
-<style>
-.iconContainer {
-  width: 50px;
-  height: 50px;
-  position: relative;
-
-  box-shadow: 1px 1px 25px -5px rgba(0,0,0,0.46);
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.iconContainer > ion-icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.icon-button {
+<style scoped>
+.servicesPageButton {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin: 10px;
-  gap: 5px;
-  overflow: visible;
+  box-shadow: 1px 1px 25px -5px rgba(0,0,0,0.3);
+  border-radius: 10px;
+  padding: 15px 15px;
+  gap: 8px;
+  overflow: hidden;
+  position: relative;
+}
+ion-icon {
+  background-color: var(--ion-color-secondary);
+  color: var(--ion-color-secondary-contrast);
+  border-radius: 999px;
+  padding: .4em;
+  font-size: large;
+}
+ion-label {
+  font-size: medium;
+  font-weight: bold;
 }
 </style>
 
