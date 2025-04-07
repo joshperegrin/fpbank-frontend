@@ -35,6 +35,10 @@ const routes = [
         component: () => import('@/views/ComponentLibrarySample.vue')
       },
     ]
+  },
+  {
+    path: '/portfolio',
+    component: () => import('@/views/PortfolioPage.vue') // Add route for PortfolioPage
   }
 ];
 
