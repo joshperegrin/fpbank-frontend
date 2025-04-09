@@ -1,12 +1,11 @@
 <template>
   <ion-page>
     <ion-header>
-      <ion-buttons slot="start" @click="goBack" class="back-button">
-        <ion-icon :icon="returnDownBackOutline" size="large"></ion-icon>
-        Back
-      </ion-buttons>
       <ion-toolbar color="primary">
-        <ion-title>My Portfolio</ion-title>
+        <ion-buttons slot="start" @click="goBack">
+          <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title class="ion-text-center">My Portfolio</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content>
@@ -108,6 +107,7 @@
       IonTitle,
       IonContent,
       IonButtons,
+      IonBackButton
     },
     data() {
       return {
@@ -124,18 +124,13 @@
 </script>
 
 <style scoped>
-  .back-button {
-    padding-top: 20px;
-    padding-left: 15px;
-    gap: 5px;
-    color: white;
-  }
   ion-header {
     background-color: var(--ion-color-primary);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     padding-bottom: 15px;
+    padding-top: 15px;
     border-radius: 0px 0px 16px 16px;
     height: max-content;
   }
