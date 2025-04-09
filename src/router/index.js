@@ -33,10 +33,14 @@ const routes = [
       {
         path: 'componentslibrarysample',
         component: () => import('@/views/ComponentLibrarySample.vue')
-      }
+      },
     ]
+  },
+  {
+    path: '/portfolio',
+    component: () => import('@/views/PortfolioPage.vue') // Add route for PortfolioPage
   }
-]
+];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
