@@ -10,7 +10,13 @@
     <ion-content :fullscreen="true" class="ion-padding">
       <div class="content-body">
         <ServicesPageButton :icon_name="receiptOutline"> Pay Bills </ServicesPageButton>
-        <ServicesPageButton icon_name="src/assets/svgs/bank.svg"> Transfer to Other Banks </ServicesPageButton>
+
+        <ServicesPageButton
+          icon_name="src/assets/svgs/bank.svg"
+          @click="this.$router.push('/tabs/tab2/transfer/external')">
+          Transfer to Other Banks
+        </ServicesPageButton>
+
         <ServicesPageButton :icon_name="walletOutline"> Topup eWallet </ServicesPageButton>
         <ServicesPageButton :icon_name="sendOutline"> Transfer to Other FullPort </ServicesPageButton>
         <ServicesPageButton :icon_name="cashOutline"> Cardless Withdrawal </ServicesPageButton>
@@ -63,6 +69,7 @@ import { IonLabel, IonIcon, IonPage, IonHeader, IonContent, IonAvatar } from '@i
 import CustomButton01 from '../components/CustomButton01.vue';
 import ServicesPageButton from '../components/ServicesPageButton.vue'
 import { cashOutline, walletOutline, sendOutline, receiptOutline, qrCodeOutline } from 'ionicons/icons';
+import { useRouter } from 'vue-router'
 export default {
   components: {
     IonPage,
