@@ -17,7 +17,7 @@ const routes = [
   },
   {
     path: '/otp',
-    component: () => import('@/views/enterOTPpage.vue')
+    component: () => import('@/views/EnterOTPPage.vue')
   }, 
   {
    path: '/loginBio',

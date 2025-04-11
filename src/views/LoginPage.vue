@@ -1,106 +1,104 @@
 <template>
-    <ion-page>
-          <ion-toolbar>
-            <ion-buttons slot="start">
-              <ion-back-button text="" default-href="/startup"></ion-back-button>
-            </ion-buttons>
-          </ion-toolbar>
-      <ion-content :fullscreen="true" class="background">
-        <div class="page content">
-          <div class="logo-title-container">
-            <img :src="logo" alt="Full Port Bank Logo" class="logo"/>
-            <div class="title-container">
-              <span class="title-line">Full Port</span>
-              <span class="title-line">Bank</span>
-            </div>
+  <ion-page>
+    <ion-content :fullscreen="true" class="background no-scroll">
+      <div class="container">
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-back-button text="" default-href="/startup"></ion-back-button>
+          </ion-buttons>
+        </ion-toolbar>
+        <div class="logo-title-container">
+          <img :src="logo" alt="Full Port Bank Logo" class="logo" />
+          <div class="title-container">
+            <span class="title-line">Full Port</span>
+            <span class="title-line">Bank</span>
           </div>
-            <div class="inputarea">
-                <ion-card-header class="aligned-content">
-                    <ion-card-title>Enter your account number</ion-card-title>
-                </ion-card-header>
-                <ion-input
-                    fill="outline"
-                    placeholder="xxxx xxxx xxxx xxxx"
-                ></ion-input>
-                <ion-card-subtitle @click="goToCredentials">Forgot my account number</ion-card-subtitle>
-            </div>
-            <div class="button-container">
-              <ion-button expand="block" shape="round" size="large" @click="goToOTP">Next</ion-button>
-            </div>
         </div>
-      </ion-content>
-    </ion-page>
-  </template>
-  
-  <script setup>
-  import {arrowBack } from 'ionicons/icons';
-  import logo from "@/assets/imgs/logo.png";
+        <div class="inputarea">
+          <ion-card-header class="aligned-content">
+            <ion-card-title>Enter your account number</ion-card-title>
+          </ion-card-header>
+          <ion-input
+            fill="outline"
+            placeholder="xxxx xxxx xxxx xxxx"
+          ></ion-input>
+          <ion-card-subtitle @click="goToCredentials">Forgot my account number</ion-card-subtitle>
+        </div>
+        <div class="button-container">
+          <ion-button expand="block" shape="round" size="large" @click="goToOTP">Next</ion-button>
+        </div>
+      </div>
+    </ion-content>
+  </ion-page>
+</template>
 
-  import {
-    IonPage,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonCard,
-    IonCardHeader,
-    IonCardTitle,
-    IonCardContent,
-    IonItem,
-    IonLabel,
-    IonInput,
-    IonButton,
-    IonButtons,
-    IonBackButton,
-  } from "@ionic/vue";
+<script setup>
+import { arrowBack } from "ionicons/icons";
+import logo from "@/assets/imgs/logo.png";
 
-  const icons = {
-    arrowBack
-  }
-  import { useRouter } from "vue-router";
-  const router = useRouter(); 
-  
-  const goToOTP = () => {
-  router.push("/otp"); //last
-  }
+import {
+  IonPage,
+  IonContent,
+  IonToolbar,
+  IonButtons,
+  IonBackButton,
+  IonCardHeader,
+  IonCardTitle,
+  IonInput,
+  IonButton,
+  IonCardSubtitle,
+} from "@ionic/vue";
 
-  const goToCredentials = () => {
-    router.push("/credentials");
-  };
+const icons = { arrowBack };
+import { useRouter } from "vue-router";
+const router = useRouter();
+
+const goToOTP = () => {
+  router.push("/otp");
+};
+
+const goToCredentials = () => {
+  router.push("/credentials");
+};
 </script>
-  
-  <style scoped>
-  .background {
-    --background: linear-gradient(to top, #5C55C9, white 60%);
-    height: 100%;
-    width: 100%;
-  }
 
-  .page-content {
+<style scoped>
+.background {
+  --background: linear-gradient(to top, #5c55c9, white 60%);
+  display: flex; /*new*/
+  flex-direction: column; /*new*/
+  height: 100vh;/*new*/
+  overflow: hidden; /*new*/
+}
+
+.no-scroll {
+  overflow: hidden !important;/*new*/
+}
+
+.container {/*new*/
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  height: 100%; 
-  padding: 20px;
-  }
+  height: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+}/*new*/
 
-  ion-toolbar {
-    --background: transparent;
-    color: #292966;
-  }
+ion-toolbar {
+  --background: transparent;
+  color: #292966;
+}
 
-  .logo-title-container {
+.logo-title-container {
   display: flex;
   align-items: center;
+  gap: 10px;/* remove WIDTH, MARGIN-TOP*/
   justify-content: center;
-  gap: 5px;
-  width: 100%; 
-  margin-top: -20px;
- }
+}
 
 .logo {
-  width: 60px; 
+  width: 15%;
   height: auto;
 }
 
@@ -112,66 +110,59 @@
 
 .title-line {
   font-size: 1.5rem;
-  font-weight:800;
+  font-weight: 800;
   color: #292966;
   font-style: italic;
   line-height: 1;
 }
 
-  .inputarea{
-    margin: 0 16px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height: 50vh; 
-    padding: 4%;
-    margin-top: -60px;
-  }
+.inputarea {
+  width: 100%;/*new*/
+  text-align: center;
+  padding: 18px;
+  flex-grow: 1;  /*new*/
+  margin-top: 35px;
+}/* remove margin, display, flex-direction justify content, hieght, */
 
-  ion-input {
-    --placeholder-color: #292966; 
-    text-align: left;
-    font-size: large;
-    color: #292966;
-  }
-
-
-  .aligned-content {
-    padding: 0;
-    width: 100%;
-  }
-
-  ion-card-title{
-    color: #292966;
-    font-size: 2rem;
-    font-weight: bold;
-    text-align: left; 
-    margin-bottom: 1rem;
-  }
-
-  ion-text-area{
-    width: 80%;
-    margin-top: 8px;
-  }
-
-  ion-card-subtitle {
-    color: #292966;
-    text-align: left;
-    margin-top: 0.5rem;
-  }
-
-  ion-button {
-  width: 90%;
+ion-input {
+  --placeholder-color: #292966;
+  text-align: left;
   font-size: large;
-  margin-top: 70%;
-  padding: 20px;
-  }
+  color: #292966;
+}
 
-  .button-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
+.aligned-content {
+  padding: 0;
+  width: 100%;
+}
+
+ion-card-title {
+  color: #292966;
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
+ion-card-subtitle {
+  color: #292966;
+  text-align: left;
+  margin-top: 0.5rem;
+  cursor: pointer;
+}
+
+.button-container {
+  width: 100%; /*new*/
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  margin-bottom: 10%;/*new*/
+}
+
+ion-button {
+    width: 90%;
+    font-size: large;
+    padding: 10px;
   }
-  </style>
-  
+</style>
+

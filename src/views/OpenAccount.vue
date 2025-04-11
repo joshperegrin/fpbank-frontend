@@ -1,12 +1,12 @@
 <template>
     <ion-page>
+      <ion-content :fullscreen="true" class="background no-scroll">
+        <div class="container">
           <ion-toolbar>
             <ion-buttons slot="start">
               <ion-back-button text="" default-href="/startup"></ion-back-button>
             </ion-buttons>
           </ion-toolbar>
-      <ion-content :fullscreen="true" class="background">
-        <div class="page content">
           <div class="logo-title-container">
             <img :src="logo" alt="Full Port Bank Logo" class="logo"/>
             <div class="title-container">
@@ -14,11 +14,11 @@
               <span class="title-line">Bank</span>
             </div>
           </div>
-            <ion-card-title class="centered-title">Are you a <br>citizen of the Philippines?</ion-card-title>
-            <div class="button-container">
-              <ion-button expand="block" shape="round" size="large" @click="filipino">Yes</ion-button>
-              <ion-button class="white-button" expand="block" shape="round" size="large" fill="outline" @click="presentPopover">No</ion-button>
-            </div>
+          <ion-card-title class="centered-title">Are you a <br>citizen of the Philippines?</ion-card-title>
+          <div class="button-container">
+            <ion-button expand="block" shape="round" size="large" @click="filipino">Yes</ion-button>
+            <ion-button class="white-button" expand="block" shape="round" size="large" fill="outline" @click="presentPopover">No</ion-button>
+          </div>
         </div>
         <ion-popover :is-open="isPopoverOpen" @ionPopoverDidDismiss="dismissPopover">
           <div class="popover-content">
@@ -76,20 +76,27 @@
   }
 </script>
   
-  <style scoped>
+<style scoped>
   .background {
     --background: linear-gradient(to top, #5C55C9, white 60%);
-    height: 100%;
-    width: 100%;
+    display: flex; 
+    flex-direction: column; 
+    height: 100vh;
+    overflow: hidden; 
   }
 
-  .page-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  height: 100%; 
-  padding: 20px;
+  .no-scroll {
+    overflow: hidden !important;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    padding: 16px;
+    box-sizing: border-box;
   }
 
   ion-toolbar {
@@ -98,51 +105,43 @@
   }
 
   .logo-title-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  width: 100%; 
-  margin-top: -20px;
- }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
 
-.logo {
-  width: 60px; 
-  height: auto;
-}
+  .logo {
+    width: 15%; 
+    height: auto;
+  }
 
-.title-container {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-}
+  .title-container {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
 
-.title-line {
-  font-size: 1.5rem;
-  font-weight:800;
-  color: #292966;
-  font-style: italic;
-  line-height: 1;
-}
+  .title-line {
+    font-size: 1.5rem;
+    font-weight:800;
+    color: #292966;
+    font-style: italic;
+    line-height: 1;
+  }
 
-  ion-card-title{
+  .centered-title{
     color: #292966;
     font-size: 2.2rem;
     font-weight: bold;
     text-align: center; 
     margin-bottom: 1rem;
-    margin-top: 60px;
+    margin-top: 35px;
     width: 100%;
     align-items: center;
+    flex-grow: 1;
+    padding: 18px;
   }
-
-  .centered-title {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;;
-  }
-
 
   .button-container {
     display: flex;
@@ -150,15 +149,13 @@
     gap: 1px;
     justify-content: center;
     align-items: center;
-    margin-top: 450px;
     margin-bottom: 10%;
-    padding: 20px;
+    width: 100%;
   }
 
   ion-button {
-  width: 90%;
-  font-size: large;
-  justify-self: center
+    width: 90%;
+    font-size: large;
   }
 
   .white-button {
@@ -177,7 +174,7 @@
     padding: 20px;
     text-align: center;
     background: white;
-    border-radius: 5px;
+    border-radius: 10px;
     width: 100%;
     justify-content: center;
   }
@@ -194,12 +191,12 @@
     font-size: 1rem;
     color: #292966;
     margin-bottom: 20px;
-    text-align: left;
+    text-align: justify;
   }
 
   .exit-button{
-    width: 40%;
-    font-size: small;
-    justify-self: right;
+    width: 50%;
+    font-size: medium;
+    justify-self: center;
   }
   </style>

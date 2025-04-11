@@ -1,12 +1,12 @@
 <template>
   <ion-page>
+    <ion-content :fullscreen="true" class="background no-scroll">
+      <div class="container">
         <ion-toolbar>
           <ion-buttons slot="start">
             <ion-back-button text="" default-href="/startup"></ion-back-button>
           </ion-buttons>
         </ion-toolbar>
-    <ion-content :fullscreen="true" class="background">
-      <div class="page content">
         <div class="logo-title-container">
           <img :src="logo" alt="Full Port Bank Logo" class="logo"/>
           <div class="title-container">
@@ -15,21 +15,23 @@
           </div>
         </div>
           <div class="input-area">
-              <ion-card-header class="aligned-content">
-                  <ion-card-title>Enter your <br> credentials</ion-card-title>
-              </ion-card-header>
+            <ion-card-header class="aligned-content">
+                <ion-card-title>Enter your <br> credentials</ion-card-title>
+            </ion-card-header>
+            <div class="ion-inputs">
               <ion-input
-                  label="Email Address"
-                  label-placement="floating"
-                  fill="outline"
-                  placeholder="xxxx xxxx xxxx xxxx"
+                label="Email Address"
+                label-placement="floating"
+                fill="outline"
+                placeholder="xxxx xxxx xxxx xxxx"
               ></ion-input>
               <ion-input
-                  label="Password"
-                  label-placement="floating"
-                  fill="outline"
-                  placeholder="xxxx xxxx xxxx xxxx"
+                label="Password"
+                label-placement="floating"
+                fill="outline"
+                placeholder="xxxx xxxx xxxx xxxx"
               ></ion-input>
+            </div>
           </div>
           <div class="button-container">
             <ion-button expand="block" shape="round" size="large" @click="goToOTP">Confirm</ion-button>
@@ -77,109 +79,104 @@ const goToCredentials = () => {
 </script>
 
 <style scoped>
-.background {
-  --background: linear-gradient(to top, #5C55C9, white 60%);
-  height: 100%;
-  width: 100%;
-}
+  .background {
+    --background: linear-gradient(to top, #5C55C9, white 60%);
+    display: flex; 
+    flex-direction: column; 
+    height: 100vh;
+    overflow: hidden; 
+  }
 
-.page-content {
-display: flex;
-flex-direction: column;
-justify-content: space-between;
-align-items: center;
-height: 100%; 
-padding: 20px;
-}
+  .no-scroll {
+    overflow: hidden !important; 
+  }
 
-ion-toolbar {
-  --background: transparent;
-  color: #292966;
-}
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+  }
 
-.logo-title-container {
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 5px;
-width: 100%; 
-margin-top: -20px;
-}
+  ion-toolbar {
+    --background: transparent;
+    color: #292966;
+  }
 
-.logo {
-width: 60px; 
-height: auto;
-}
+  .logo-title-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
 
-.title-container {
-display: flex;
-flex-direction: column;
-text-align: left;
-}
+  .logo {
+    width: 15%; 
+    height: auto;
+  }
 
-.title-line {
-font-size: 1.5rem;
-font-weight:800;
-color: #292966;
-font-style: italic;
-line-height: 1;
-}
+  .title-container {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
 
-.input-area{
-  margin: 0 16px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 50vh; 
-  padding: 4%;
-  margin-top: -43px;
-  gap: 10px;
-}
+  .title-line {
+    font-size: 1.5rem;
+    font-weight:800;
+    color: #292966;
+    font-style: italic;
+    line-height: 1;
+  }
 
-ion-input {
-  --placeholder-color: #292966; 
-  text-align: left;
-  font-size: large;
-  color: #292966;
-}
+  .input-area{
+    width: 100%;
+    text-align: center;
+    padding: 18px;
+    flex-grow: 1;
+    margin-top: 35px;
+  }
 
+  .ion-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  ion-input {
+    --placeholder-color: #292966; 
+    text-align: left;
+    font-size: large;
+    color: #292966;
+  }
 
-.aligned-content {
-  padding: 0;
-  width: 100%;
-}
+  .aligned-content {
+    padding: 0;
+    width: 100%;
+  }
 
-ion-card-title{
-  color: #292966;
-  font-size: 2rem;
-  font-weight: bold;
-  text-align: left; 
-  line-height: 35px;
-  margin-bottom: 0.5rem;
-}
+  ion-card-title{
+    color: #292966;
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: left; 
+    margin-bottom: 1rem;
+  }
 
-ion-text-area{
-  width: 80%;
-  margin-top: 8px;
-}
+  .button-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    margin-bottom: 10%;
+  }
 
-ion-card-subtitle {
-  color: #292966;
-  text-align: left;
-  margin-top: 0.5rem;
-}
-
-ion-button {
-width: 90%;
-font-size: large;
-margin-top: 70%;
-padding: 20px;
-}
-
-.button-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-}
+  ion-button {
+    width: 90%;
+    font-size: large;
+    padding: 10px;
+  }
 </style>
