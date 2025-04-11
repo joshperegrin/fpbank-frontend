@@ -35,7 +35,19 @@ const routes = [
         component: () => import('@/views/ComponentLibrarySample.vue')
       }
     ]
-  }
+  },
+  {
+    path: '/tabs/tab2/transfer/:transfertype',
+    component: () => import('@/views/TransferPage01.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/:transfertype/destinationSelect',
+    component: () => import('@/views/TransferPage02.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/:transfertype/destinationSelect/bankSelect',
+    component: () => import('@/views/TransferPage03.vue')
+  },
 ]
 
 const router = createRouter({
