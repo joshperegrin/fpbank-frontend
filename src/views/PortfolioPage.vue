@@ -53,37 +53,20 @@
       </div>
       <div class="tokens-list">
         <ion-list class="coin-list" lines="none">
-          <ion-item button class="coin-item">
+          <ion-item 
+            v-for="(token, index) in tokens" 
+            :key="index" 
+            button 
+            class="coin-item"
+          >
             <ion-icon slot="start" :icon="helpCircle" class="coin-icon"></ion-icon>
             <ion-label>
-              <h2>Bitcoin </h2>
-              <p>0.01 BTC</p>
+              <h2>{{ token.name }}</h2>
+              <p>{{ token.amount }}</p>
             </ion-label>
             <ion-text slot="end" class="coin-value">
-              <h3>$82,391.53</h3>
-              <p class="negative">-3.88%</p>
-            </ion-text>
-          </ion-item>
-          <ion-item button class="coin-item">
-            <ion-icon slot="start" :icon="helpCircle" class="coin-icon"></ion-icon>
-            <ion-label>
-              <h2>Solana</h2>
-              <p>0.204 SOL</p>
-            </ion-label>
-            <ion-text slot="end" class="coin-value">
-              <h3>$25.53</h3>
-              <p class="negative">-1.25%</p>
-            </ion-text>
-          </ion-item>
-          <ion-item button class="coin-item">
-            <ion-icon slot="start" :icon="helpCircle" class="coin-icon"></ion-icon>
-            <ion-label>
-              <h2>Ethereum</h2>
-              <p>0.74 ETH</p>
-            </ion-label>
-            <ion-text slot="end" class="coin-value">
-              <h3>$1,391.53</h3>
-              <p class="negative">-1.12%</p>
+              <h3>{{ token.value }}</h3>
+              <p :class="{ negative: token.change < 0 }">{{ token.change }}%</p>
             </ion-text>
           </ion-item>
         </ion-list>
@@ -93,11 +76,13 @@
 </template>
 
 <script>
-  import { IonText, IonLabel, IonIcon, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton } from "@ionic/vue";
+  import { IonItem, IonList, IonText, IonLabel, IonIcon, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton } from "@ionic/vue";
   import { returnDownBackOutline, helpCircle } from "ionicons/icons";
 
   export default {
     components: {
+      IonItem,
+      IonList,
       IonText,
       IonLabel,
       IonIcon,
@@ -113,6 +98,11 @@
       return {
         returnDownBackOutline,
         helpCircle,
+        tokens: [
+          { name: "Bitcoin", amount: "0.01 BTC", value: "$82,391.53", change: -3.88 },
+          { name: "Solana", amount: "0.204 SOL", value: "$25.53", change: -1.25 },
+          { name: "Ethereum", amount: "0.74 ETH", value: "$1,391.53", change: -1.12 },
+        ],
       };
     },
     methods: {

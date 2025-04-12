@@ -52,63 +52,40 @@
       <ion-segment-view>
         <ion-segment-content id="watchlist">
           <ion-list class="coin-list">
-            <ion-item button class="coin-item">
+            <ion-item 
+              v-for="(coin, index) in watchlistCoins" 
+              :key="index" 
+              button 
+              class="coin-item"
+            >
               <ion-icon slot="start" :icon="helpCircle" class="coin-icon"></ion-icon>
               <ion-label>
-                <h2>Agency</h2>
-                <p>136,534.02 AGENCY</p>
+                <h2>{{ coin.name }}</h2>
+                <p>{{ coin.amount }}</p>
               </ion-label>
               <ion-text slot="end" class="coin-value">
-                <h3>-$12.53</h3>
-                <p class="negative">-0.88%</p>
-              </ion-text>
-            </ion-item>
-            <ion-item button class="coin-item">
-              <ion-icon slot="start" :icon="helpCircle" class="coin-icon"></ion-icon>
-              <ion-label>
-                <h2>Eliza</h2>
-                <p>30,081.71 ELIZA</p>
-              </ion-label>
-              <ion-text slot="end" class="coin-value">
-                <h3>-$8.53</h3>
-                <p class="negative">-0.45%</p>
+                <h3>{{ coin.value }}</h3>
+                <p :class="{ negative: coin.change < 0 }">{{ coin.change }}%</p>
               </ion-text>
             </ion-item>
           </ion-list>
         </ion-segment-content>
         <ion-segment-content id="coins">
           <ion-list class="coin-list" lines="none">
-            <ion-item button class="coin-item">
+            <ion-item 
+              v-for="(coin, index) in coins" 
+              :key="index" 
+              button 
+              class="coin-item"
+            >
               <ion-icon slot="start" :icon="helpCircle" class="coin-icon"></ion-icon>
               <ion-label>
-                <h2>Bitcoin</h2>
-                <p>0.01 BTC</p>
+                <h2>{{ coin.name }}</h2>
+                <p>{{ coin.amount }}</p>
               </ion-label>
               <ion-text slot="end" class="coin-value">
-                <h3>$82,391.53</h3>
-                <p class="negative">-3.88%</p>
-              </ion-text>
-            </ion-item>
-            <ion-item button class="coin-item">
-              <ion-icon slot="start" :icon="helpCircle" class="coin-icon"></ion-icon>
-              <ion-label>
-                <h2>Solana</h2>
-                <p>0.204 SOL</p>
-              </ion-label>
-              <ion-text slot="end" class="coin-value">
-                <h3>$25.53</h3>
-                <p class="negative">-1.25%</p>
-              </ion-text>
-            </ion-item>
-            <ion-item button class="coin-item">
-              <ion-icon slot="start" :icon="helpCircle" class="coin-icon"></ion-icon>
-              <ion-label>
-                <h2>Ethereum</h2>
-                <p>0.74 ETH</p>
-              </ion-label>
-              <ion-text slot="end" class="coin-value">
-                <h3>$1,391.53</h3>
-                <p class="negative">-2.88%</p>
+                <h3>{{ coin.value }}</h3>
+                <p :class="{ negative: coin.change < 0 }">{{ coin.change }}%</p>
               </ion-text>
             </ion-item>
           </ion-list>
@@ -152,6 +129,15 @@ export default {
       timeOutline,
       helpCircle,
       chevronForward,
+      watchlistCoins: [
+        { name: "Agency", amount: "136,534.02 AGENCY", value: "-$12.53", change: -0.88 },
+        { name: "Eliza", amount: "30,081.71 ELIZA", value: "-$8.53", change: -0.45 },
+      ],
+      coins: [
+        { name: "Bitcoin", amount: "0.01 BTC", value: "$82,391.53", change: -3.88 },
+        { name: "Solana", amount: "0.204 SOL", value: "$25.53", change: -1.25 },
+        { name: "Ethereum", amount: "0.74 ETH", value: "$1,391.53", change: -2.88 },
+      ],
     };
   },
   methods: {
