@@ -3,7 +3,7 @@
     <ion-header>
       <ion-toolbar color="primary">
         <ion-buttons slot="start">
-          <ion-back-button defaultHref="/tabs/tab2" @click="cancel"></ion-back-button>
+          <ion-back-button @click="cancel"></ion-back-button>
         </ion-buttons>
         <ion-title>Transfer Funds</ion-title>
       </ion-toolbar>
