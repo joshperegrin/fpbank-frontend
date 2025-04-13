@@ -22,6 +22,10 @@
           <div v-if="(this.servicesStore.serviceDetails.transfer_ReceivingAccountNumber && this.servicesStore.serviceDetails.transfer_ReceivingAccountNumber.trim() !== '')">{{this.servicesStore.serviceDetails.transfer_ReceivingAccountNumber}}</div>
           <div v-if="(this.servicesStore.serviceDetails.transfer_ReceivingAccountName && this.servicesStore.serviceDetails.transfer_ReceivingAccountName.trim() !== '')"><span>{{this.servicesStore.serviceDetails.transfer_ReceivingAccountName}}</span></div>
         </div>
+        <div class="transfer" @click="this.$router.push('/tabs/tab2/transfer/external/transferChannel')">
+          <img v-if="this.servicesStore.serviceDetails.transfer_Channel !== ''" :src="(this.servicesStore.serviceDetails.transfer_Channel === 'instapay')? instapayImage: (this.servicesStore.serviceDetails.transfer_Channel === 'pesonet')? pesonetImage: ''"/>
+          <div v-else class="selectDestination"><span>Transfer Channel</span> <ion-icon :icon="this.chevronForwardOutline"></ion-icon></div>
+        </div>
         <ion-input label="Amount*" label-placement="stacked" fill='outline'></ion-input>
         <ion-input label="Notes" label-placement="stacked" fill='outline'></ion-input>
       </div>
@@ -31,6 +35,9 @@
 </template>
 
 <style scoped>
+img {
+  width: 100px;
+}
 .selectDestination{
   display: flex;
   flex-direction: row;
@@ -102,9 +109,11 @@ ion-input {
 </style>
 
 <script>
-import { IonInput, IonToggle, IonContent, IonFooter, IonPage, IonHeader, IonToolbar, IonTitle, IonBackButton, IonButtons } from '@ionic/vue';
+import { IonButton, IonIcon, IonInput, IonToggle, IonContent, IonFooter, IonPage, IonHeader, IonToolbar, IonTitle, IonBackButton, IonButtons } from '@ionic/vue';
 import { useServicesStore } from '../store/services.store.js'
 import { chevronForwardOutline } from 'ionicons/icons';
+import instapayImage from '../assets/imgs/instapay.png';
+import pesonetImage from '../assets/imgs/PESONet.png';
 export default {
   components: {
     IonPage,
@@ -117,13 +126,17 @@ export default {
     IonInput,
     IonToggle,
     IonContent,
-  },
+    IonIcon, 
+    IonButton,
+},
   data(){
     return {
       accountNumber: '1234 123 1234',
       accountBalance: 1276.32,
       servicesStore: useServicesStore(),
       chevronForwardOutline,
+      instapayImage,
+      pesonetImage,
     }
   },
   methods: {
