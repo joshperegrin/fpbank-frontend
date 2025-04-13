@@ -23,8 +23,8 @@
           <div v-if="(this.servicesStore.serviceDetails.transfer_ReceivingAccountNumber && this.servicesStore.serviceDetails.transfer_ReceivingAccountNumber.trim() !== '')">{{this.servicesStore.serviceDetails.transfer_ReceivingAccountNumber}}</div>
           <div v-if="(this.servicesStore.serviceDetails.transfer_ReceivingAccountName && this.servicesStore.serviceDetails.transfer_ReceivingAccountName.trim() !== '')"><span>{{this.servicesStore.serviceDetails.transfer_ReceivingAccountName}}</span></div>
         </div>
-        <div class="ion-activatable transfer" @click="this.$router.push('/tabs/tab2/transfer/external/transferChannel')">
-          <ion-ripple-effect></ion-ripple-effect>
+        <div :class="(this.servicesStore.serviceDetails.transfer_ReceivingBank && this.servicesStore.serviceDetails.transfer_ReceivingBank.trim() !== '')?['ion-activatable', 'transfer']:['deactivated', 'transfer']" @click="handleClick()">
+          <ion-ripple-effect v-if="this.servicesStore.serviceDetails.transfer_ReceivingBank && this.servicesStore.serviceDetails.transfer_ReceivingBank.trim() !== ''"></ion-ripple-effect>
           <img v-if="this.servicesStore.serviceDetails.transfer_Channel !== ''" :src="(this.servicesStore.serviceDetails.transfer_Channel === 'instapay')? instapayImage: (this.servicesStore.serviceDetails.transfer_Channel === 'pesonet')? pesonetImage: ''"/>
           <div v-else class="selectDestination"><span>Transfer Channel</span> <ion-icon :icon="this.chevronForwardOutline"></ion-icon></div>
         </div>
@@ -37,6 +37,9 @@
 </template>
 
 <style scoped>
+.deactivated{
+  color: var(--ion-color-lightmedium);
+}
 img {
   width: 100px;
 }
@@ -146,7 +149,13 @@ export default {
     set(){
       console.log(this.$router)
       this.$router.push(`/tabs/tab2/transfer/${this.$route.params.transfertype}/destinationSelect`);
-    }
+    },
+    handleClick() {
+      const bank = this.servicesStore.serviceDetails.transfer_ReceivingBank;
+      if (bank && bank.trim() !== '') {
+        this.$router.push('/tabs/tab2/transfer/external/transferChannel');
+      }
+    },
   }
 }
 </script>
