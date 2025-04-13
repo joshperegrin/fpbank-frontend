@@ -16,13 +16,15 @@
           <div>{{accountNumber}}</div>
           <div><span>PHP</span> {{accountBalance}}</div>
         </div>
-        <div class="transfer" @click="set">
+        <div class="ion-activatable transfer" @click="set">
+          <ion-ripple-effect></ion-ripple-effect>
           <div class="selectDestination" :style="(this.servicesStore.serviceDetails.transfer_ReceivingBank && this.servicesStore.serviceDetails.transfer_ReceivingBank.trim() !== '')? { borderBottom: '1px solid var(--ion-color-lightmedium)', marginBottom: '8px' } : {}"><span>Transfer To</span> <ion-icon :icon="this.chevronForwardOutline"></ion-icon></div>
           <div v-if="(this.servicesStore.serviceDetails.transfer_ReceivingBank && this.servicesStore.serviceDetails.transfer_ReceivingBank.trim() !== '')">{{this.servicesStore.serviceDetails.transfer_ReceivingBank}}</div>
           <div v-if="(this.servicesStore.serviceDetails.transfer_ReceivingAccountNumber && this.servicesStore.serviceDetails.transfer_ReceivingAccountNumber.trim() !== '')">{{this.servicesStore.serviceDetails.transfer_ReceivingAccountNumber}}</div>
           <div v-if="(this.servicesStore.serviceDetails.transfer_ReceivingAccountName && this.servicesStore.serviceDetails.transfer_ReceivingAccountName.trim() !== '')"><span>{{this.servicesStore.serviceDetails.transfer_ReceivingAccountName}}</span></div>
         </div>
-        <div class="transfer" @click="this.$router.push('/tabs/tab2/transfer/external/transferChannel')">
+        <div class="ion-activatable transfer" @click="this.$router.push('/tabs/tab2/transfer/external/transferChannel')">
+          <ion-ripple-effect></ion-ripple-effect>
           <img v-if="this.servicesStore.serviceDetails.transfer_Channel !== ''" :src="(this.servicesStore.serviceDetails.transfer_Channel === 'instapay')? instapayImage: (this.servicesStore.serviceDetails.transfer_Channel === 'pesonet')? pesonetImage: ''"/>
           <div v-else class="selectDestination"><span>Transfer Channel</span> <ion-icon :icon="this.chevronForwardOutline"></ion-icon></div>
         </div>
@@ -109,7 +111,7 @@ ion-input {
 </style>
 
 <script>
-import { IonButton, IonIcon, IonInput, IonToggle, IonContent, IonFooter, IonPage, IonHeader, IonToolbar, IonTitle, IonBackButton, IonButtons } from '@ionic/vue';
+import { IonRippleEffect, IonButton, IonIcon, IonInput, IonToggle, IonContent, IonFooter, IonPage, IonHeader, IonToolbar, IonTitle, IonBackButton, IonButtons } from '@ionic/vue';
 import { useServicesStore } from '../store/services.store.js'
 import { chevronForwardOutline } from 'ionicons/icons';
 import instapayImage from '../assets/imgs/instapay.png';
@@ -128,6 +130,7 @@ export default {
     IonContent,
     IonIcon, 
     IonButton,
+    IonRippleEffect,
 },
   data(){
     return {

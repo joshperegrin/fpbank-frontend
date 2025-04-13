@@ -10,7 +10,8 @@
     </ion-header>
     <ion-content class="ion-padding">
       <div class="content-container">
-        <div class="transfer" @click="this.$router.push(`/tabs/tab2/transfer/${this.$route.params.transfertype}/destinationSelect/bankSelect`)">
+        <div class="ion-activatable transfer" @click="this.$router.push(`/tabs/tab2/transfer/${this.$route.params.transfertype}/destinationSelect/bankSelect`)">
+          <ion-ripple-effect></ion-ripple-effect>
             <span v-if="!(this.servicesStore.serviceDetails.transfer_ReceivingBank && this.servicesStore.serviceDetails.transfer_ReceivingBank.trim() !== '')">Select Bank</span>
             <span v-else>{{this.servicesStore.serviceDetails.transfer_ReceivingBank}}</span>
             <ion-icon :icon="this.chevronForwardOutline"></ion-icon>
@@ -68,7 +69,7 @@ ion-input {
 }
 </style>
 <script>
-import { toastController, IonButton, IonInput, IonToggle, IonContent, IonFooter, IonPage, IonHeader, IonToolbar, IonTitle, IonBackButton, IonButtons } from '@ionic/vue';
+import { toastController, IonRippleEffect, IonButton, IonInput, IonToggle, IonContent, IonFooter, IonPage, IonHeader, IonToolbar, IonTitle, IonBackButton, IonButtons } from '@ionic/vue';
 import { useServicesStore } from '../store/services.store.js'
 import { chevronForwardOutline } from 'ionicons/icons';
 export default {
@@ -84,6 +85,7 @@ export default {
     IonToggle,
     IonContent,
     IonButton,
+    IonRippleEffect,
   },
   data(){
     return {

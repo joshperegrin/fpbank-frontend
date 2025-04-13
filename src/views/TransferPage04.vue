@@ -39,6 +39,7 @@ ul {
   color: var(--ion-color-medium);
   margin-block-start: 5px;
   margin-block-end: 5px;
+  font-size: .8rem;
 }
 img[src*="instapay.png"]{
   width: 150px;
