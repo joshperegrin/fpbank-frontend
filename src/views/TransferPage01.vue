@@ -28,7 +28,7 @@
           <img v-if="this.servicesStore.serviceDetails.transfer_Channel !== ''" :src="(this.servicesStore.serviceDetails.transfer_Channel === 'instapay')? instapayImage: (this.servicesStore.serviceDetails.transfer_Channel === 'pesonet')? pesonetImage: ''"/>
           <div v-else class="selectDestination"><span>Transfer Channel</span> <ion-icon :icon="this.chevronForwardOutline"></ion-icon></div>
         </div>
-        <ion-input label="Amount*" label-placement="stacked" fill='outline'></ion-input>
+        <ion-input label="Amount*" type="number" inputmode="decimal" step="0.01" min="0" v-model="amount" @input="validateAmount" label-placement="stacked" fill='outline'></ion-input>
         <ion-input label="Notes" label-placement="stacked" fill='outline'></ion-input>
       </div>
     </ion-content>
@@ -137,6 +137,7 @@ export default {
 },
   data(){
     return {
+      amount: '',
       accountNumber: '1234 123 1234',
       accountBalance: 1276.32,
       servicesStore: useServicesStore(),
@@ -154,6 +155,23 @@ export default {
       const bank = this.servicesStore.serviceDetails.transfer_ReceivingBank;
       if (bank && bank.trim() !== '') {
         this.$router.push('/tabs/tab2/transfer/external/transferChannel');
+      }
+    },
+    confirm(){
+      
+    },
+    validateAmount(event) {
+      let value = event.target.value;
+
+      // Ensure only up to 2 decimal places
+      const regex = /^\d*\.?\d{0,2}$/;
+      if (regex.test(value)) {
+        this.amount = value;
+      } else {
+        // Strip excess decimals
+        value = value.replace(/[^0-9.]/g, '');
+        const [intPart, decPart] = value.split(".");
+        this.amount = decPart ? `${intPart}.${decPart.slice(0, 2)}` : intPart;
       }
     },
   }
