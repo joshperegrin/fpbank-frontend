@@ -28,11 +28,11 @@
           <img v-if="this.servicesStore.serviceDetails.transfer_Channel !== ''" :src="(this.servicesStore.serviceDetails.transfer_Channel === 'instapay')? instapayImage: (this.servicesStore.serviceDetails.transfer_Channel === 'pesonet')? pesonetImage: ''"/>
           <div v-else class="selectDestination"><span>Transfer Channel</span> <ion-icon :icon="this.chevronForwardOutline"></ion-icon></div>
         </div>
-        <ion-input label="Amount*" type="number" inputmode="decimal" step="0.01" min="0" v-model="amount" @input="validateAmount" label-placement="stacked" fill='outline'></ion-input>
+        <ion-input ref="amountTextbox" :disabled="this.servicesStore.serviceDetails.transfer_Channel === ''" label="Amount*" type="number" inputmode="decimal" step="0.01" min="0"  v-model="amount" @input="validateInput" label-placement="stacked" fill='outline'></ion-input>
         <ion-input label="Notes" label-placement="stacked" fill='outline'></ion-input>
       </div>
     </ion-content>
-    <ion-footer id="footer"><ion-button shape='round' size="large" @click="confirm"> Confirm </ion-button></ion-footer>
+    <ion-footer id="footer"><ion-button shape='round' size="large" @click="confirm" id="confirm"> Confirm </ion-button></ion-footer>
   </ion-page>
 </template>
 
@@ -114,7 +114,7 @@ ion-input {
 </style>
 
 <script>
-import { IonRippleEffect, IonButton, IonIcon, IonInput, IonToggle, IonContent, IonFooter, IonPage, IonHeader, IonToolbar, IonTitle, IonBackButton, IonButtons } from '@ionic/vue';
+import { toastController, IonRippleEffect, IonButton, IonIcon, IonInput, IonToggle, IonContent, IonFooter, IonPage, IonHeader, IonToolbar, IonTitle, IonBackButton, IonButtons } from '@ionic/vue';
 import { useServicesStore } from '../store/services.store.js'
 import { chevronForwardOutline } from 'ionicons/icons';
 import instapayImage from '../assets/imgs/instapay.png';
@@ -137,6 +137,7 @@ export default {
 },
   data(){
     return {
+      toastPresented: false,
       amount: '',
       accountNumber: '1234 123 1234',
       accountBalance: 1276.32,
@@ -160,19 +161,56 @@ export default {
     confirm(){
       
     },
-    validateAmount(event) {
+    async validateInput(event) {
       let value = event.target.value;
 
-      // Ensure only up to 2 decimal places
-      const regex = /^\d*\.?\d{0,2}$/;
-      if (regex.test(value)) {
-        this.amount = value;
-      } else {
-        // Strip excess decimals
-        value = value.replace(/[^0-9.]/g, '');
-        const [intPart, decPart] = value.split(".");
-        this.amount = decPart ? `${intPart}.${decPart.slice(0, 2)}` : intPart;
+      // Allow only numbers and a single decimal point
+      value = value.replace(/[^0-9.]/g, '');
+
+      // Prevent multiple decimals
+      const parts = value.split('.');
+      if (parts.length > 2) {
+        parts.splice(2); // Remove any extra decimals
       }
+
+      let intPart = parts[0];
+      let decPart = parts[1] || '';
+
+      // Limit integer part to 13 digits
+      intPart = intPart.slice(0, 13);
+
+      // Limit decimal to 2 digits
+      decPart = decPart.slice(0, 2);
+
+      this.amount = decPart ? `${intPart}.${decPart}` : intPart;
+
+      let toastMessage = '';
+      if(this.servicesStore.serviceDetails.transfer_Channel === 'instapay' && parseFloat(this.amount) > this.servicesStore.transferLimit.instapay){
+        this.$refs.amountTextbox.$el.classList.add('ion-invalid')
+        this.$refs.amountTextbox.$el.classList.add('ion-touched')
+        toastMessage = `You are over the Instapay transfer limit: PHP${this.servicesStore.transferLimit.instapay}.00`
+      } else if (this.servicesStore.serviceDetails.transfer_Channel === 'pesonet' && parseFloat(this.amount) > this.servicesStore.transferLimit.pesonet){
+        this.$refs.amountTextbox.$el.classList.add('ion-invalid')
+        this.$refs.amountTextbox.$el.classList.add('ion-touched')
+        toastMessage = `You are over the PESONet transfer limit: PHP${this.servicesStore.transferLimit.pesonet}.00`
+      } else {
+        this.$refs.amountTextbox.$el.classList.remove('ion-invalid')
+        this.$refs.amountTextbox.$el.classList.remove('ion-touched')
+      }
+
+      if(toastMessage && !this.toastPresented){
+        const toast = await toastController.create({
+          message: toastMessage,
+          duration: 1500,
+          position: 'bottom',
+          positionAnchor: 'confirm',
+        });
+        await toast.present();
+        this.toastPresented = true;
+        await toast.onDidDismiss();
+        this.toastPresented = false;
+      }
+      
     },
   }
 }
