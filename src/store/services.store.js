@@ -24,6 +24,13 @@ export const useServicesStore = defineStore(
         cardlessWithdrawal_ApprovalNumber: ''
       },
       listOfBanks: [],
+      transferLimit: {
+        instapay: 50000.00,
+        pesonet: 500000.00,
+        internal: 500000.00,
+        bills: 100000.00,
+        ewallet: 100000.00,
+      }
     }
   },
   actions: {
