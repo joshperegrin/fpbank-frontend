@@ -52,6 +52,11 @@ const routes = [
     path: '/tabs/tab2/transfer/:transfertype/transferChannel',
     component: () => import('@/views/TransferPage04.vue')
   },
+  {
+     path: '/tabs/tab2/transfer/:transfertype/confirmation',
+    component: () => import('@/views/TransferPage05.vue')
+     
+  }
 ]
 
 const router = createRouter({
