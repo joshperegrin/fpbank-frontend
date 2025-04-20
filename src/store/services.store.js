@@ -16,7 +16,7 @@ export const useServicesStore = defineStore(
         transfer_ReceivingAccountName: '',
         transfer_Amount: '',
         transfer_Channel: '',
-        transfer_Purpose: '',
+        transfer_Note: '',
         ewallet_EWalletName: '',
         ewallet_WalletNumber: '',
         ewallet_Amount: '',
@@ -30,6 +30,13 @@ export const useServicesStore = defineStore(
         internal: 500000.00,
         bills: 100000.00,
         ewallet: 100000.00,
+      },
+      serviceCharge: {
+        instapay: 15.00,
+        pesonet: 0.00,
+        internal: 0.00,
+        bills: 0.00,
+        ewallet: 0.00,
       }
     }
   },

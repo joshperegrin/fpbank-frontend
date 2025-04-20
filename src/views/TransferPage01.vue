@@ -29,10 +29,10 @@
           <div v-else class="selectDestination"><span>Transfer Channel</span> <ion-icon :icon="this.chevronForwardOutline"></ion-icon></div>
         </div>
         <ion-input ref="amountTextbox" :disabled="this.servicesStore.serviceDetails.transfer_Channel === ''" label="Amount*" type="number" inputmode="decimal" step="0.01" min="0"  v-model="amount" @input="validateInput" label-placement="stacked" fill='outline'></ion-input>
-        <ion-input label="Notes" label-placement="stacked" fill='outline'></ion-input>
+        <ion-input ref="noteTextbox" label="Notes" label-placement="stacked" fill='outline'></ion-input>
       </div>
     </ion-content>
-    <ion-footer id="footer"><ion-button shape='round' size="large" @click="confirm" id="confirm"> Confirm </ion-button></ion-footer>
+    <ion-footer id="footer"><ion-button shape='round' size="large" @click="confirm" id="confirm"> Proceed </ion-button></ion-footer>
   </ion-page>
 </template>
 
@@ -140,7 +140,7 @@ export default {
       toastPresented: false,
       amount: '',
       accountNumber: '1234 123 1234',
-      accountBalance: 1276.32,
+      accountBalance: 100000.00,
       servicesStore: useServicesStore(),
       chevronForwardOutline,
       instapayImage,
@@ -158,8 +158,32 @@ export default {
         this.$router.push('/tabs/tab2/transfer/external/transferChannel');
       }
     },
-    confirm(){
-      
+    async confirm(){
+      if(this.isFormComplete()){
+        this.servicesStore.serviceDetails.transfer_Amount = this.amount;
+        this.servicesStore.serviceDetails.transfer_Note = this.$refs.noteTextbox.$el.value || null
+        this.$router.push('/tabs/tab2/transfer/external/confirmation');
+      } else if(!this.toastPresented) {
+          const toast = await toastController.create({
+            message: 'Incomplete or invalid transaction details.',
+            duration: 1500,
+            position: 'bottom',
+            positionAnchor: 'confirm',
+          });
+          await toast.present();
+          this.toastPresented = true;
+          await toast.onDidDismiss();
+          this.toastPresented = false;
+      }
+    },
+    isFormComplete(){
+      return (
+        this.servicesStore.serviceDetails.transfer_ReceivingBank !== '' &&
+        this.servicesStore.serviceDetails.transfer_ReceivingAccountNumber !== '' &&
+        this.servicesStore.serviceDetails.transfer_ReceivingAccountName !== '' &&
+        this.servicesStore.serviceDetails.transfer_Channel !== '' &&
+        this.amount !== '' && 
+        !this.$refs.amountTextbox.$el.classList.contains('ion-invalid'))
     },
     async validateInput(event) {
       let value = event.target.value;
@@ -185,7 +209,11 @@ export default {
       this.amount = decPart ? `${intPart}.${decPart}` : intPart;
 
       let toastMessage = '';
-      if(this.servicesStore.serviceDetails.transfer_Channel === 'instapay' && parseFloat(this.amount) > this.servicesStore.transferLimit.instapay){
+      if(parseFloat(this.amount) > this.accountBalance){
+        this.$refs.amountTextbox.$el.classList.add('ion-invalid')
+        this.$refs.amountTextbox.$el.classList.add('ion-touched')
+        toastMessage = `Insufficient Funds`
+      } else if(this.servicesStore.serviceDetails.transfer_Channel === 'instapay' && parseFloat(this.amount) > this.servicesStore.transferLimit.instapay){
         this.$refs.amountTextbox.$el.classList.add('ion-invalid')
         this.$refs.amountTextbox.$el.classList.add('ion-touched')
         toastMessage = `You are over the Instapay transfer limit: PHP${this.servicesStore.transferLimit.instapay}.00`
