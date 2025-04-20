@@ -3,7 +3,7 @@
     <ion-header>
       <ion-toolbar color="primary">
         <ion-buttons slot="start">
-          <ion-back-button defaultHref="/tabs/tab2"></ion-back-button>
+          <ion-back-button @click="handleBackButtonClick()"></ion-back-button>
         </ion-buttons>
         <ion-title>Transfer Funds</ion-title>
       </ion-toolbar>
@@ -114,7 +114,7 @@ ion-input {
 </style>
 
 <script>
-import { toastController, IonRippleEffect, IonButton, IonIcon, IonInput, IonToggle, IonContent, IonFooter, IonPage, IonHeader, IonToolbar, IonTitle, IonBackButton, IonButtons } from '@ionic/vue';
+import { toastController, alertController, IonRippleEffect, IonButton, IonIcon, IonInput, IonToggle, IonContent, IonFooter, IonPage, IonHeader, IonToolbar, IonTitle, IonBackButton, IonButtons } from '@ionic/vue';
 import { useServicesStore } from '../store/services.store.js'
 import { chevronForwardOutline } from 'ionicons/icons';
 import instapayImage from '../assets/imgs/instapay.png';
@@ -148,6 +148,42 @@ export default {
     }
   },
   methods: {
+    async handleBackButtonClick(){
+      if(this.servicesStore.serviceDetails.transfer_ReceivingBank !== '' ||
+        this.servicesStore.serviceDetails.transfer_ReceivingAccountNumber !== '' ||
+        this.servicesStore.serviceDetails.transfer_ReceivingAccountName !== '' ||
+        this.servicesStore.serviceDetails.transfer_Amount !== '' ||
+        this.servicesStore.serviceDetails.transfer_Channel !== '' ||
+        this.servicesStore.serviceDetails.transfer_Purpose !== ''){
+        const alert = await alertController.create({
+          header: 'Leave Transfer?',
+          message: 'If you leave now, all the info you’ve entered will be lost. Want to stay and finish it?',
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel',
+            },
+            {
+              text: 'Confirm',
+              role: 'confirm',
+              handler: () => {
+                this.servicesStore.serviceDetails.transfer_ReceivingBank = '';
+                this.servicesStore.serviceDetails.transfer_ReceivingAccountNumber = '';
+                this.servicesStore.serviceDetails.transfer_ReceivingAccountName = '';
+                this.servicesStore.serviceDetails.transfer_Amount = '';
+                this.servicesStore.serviceDetails.transfer_Channel = '';
+                this.servicesStore.serviceDetails.transfer_Purpose = '';
+                this.$router.back()
+              }
+            },
+          ],
+        });
+        await alert.present();
+      } else {
+        this.$router.back()
+      }
+
+    },
     set(){
       console.log(this.$router)
       this.$router.push(`/tabs/tab2/transfer/${this.$route.params.transfertype}/destinationSelect`);
