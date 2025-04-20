@@ -54,7 +54,7 @@
           <img v-if="this.servicesStore.serviceDetails.transfer_Channel !== ''" :src="(this.servicesStore.serviceDetails.transfer_Channel === 'instapay')? instapayImage: (this.servicesStore.serviceDetails.transfer_Channel === 'pesonet')? pesonetImage: ''"/>
           </div>
         </div>
-        <div class="detail-list">
+        <div v-if="this.servicesStore.serviceDetails.transfer_Note !== null" class="detail-list">
           <div>
             Notes
           </div>
@@ -106,14 +106,6 @@ img {
   width: 20ch;
   margin-bottom: 15px;
 }
-.arrow-downward{
-  font-size: 30px;
-  margin-left: auto;
-  margin-right: auto;
-  color: var(--ion-color-primary);
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
 .header01{
   color: var(--ion-color-primary);
   font-weight: 600;
@@ -135,11 +127,6 @@ img {
   border-radius: 10px;
   padding: 20px 20px;
 }
-.transfer > ion-icon{
-  color: var(--ion-color-primary);
-  font-size: 25px;
-  margin-right: 15px;
-}
 .transfer > div > div{
   font-size: .75em;
   font-weight: 400;
@@ -158,7 +145,6 @@ img {
   padding-left: 10px;
   padding-right: 10px;
 }
-
 h1{
   font-weight: 800;
   font-size: 2.1rem;
@@ -184,9 +170,8 @@ ion-button{
 </style>
 
 <script>
-import { toastController, IonCheckbox, IonRippleEffect, IonButton, IonIcon, IonInput, IonToggle, IonContent, IonFooter, IonPage, IonHeader, IonToolbar, IonTitle, IonBackButton, IonButtons } from '@ionic/vue';
+import { IonCheckbox, IonButton, IonContent, IonFooter, IonPage, IonHeader, IonToolbar, IonTitle, IonBackButton, IonButtons } from '@ionic/vue';
 import { useServicesStore } from '../store/services.store.js'
-import { arrowDownOutline } from 'ionicons/icons';
 import instapayImage from '../assets/imgs/instapay.png';
 import pesonetImage from '../assets/imgs/PESONet.png';
 export default {
@@ -198,39 +183,21 @@ export default {
     IonBackButton,
     IonButtons,
     IonFooter,
-    IonInput,
-    IonToggle,
     IonContent,
-    IonIcon, 
     IonButton,
-    IonRippleEffect,
     IonCheckbox,
 },
   data(){
     return {
+      accountNumber: '1234 123 1234',
       confirmationChecked: false,
       confirmationCheckbox: 'I hereby confirm that the transaction details above are correct and understand that refund or reversal of the transaction amount and service charge will not be allowed.',
-      toastPresented: false,
-      amount: '',
-      accountNumber: '1234 123 1234',
-      accountBalance: 1276.32,
       servicesStore: useServicesStore(),
-      arrowDownOutline,
       instapayImage,
       pesonetImage,
     }
   },
   methods: {
-    set(){
-      console.log(this.$router)
-      this.$router.push(`/tabs/tab2/transfer/${this.$route.params.transfertype}/destinationSelect`);
-    },
-    handleClick() {
-      const bank = this.servicesStore.serviceDetails.transfer_ReceivingBank;
-      if (bank && bank.trim() !== '') {
-        this.$router.push('/tabs/tab2/transfer/external/transferChannel');
-      }
-    },
     confirm(){
       
     },
