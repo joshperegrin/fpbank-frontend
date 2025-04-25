@@ -53,9 +53,12 @@ const routes = [
     component: () => import('@/views/TransferPage04.vue')
   },
   {
-     path: '/tabs/tab2/transfer/:transfertype/confirmation',
+    path: '/tabs/tab2/transfer/:transfertype/confirmation',
     component: () => import('@/views/TransferPage05.vue')
-     
+  },
+  {
+    path: '/tabs/tab2/transfer/:transfertype/transferResult',
+    component: () => import('@/views/TransferPage06.vue')
   }
 ]
 
