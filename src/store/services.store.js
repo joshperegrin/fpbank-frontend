@@ -55,13 +55,23 @@ export const useServicesStore = defineStore(
 
     },
     async fundTransfer(){
+      if(false){
+        throw new Error("Transaction Error");
+      }
+
       console.log(this.serviceDetails.transfer_ReceivingBank)
       console.log(this.serviceDetails.transfer_ReceivingAccountNumber)
       console.log(this.serviceDetails.transfer_ReceivingAccountName)
       console.log(this.serviceDetails.transfer_Amount)
       console.log(this.serviceDetails.transfer_Channel)
       console.log(this.serviceDetails.transfer_Purpose)
-      
+      return {
+        serviceCharge: 15.00,
+        transactionDateTime: new Date(),
+        transactionName: 'Internal Fund Transfer',
+        referenceNumber: 'MAV1234567890U8',
+        transactionStatus: 'success',
+      }
     },
     async loadEWallet(){
       console.log(this.serviceDetails.ewallet_EWalletName)

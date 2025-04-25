@@ -11,61 +11,40 @@
     <ion-content class="ion-padding">
       <div class="content-container">
         <div class="header01">Transfer Details</div>
-        <div class="detail-list">
-          <div>
-            Transaction Type
-          </div>
+        <div class="detail-list"> <div> Transaction Type </div>
           <div>
             Fund Transfer via <br/>{{servicesStore.serviceDetails.transfer_Channel.toLowerCase().replace(/^./, c => c.toUpperCase())}}
           </div>
         </div>
-        <div class="detail-list">
-          <div>
-            Source Account
-          </div>
+        <div class="detail-list"> <div> Source Account </div>
           <div>
             Full Port Bank <br/>
             {{accountNumber}}
           </div>
         </div>
-        <div class="detail-list">
-          <div>
-            Destination Account
-          </div>
+        <div class="detail-list"> <div> Destination Account </div>
           <div>
             {{servicesStore.serviceDetails.transfer_ReceivingAccountName}}<br/>
             {{servicesStore.serviceDetails.transfer_ReceivingBank}}<br/>
             {{servicesStore.serviceDetails.transfer_ReceivingAccountNumber}}
           </div>
         </div>
-        <div class="detail-list">
-          <div>
-            Amount
-          </div>
+        <div class="detail-list"> <div> Amount </div>
           <div>
             PHP {{servicesStore.serviceDetails.transfer_Amount}}
           </div>
         </div>
-        <div class="detail-list">
-          <div>
-            Transfer Channel
-          </div>
+        <div class="detail-list"> <div> Transfer Channel </div>
           <div>
           <img v-if="this.servicesStore.serviceDetails.transfer_Channel !== ''" :src="(this.servicesStore.serviceDetails.transfer_Channel === 'instapay')? instapayImage: (this.servicesStore.serviceDetails.transfer_Channel === 'pesonet')? pesonetImage: ''"/>
           </div>
         </div>
-        <div v-if="this.servicesStore.serviceDetails.transfer_Note !== null" class="detail-list">
-          <div>
-            Notes
-          </div>
+        <div v-if="this.servicesStore.serviceDetails.transfer_Note !== null" class="detail-list"> <div> Notes </div>
           <div>
             {{this.servicesStore.serviceDetails.transfer_Note}}
           </div>
         </div>
-        <div class="detail-list">
-          <div>
-            Service Charge
-          </div>
+        <div class="detail-list"> <div> Service Charge </div>
           <div>
             PHP {{(this.servicesStore.serviceDetails.transfer_Channel === 'instapay')? this.servicesStore.serviceCharge.instapay : this.servicesStore.serviceCharge.pesonet }}.00
           </div>
@@ -199,7 +178,7 @@ export default {
   },
   methods: {
     confirm(){
-      
+      this.$router.push(`/tabs/tab2/transfer/${this.$route.params.transfertype}/transferResult`);
     },
   }
 }
