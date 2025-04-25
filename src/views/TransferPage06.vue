@@ -152,6 +152,16 @@ export default {
       this.transactionDetails.notes = this.servicesStore.serviceDetails.transfer_Note
       this.loaded = true;
       console.log(`reference number: ${this.transactionDetails.referenceNumber}`)
+    },
+    async confirm(){
+      this.servicesStore.serviceDetails.transfer_ReceivingBank = ''
+      this.servicesStore.serviceDetails.transfer_ReceivingAccountNumber = ''
+      this.servicesStore.serviceDetails.transfer_ReceivingAccountName = ''
+      this.servicesStore.serviceDetails.transfer_Amount = ''
+      this.servicesStore.serviceDetails.transfer_Channel = ''
+      this.servicesStore.serviceDetails.transfer_Note = ''
+      this.$router.go(-3)
+      
     }
   }
 }
