@@ -1,14 +1,13 @@
 <template>
   <ion-page>
-    <ion-header>
-      <ion-toolbar color="primary">
-        <ion-title>Logo FP Bank</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content color="primary" :fullscreen="true">
+    <ion-content :fullscreen="true">
+      <ion-header>
+        <ion-toolbar color="primary">
+          <ion-title>FP Bank Dashboard</ion-title>
+        </ion-toolbar>
+        <Account :account="account"/>
+      </ion-header>
       <div class="content-body">
-        <Account :account="account" />
-
         <ion-card class="body-widgets">
           <ion-card-header>
             <ion-card-title>Favorite Accounts</ion-card-title>
@@ -38,18 +37,11 @@
           </ion-card-content>
         </ion-card>
 
-        <FeaturedArticle />
-
-        <ion-header collapse="condense">
-          <ion-toolbar>
-            <ion-title size="large">Home Page</ion-title>
-          </ion-toolbar>
-        </ion-header>
+        <FeaturedArticle/>
       </div>
     </ion-content>
   </ion-page>
 </template>
-
 
 <script>
 import {
@@ -151,17 +143,29 @@ export default {
   padding: 1em;
 }
 
+ion-header {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+
+  background-color: var(--ion-color-primary);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+
+  padding-top: 30px;
+  padding-bottom: 15px;
+  border-radius: 0px 0px 16px 16px;
+}
+
 ion-card.body-widgets {
   width: 100%;
   border-radius: 20px;
 }
 
-.head {
-  background-color: var(--ion-color-primary);
-  border-radius: 20px;
-}
-
-ion-card-title {
-  color: var(--ion-color-primary);
+ion-header {
+  color: var(--ion-color-primary-contrast);
 }
 </style>
