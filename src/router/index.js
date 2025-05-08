@@ -19,6 +19,10 @@ const routes = [
         component: () => import('@/views/Tab1Page.vue')
       },
       {
+        path: 'HistoryPage1',
+        component: () => import('@/views/HistoryPage1.vue')
+      },
+      {
         path: 'HistoryPage2',
         component: () => import('@/views/HistoryPage2.vue')
       },
