@@ -16,7 +16,7 @@ const routes = [
       },
       {
         path: 'tab1',
-        component: () => import('@/views/Tab1Page.vue')
+        component: () => import('@/views/DashboardPage1.vue')
       },
       {
         path: 'HistoryPage1',
@@ -25,6 +25,10 @@ const routes = [
       {
         path: 'HistoryPage2',
         component: () => import('@/views/HistoryPage2.vue')
+      },
+      {
+        path: 'HistoryPage3',
+        component: () => import('@/views/HistoryPage3.vue')
       },
       {
         path: 'tab2',
