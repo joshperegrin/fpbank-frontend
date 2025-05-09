@@ -8,60 +8,54 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, computed } from 'vue';
 import { IonAvatar, IonLabel, IonRippleEffect } from '@ionic/vue';
 
-export default {
-  name: 'AvatarButton',
-  components: {
-    IonAvatar,
-    IonLabel,
-    IonRippleEffect,
+const props = defineProps({
+  avatar_src: {
+    type: String,
+    required: true,
+    default: '',
   },
-  props: {
-    avatar_src: {
-      type: String,
-      required: true,
-      default: '',
-    },
-    avatar_size: {
-      type: String,
-      default: '48px',
-      validator: (value) => {
-        return ['small', 'medium', 'large'].includes(value) || /^[0-9]+(px|rem)$/.test(value);
-      },
-    },
-    text_size: {
-      type: String,
-      default: 'x-small',
-      validator: (value) => /^[0-9]+(px|rem)$/.test(value) || ['x-small', 'small', 'medium', 'large', 'x-large'].includes(value),
+  avatar_size: {
+    type: String,
+    default: '48px',
+    validator: (value) => {
+      return ['small', 'medium', 'large'].includes(value) || /^[0-9]+(px|rem)$/.test(value);
     },
   },
-  computed: {
-    computed_avatar_size() {
-      const sizes = {
-        small: '32px',
-        medium: '48px',
-        large: '64px',
-      };
-      return sizes[this.avatar_size] || this.avatar_size;
-    },
-    effective_avatar_src() {
-      const placeholder = 'https://ionicframework.com/docs/img/demos/avatar.svg'; /*TODO: Fix Placeholder not passing*/
-      if (!this.avatar_src) {
-        console.warn('AvatarButton: avatar_src is empty, using placeholder:', placeholder);
-        return placeholder;
-      }
-      console.log('AvatarButton: loading avatar_src:', this.avatar_src);
-      return this.avatar_src;
-    },
+  text_size: {
+    type: String,
+    default: 'x-small',
+    validator: (value) => /^[0-9]+(px|rem)$/.test(value) || ['x-small', 'small', 'medium', 'large', 'x-large'].includes(value),
   },
-  methods: {
-    handle_click() {
-      this.$emit('click');
-    },
-  },
-};
+});
+
+const emit = defineEmits(['click']);
+
+const computed_avatar_size = computed(() => {
+  const sizes = {
+    small: '32px',
+    medium: '48px',
+    large: '64px',
+  };
+  return sizes[props.avatar_size] || props.avatar_size;
+});
+
+const effective_avatar_src = computed(() => {
+  const placeholder = 'https://ionicframework.com/docs/img/demos/avatar.svg'; /*TODO: Fix Placeholder not passing*/
+  if (!props.avatar_src) {
+    console.warn('AvatarButton: avatar_src is empty, using placeholder:', placeholder);
+    return placeholder;
+  }
+  console.log('AvatarButton: loading avatar_src:', props.avatar_src);
+  return props.avatar_src;
+});
+
+function handle_click() {
+  emit('click');
+}
 </script>
 
 <style scoped>

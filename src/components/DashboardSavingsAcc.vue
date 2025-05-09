@@ -22,39 +22,25 @@
   </div>
 </template>
 
-<script>
-import { IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonIcon, IonText, IonRippleEffect } from '@ionic/vue';
+<script setup>
+import { IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonIcon, IonRippleEffect } from '@ionic/vue';
 import { chevronForward } from 'ionicons/icons';
 
-export default {
-  components: {
-    IonCard,
-    IonCardHeader,
-    IonCardTitle,
-    IonCardSubtitle,
-    IonCardContent,
-    IonIcon,
-    IonRippleEffect,
+defineProps({
+  account: {
+    type: Object,
+    required: true,
+    default: () => ({
+      name: '',
+      number: '',
+      balance: '',
+      currency: '',
+      bankIcon: '',
+    }),
   },
-  props: {
-    account: {
-      type: Object,
-      required: true,
-      default: () => ({
-        name: '',
-        number: '',
-        balance: '',
-        currency: '',
-        bankIcon: '',
-      }),
-    },
-  },
-  data() {
-    return {
-      chevronForward,
-    };
-  },
-};
+});
+
+const chevronForwardIcon = chevronForward;
 </script>
 
 <style scoped>

@@ -169,7 +169,7 @@ export default {
         await toast.present();
         } else if(this.receivingAccountNumber.length !== 10){
           const toast = await toastController.create({
-            message: 'Invalid Account Number, must be 10 in length',
+            message: 'Invalid DashboardHeader Number, must be 10 in length',
             duration: 1500,
             position: 'bottom',
             positionAnchor: 'confirm',

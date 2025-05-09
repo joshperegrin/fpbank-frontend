@@ -19,7 +19,13 @@ const routes = [
         component: () => import('@/views/DashboardPage1.vue')
       },
       {
+        path: 'DashboardPage2',
+        name: 'dashboard_page_2',
+        component: () => import('@/views/DashboardPage2.vue')
+      },
+      {
         path: 'HistoryPage1',
+        name: 'history_page_1',
         component: () => import('@/views/HistoryPage1.vue')
       },
       {

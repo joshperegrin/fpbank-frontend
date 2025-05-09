@@ -1,5 +1,5 @@
 <template>
-  <HistoryHeader
+  <GenericHeader
     title="Download your Statements"
     :icon_src="downloadOutline"
   />
@@ -19,7 +19,6 @@
           <ion-input label="End Date" label-placement="floating" fill='outline' placeholder="End date"></ion-input>
         </ion-list>
 
-
       <ion-text>Your transaction history will be sent to the email address connected to your account, or can be downloaded as a CSV file. All transactions are in PH time (GMT+8)</ion-text>
       <ion-buttons class="ion-justify-content-between">
         <ion-button color="primary" fill="outline" shape='round' size="small">Send Me an Email</ion-button>
@@ -30,28 +29,10 @@
   </ion-content>
 </template>
 
-<script>
-import { IonHeader, IonToolbar, IonTitle, IonIcon, IonContent, IonButton, IonButtons } from '@ionic/vue';
-import { downloadOutline, returnDownBackOutline, } from 'ionicons/icons';
+<script setup>
+import { IonContent, IonButton, IonButtons } from '@ionic/vue';
+import { downloadOutline } from 'ionicons/icons';
 import GenericHeader from "@/components/GenericHeader.vue";
-export default {
-  components: {
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonIcon,
-    IonContent,
-    IonButton,
-    IonButtons,
-    HistoryHeader: GenericHeader,
-  },
-  data() {
-    return {
-      downloadOutline,
-      returnDownBackOutline,
-    };
-  },
-};
 </script>
 
 <style scoped>

@@ -27,47 +27,39 @@
   </ion-grid>
 </template>
 
-<script>
+<script setup>
 import { IonGrid, IonRow, IonCol } from '@ionic/vue';
 import IconButton from '@/components/IconButton.vue';
 import AvatarButton from '@/components/AvatarButton.vue';
+import { computed, onMounted } from 'vue';
 
-export default {
-  components: {
-    IonGrid,
-    IonRow,
-    IonCol,
-    AvatarButton,
-    IconButton,
+const props = defineProps({
+  items: {
+    type: Array,
+    required: true,
   },
-  props: {
-    items: {
-      type: Array,
-      required: true,
-    },
-    items_per_row: {
-      type: Number,
-      default: () => (window.innerWidth > 399 ? 4 : 8),
-    },
+  items_per_row: {
+    type: Number,
+    default: () => (window.innerWidth > 399 ? 4 : 8),
   },
-  computed: {
-    chunked_items() {
-      const chunks = [];
-      for (let i = 0; i < this.items.length; i += this.items_per_row) {
-        chunks.push(this.items.slice(i, i + this.items_per_row));
-      }
-      return chunks;
-    },
-  },
-  mounted() {
-    console.log('ItemGrid items:', this.items);
-    this.items.forEach((item, index) => {
-      if (item.avatar && !item.avatar.startsWith('http') && !item.avatar.startsWith('/')) {
-        console.warn(`ItemGrid: Potentially invalid avatar path for item ${index}:`, item.avatar);
-      }
-    });
-  },
-};
+});
+
+const chunked_items = computed(() => {
+  const chunks = [];
+  for (let i = 0; i < props.items.length; i += props.items_per_row) {
+    chunks.push(props.items.slice(i, i + props.items_per_row));
+  }
+  return chunks;
+});
+
+onMounted(() => {
+  console.log('ItemGrid items:', props.items);
+  props.items.forEach((item, index) => {
+    if (item.avatar && !item.avatar.startsWith('http') && !item.avatar.startsWith('/')) {
+      console.warn(`ItemGrid: Potentially invalid avatar path for item ${index}:`, item.avatar);
+    }
+  });
+});
 </script>
 
 <style scoped>

@@ -166,21 +166,21 @@ export default {
       },
       savingsAccounts: [
         {
-          name: 'Savings Account 1',
+          name: 'Savings DashboardHeader 1',
           number: '002376543210',
           balance: '40,000.10',
           currency: 'PHP',
           bankIcon: 'src/assets/svgs/bank.svg',
         },
         {
-          name: 'Savings Account 2',
+          name: 'Savings DashboardHeader 2',
           number: '002376543211',
           balance: '25,500.75',
           currency: 'PHP',
           bankIcon: 'src/assets/svgs/bank.svg',
         },
         {
-          name: 'Savings Account 3',
+          name: 'Savings DashboardHeader 3',
           number: '002376543212',
           balance: '15,200.30',
           currency: 'PHP',
@@ -230,10 +230,10 @@ export default {
       // Placeholder for create account logic
       alert('Create account clicked!');
       // You could push a new account to savingsAccounts here, e.g.:
-      // this.savingsAccounts.push({ name: 'New Account', number: '002376543214', balance: '0.00', currency: 'PHP', bankIcon: 'src/assets/svgs/bank.svg' });
+      // this.savingsAccounts.push({ name: 'New DashboardHeader', number: '002376543214', balance: '0.00', currency: 'PHP', bankIcon: 'src/assets/svgs/bank.svg' });
     },
     navigateAccount(){
-      alert('Account clicked!');
+      alert('DashboardHeader clicked!');
     },
     goToAccount(accountName) {
       alert(`I have gone to ${accountName}`);

@@ -11,19 +11,8 @@
   </ion-card>
 </template>
 
-<script>
+<script setup>
 import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonImg, IonButton } from '@ionic/vue';
-
-export default {
-  components: {
-    IonCard,
-    IonCardHeader,
-    IonCardTitle,
-    IonCardContent,
-    IonImg,
-    IonButton,
-  },
-};
 </script>
 
 <style scoped>

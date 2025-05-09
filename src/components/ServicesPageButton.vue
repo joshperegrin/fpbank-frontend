@@ -30,26 +30,17 @@ ion-label {
 }
 </style>
 
-<script>
+<script setup>
 import { receiptOutline } from 'ionicons/icons';
 import { IonIcon, IonLabel, IonRippleEffect } from '@ionic/vue';
-export default {
-  components: {
-    IonIcon,
-    IonLabel,
-    IonRippleEffect, 
+
+defineProps({
+  icon_name: {
+    type: String,
+    default: receiptOutline, // Default empty string or provide a default icon source (value: SVG URL String)
   },
-  props: {
-    icon_name: {
-      type: String,
-      default: receiptOutline, // Default empty string or provide a default icon source (value: SVG URL String)
-    },
-  },
-  data(){
-    return {
-      receiptOutline,
-    }
-  }
-};
+});
+
+const receiptOutlineIcon = receiptOutline;
 </script>
 

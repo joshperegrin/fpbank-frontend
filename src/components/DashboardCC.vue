@@ -29,53 +29,46 @@
   </ion-card>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue';
 import { IonCard, IonCardContent, IonText, IonRippleEffect } from '@ionic/vue';
 
-export default {
-  components: {
-    IonCard,
-    IonCardContent,
-    IonText,
-    IonRippleEffect,
+const props = defineProps({
+  cardDetails: {
+    type: Object,
+    required: true,
+    default: () => ({
+      type: '',
+      number: '',
+      name: '',
+      expiry: '',
+      cvv: '',
+      logo: '',
+    }),
   },
-  props: {
-    cardDetails: {
-      type: Object,
-      required: true,
-      default: () => ({
-        type: '',
-        number: '',
-        name: '',
-        expiry: '',
-        cvv: '',
-        logo: '',
-      }),
-    },
-  },
-  data() {
-    return {
-      isCensored: true,
-    };
-  },
-  methods: {
-    toggleCensor() {
-      this.isCensored = !this.isCensored;
-    },
-    formatCardNumber(number) {
-      return number.replace(/(\d{4})(?=\d)/g, '$1 ');
-    },
-    censorCardNumber(number) {
-      return '**** **** **** ' + number.slice(-4);
-    },
-    censorExpiry(expiry) {
-      return '**/**';
-    },
-    censorCvv(cvv) {
-      return '*'.repeat(cvv.length);
-    },
-  },
-};
+});
+
+const isCensored = ref(true);
+
+function toggleCensor() {
+  isCensored.value = !isCensored.value;
+}
+
+function formatCardNumber(number) {
+  return number.replace(/(\d{4})(?=\d)/g, '$1 ');
+}
+
+function censorCardNumber(number) {
+  return '**** **** **** ' + number.slice(-4);
+}
+
+function censorExpiry(expiry) {
+  return '**/**';
+}
+
+function censorCvv(cvv) {
+  return '*'.repeat(cvv.length);
+}
 </script>
 
 <style scoped>

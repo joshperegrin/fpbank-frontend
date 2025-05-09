@@ -2,37 +2,24 @@
   <ion-header>
     <ToolbarBackButton toolbar_color="primary"/>
     <div v-if="icon_src" class="icon-circle">
-      <ion-icon color="primary" :src="icon_src"></ion-icon>
+      <ion-icon :color="color" :src="icon_src"/>
     </div>
     <ion-text>
       <h1><strong>{{ title }}</strong></h1>
     </ion-text>
-    <slot>
-
-    </slot>
+    <slot/>
   </ion-header>
 </template>
 
-<script>
-import { IonIcon, IonText } from '@ionic/vue';
-import { downloadOutline } from 'ionicons/icons';
+<script setup>
+import { IonIcon, IonText, IonHeader } from '@ionic/vue';
 import ToolbarBackButton from "@/components/ToolbarBackButton.vue";
 
-export default {
-  name: 'HeaderComponent',
-  components: {
-    ToolbarBackButton,
-    IonIcon,
-    IonText
-  },
-  props: {
-    title: { type: String, default: 'Download your Statements' },
-    icon_src: { type: String, default: '' },
-  },
-  data() {
-    return { downloadOutline };
-  },
-};
+const props = defineProps({
+  title: { type: String, default: 'Download your Statements' },
+  icon_src: { type: String, default: '' },
+  color: { type: String, default: 'primary' },
+});
 </script>
 
 <style scoped>
