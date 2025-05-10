@@ -40,7 +40,5 @@ defineProps({
     default: receiptOutline, // Default empty string or provide a default icon source (value: SVG URL String)
   },
 });
-
-const receiptOutlineIcon = receiptOutline;
 </script>
 

@@ -7,33 +7,18 @@
   </ion-toolbar>
 </template>
 
-<script>
-import {IonButton, IonIcon, IonToolbar} from '@ionic/vue';
+<script setup>
+import { IonButton, IonIcon, IonToolbar } from '@ionic/vue';
 import { returnDownBackOutline } from 'ionicons/icons';
-export default {
-  name: 'ToolbarBackButton',
-  components: {
-    IonButton,
-    IonIcon,
-    IonToolbar
-  },
-  props: {
-    toolbar_color: { type: String, default: 'primary' },
-  },
-  data() {
-    return {
-      returnDownBackOutline,
-    };
-  },
-  methods: {
-    goBack() {
-      this.$emit('back') || this.$router.back();
-    },
-  },
+import { defineProps, defineEmits } from 'vue';
+
+defineProps({
+  toolbar_color: { type: String, default: 'primary' },
+});
+
+const emit = defineEmits(['back']);
+
+function goBack() {
+  emit('back') || window.history.back();
 }
-
 </script>
-
-<style scoped>
-
-</style>

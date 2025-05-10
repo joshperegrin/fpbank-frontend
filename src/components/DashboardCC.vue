@@ -4,72 +4,30 @@
     <ion-card-content>
       <div class="card-design">
         <div class="card-header">
-          <img :src="cardDetails.logo" alt="Card Logo" class="card-logo" />
-          <ion-text>{{ cardDetails.type }}</ion-text>
+          <img :src="props.cardDetails.logo" alt="Card Logo" class="card-logo" />
+          <ion-text>{{ props.cardDetails.type }}</ion-text>
         </div>
         <div class="card-number">
-          <ion-text>{{ isCensored ? censorCardNumber(cardDetails.number) : formatCardNumber(cardDetails.number) }}</ion-text>
+          <ion-text>{{ isCensored ? censorCardNumber(props.cardDetails.number) : formatCardNumber(props.cardDetails.number) }}</ion-text>
         </div>
         <div class="card-details">
           <div class="card-info">
             <ion-text class="label">Card Holder</ion-text>
-            <ion-text>{{ cardDetails.name }}</ion-text>
+            <ion-text>{{ props.cardDetails.name }}</ion-text>
           </div>
           <div class="card-info">
             <ion-text class="label">Expires</ion-text>
-            <ion-text>{{ isCensored ? censorExpiry(cardDetails.expiry) : cardDetails.expiry }}</ion-text>
+            <ion-text>{{ isCensored ? '**/**' : props.cardDetails.expiry }}</ion-text>
           </div>
           <div class="card-info">
             <ion-text class="label">CVV</ion-text>
-            <ion-text>{{ isCensored ? censorCvv(cardDetails.cvv) : cardDetails.cvv }}</ion-text>
+            <ion-text>{{ isCensored ? censorCvv(props.cardDetails.cvv) : props.cardDetails.cvv }}</ion-text>
           </div>
         </div>
       </div>
     </ion-card-content>
   </ion-card>
 </template>
-
-<script setup>
-import { ref } from 'vue';
-import { IonCard, IonCardContent, IonText, IonRippleEffect } from '@ionic/vue';
-
-const props = defineProps({
-  cardDetails: {
-    type: Object,
-    required: true,
-    default: () => ({
-      type: '',
-      number: '',
-      name: '',
-      expiry: '',
-      cvv: '',
-      logo: '',
-    }),
-  },
-});
-
-const isCensored = ref(true);
-
-function toggleCensor() {
-  isCensored.value = !isCensored.value;
-}
-
-function formatCardNumber(number) {
-  return number.replace(/(\d{4})(?=\d)/g, '$1 ');
-}
-
-function censorCardNumber(number) {
-  return '**** **** **** ' + number.slice(-4);
-}
-
-function censorExpiry(expiry) {
-  return '**/**';
-}
-
-function censorCvv(cvv) {
-  return '*'.repeat(cvv.length);
-}
-</script>
 
 <style scoped>
 .credit-card-widget {
@@ -121,3 +79,41 @@ function censorCvv(cvv) {
   opacity: 0.8;
 }
 </style>
+
+<script setup>
+import { ref } from 'vue';
+import { IonCard, IonCardContent, IonText, IonRippleEffect } from '@ionic/vue';
+
+const props = defineProps({
+  cardDetails: {
+    type: Object,
+    required: true,
+    default: () => ({
+      type: '',
+      number: '',
+      name: '',
+      expiry: '',
+      cvv: '',
+      logo: '',
+    }),
+  },
+});
+
+const isCensored = ref(true);
+
+function toggleCensor() {
+  isCensored.value = !isCensored.value;
+}
+
+function formatCardNumber(number) {
+  return number.replace(/(\d{4})(?=\d)/g, '$1 ');
+}
+
+function censorCardNumber(number) {
+  return '**** **** **** ' + number.slice(-4);
+}
+
+function censorCvv(cvv) {
+  return '*'.repeat(cvv.length);
+}
+</script>

@@ -107,7 +107,7 @@ export default {
           const filteredValue = value.replace(/[^0-9]+/g, '');
 
 
-          this.receivingAccountNumber = filteredValue; 
+          this.receivingAccountNumber = filteredValue;
           const inputCmp = event.target;
           if (inputCmp !== undefined) {
             inputCmp.value = filteredValue;
@@ -125,7 +125,7 @@ export default {
     },
     cancel(){
       if(this.servicesStore.serviceDetails.transfer_ReceivingBank !== "" &&
-        this.receivingAccountNumber != "" && 
+        this.receivingAccountNumber != "" &&
         this.receivingAccountNumber != "") {
         this.$router.back()
       } else {
@@ -139,7 +139,7 @@ export default {
     },
     async confirm(){
       if(this.servicesStore.serviceDetails.transfer_ReceivingBank !== "" &&
-        this.receivingAccountName !== "" && 
+        this.receivingAccountName !== "" &&
         this.receivingAccountNumber !== "" &&
         this.receivingAccountNumber.length === 10) {
           this.servicesStore.serviceDetails.transfer_ReceivingAccountNumber = this.receivingAccountNumber;
@@ -169,17 +169,17 @@ export default {
         await toast.present();
         } else if(this.receivingAccountNumber.length !== 10){
           const toast = await toastController.create({
-            message: 'Invalid DashboardHeader Number, must be 10 in length',
+            message: 'Invalid Header Number, must be 10 in length',
             duration: 1500,
             position: 'bottom',
             positionAnchor: 'confirm',
           });
           await toast.present();
-          
+
         }
       }
 
-      
+
     }
   }
 }

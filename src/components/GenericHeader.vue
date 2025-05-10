@@ -1,10 +1,10 @@
 <template>
-  <ion-header>
-    <ToolbarBackButton toolbar_color="primary"/>
+  <ion-header class="ion-padding">
+    <ToolbarBackButton v-if="!root_page" toolbar_color="primary"/>
     <div v-if="icon_src" class="icon-circle">
       <ion-icon :color="color" :src="icon_src"/>
     </div>
-    <ion-text>
+    <ion-text v-if="title" >
       <h1><strong>{{ title }}</strong></h1>
     </ion-text>
     <slot/>
@@ -15,10 +15,11 @@
 import { IonIcon, IonText, IonHeader } from '@ionic/vue';
 import ToolbarBackButton from "@/components/ToolbarBackButton.vue";
 
-const props = defineProps({
-  title: { type: String, default: 'Download your Statements' },
+defineProps({
+  title: { type: String },
   icon_src: { type: String, default: '' },
   color: { type: String, default: 'primary' },
+  root_page: { type: Boolean, default: false },
 });
 </script>
 
@@ -37,7 +38,7 @@ ion-header {
 
   padding-top: 30px;
   padding-bottom: 15px;
-  border-radius: 0px 0px 16px 16px;
+  border-radius: 0 0 16px 16px;
 }
 .icon-circle {
   background-color: var(--ion-color-primary-contrast);
@@ -56,4 +57,7 @@ ion-icon {
 ion-text {
   color: var(--ion-color-primary-contrast);
 }
+
+ion-header {
+  color: var(--ion-color-primary-contrast);}
 </style>

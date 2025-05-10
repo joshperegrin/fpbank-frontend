@@ -40,21 +40,15 @@ ion-segment-button {
 }
 </style>
 
-<script>
+<script setup>
+import { ref } from 'vue';
 import { IonToolbar, IonSegment, IonSegmentButton, IonLabel } from '@ionic/vue';
 
-export default {
-  components: { IonToolbar, IonSegment, IonSegmentButton, IonLabel },
-  data() {
-    return {
-      activeFilter: 'all',
-    };
-  },
-  methods: {
-    setFilter(value) {
-      this.activeFilter = value;
-      this.$emit('filter-changed', value);
-    },
-  },
-};
+const activeFilter = ref('all');
+const emit = defineEmits(['filter-changed']);
+
+function setFilter(value) {
+  activeFilter.value = value;
+  emit('filter-changed', value);
+}
 </script>

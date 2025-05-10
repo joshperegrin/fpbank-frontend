@@ -1,46 +1,23 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
-      <ion-header>
-        <ion-toolbar color="primary">
-          <ion-title>FP Bank Dashboard</ion-title>
-        </ion-toolbar>
-        <ion-button size="large" :router-link="{ name: 'dashboard_page_2' }" router-direction="forward">
-          Savings Account
-          <ion-icon slot="end" :icon='chevronForward'></ion-icon>
-        </ion-button>
+      <GenericHeader title="FPBANK Dashboard" :root_page="true">
         <DashboardHeader :account="account"/>
-      </ion-header>
-
+      </GenericHeader>
       <div class="content-body">
-        <ion-card class="body-widgets">
-          <ion-card-header>
-            <ion-card-title>Favorite Accounts</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <item-grid :items="favoriteAccounts"></item-grid>
-          </ion-card-content>
-        </ion-card>
+        <GenericCardWidgets title="Favorite Accounts">
+            <item-grid :items="favoriteAccounts"/>
+        </GenericCardWidgets>
 
-        <ion-card class="body-widgets">
-          <ion-card-header>
-            <ion-card-title>Favorite Billers</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <item-grid :items="favoriteBillers"></item-grid>
-          </ion-card-content>
-        </ion-card>
+        <GenericCardWidgets title="Favorite Billers">
+          <item-grid :items="favoriteBillers"/>
+        </GenericCardWidgets>
 
         <CreditCard :card-details="cardDetails" />
 
-        <ion-card class="body-widgets">
-          <ion-card-header>
-            <ion-card-title>Services</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <item-grid :items="services"></item-grid>
-          </ion-card-content>
-        </ion-card>
+        <GenericCardWidgets title="Services">
+          <item-grid :items="services"/>
+        </GenericCardWidgets>
 
         <FeaturedArticle/>
       </div>
@@ -51,22 +28,15 @@
 <script setup>
 import {
   IonPage,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
   IonContent,
-  IonCard,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardContent,
-  IonIcon,
-  IonButton,
 } from '@ionic/vue';
-import { chevronForward, homeOutline, personOutline, settingsOutline, walletOutline, helpCircleOutline, logOutOutline, searchOutline } from 'ionicons/icons';
+import { homeOutline, personOutline, settingsOutline, walletOutline, helpCircleOutline, logOutOutline, searchOutline } from 'ionicons/icons';
 import ItemGrid from '@/components/ItemGrid.vue';
 import DashboardHeader from '@/components/DashboardHeader.vue';
 import CreditCard from '@/components/DashboardCC.vue';
 import FeaturedArticle from '@/components/DashboardArticle.vue';
+import GenericCardWidgets from "@/components/GenericCardWidgets.vue";
+import GenericHeader from "@/components/GenericHeader.vue";
 
 const account = {
   amount: '370,740.21',
@@ -110,37 +80,5 @@ const services = [
 </script>
 
 <style scoped>
-.content-body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 1em;
-}
 
-ion-header {
-  -webkit-box-shadow: none;
-  box-shadow: none;
-
-  background-color: var(--ion-color-primary);
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: nowrap;
-
-  padding-top: 30px;
-  padding-bottom: 15px;
-  border-radius: 0px 0px 16px 16px;
-}
-
-ion-card.body-widgets {
-  width: 100%;
-  border-radius: 20px;
-}
-
-ion-header {
-  color: var(--ion-color-primary-contrast);
-}
 </style>

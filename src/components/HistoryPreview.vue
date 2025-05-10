@@ -11,7 +11,7 @@
         </ion-label>
       </ion-item>
     </ion-list>
-    <ion-button expand="block" :router-link= "{ name: 'history_page_1' }">View transaction history</ion-button>
+    <ion-button expand="block" :router-link= "{ name: 'history_page_1' }" router-direction="forward">View transaction history</ion-button>
   </ion-card>
 </template>
 

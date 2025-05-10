@@ -63,7 +63,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-
 .logo-col {
   display: flex;
   justify-content: center;

@@ -1,8 +1,12 @@
 <template>
-  <ion-text v-if="show_acc_number">
+  <ion-text v-if="acc_details">
     <ion-icon :src="'src/assets/svgs/bank.svg'"></ion-icon>
     {{ account.number }}
   </ion-text>
+  <ion-button v-else size="large" :router-link="{ name: 'dashboard_page_2' }" router-direction="forward">
+    Savings Account
+    <ion-icon slot="end" :icon='chevronForward'></ion-icon>
+  </ion-button>
   <ion-text>
     <div class="balance ion-text-center">
       <h2>{{ account.amount }}</h2>
@@ -12,7 +16,8 @@
 </template>
 
 <script setup>
-import { IonIcon, IonText } from '@ionic/vue';
+import { IonButton, IonIcon, IonText } from '@ionic/vue';
+import { chevronForward } from "ionicons/icons";
 
 defineProps({
   account: {
@@ -24,7 +29,7 @@ defineProps({
       currency: 'PHP',
     }),
   },
-  show_acc_number: {
+  acc_details: {
     type: Boolean,
     default: false,
   },
@@ -47,13 +52,5 @@ defineProps({
 .balance h3 {
   margin-left: 0.5em;
   font-size: 0.8em;
-}
-
-.title {
-  font-size: 1.5em;
-  padding: 0.5em;
-  display: flex;
-  align-items: center;
-  font-weight: bold;
 }
 </style>

@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 import { IonAvatar, IonLabel, IonRippleEffect } from '@ionic/vue';
 
 const props = defineProps({

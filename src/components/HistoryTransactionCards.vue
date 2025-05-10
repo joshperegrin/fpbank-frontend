@@ -107,78 +107,65 @@
 }
 </style>
 
-<script>
+<script setup>
 import { IonCard, IonCardContent, IonText } from '@ionic/vue';
+import { computed } from 'vue';
 
-export default {
-  name: 'TransactionCard',
-  components: {
-    IonCard,
-    IonCardContent,
-    IonText,
+// Define and destructure props
+const props = defineProps({
+  clientName: { type: String, default: '' },
+  accountNumber: { type: String, default: '' },
+  datetime: { type: [String, Date], default: '' },
+  amount: { type: Number, default: 0 },
+  status: {
+    type: String,
+    default: 'pending',
+    validator: (value) => ['sent', 'pending', ''].includes(value.toLowerCase()),
   },
-  props: {
-    clientName: {
-      type: String,
-      default: '',
-    },
-    accountNumber: {
-      type: String,
-      default: '',
-    },
-    datetime: {
-      type: [String, Date],
-      default: '',
-    },
-    amount: {
-      type: Number,
-      default: 0,
-    },
-    status: {
-      type: String,
-      default: 'pending',
-      validator: (value) => ['sent', 'pending', ''].includes(value.toLowerCase()),
-    },
-  },
-  computed: {
-    isValidData() {
-      return (
-          this.clientName &&
-          this.accountNumber &&
-          this.datetime &&
-          this.isValidDate(this.datetime) &&
-          this.status
-      );
-    },
-    formattedDatetime() {
-      if (!this.isValidDate(this.datetime)) return 'Invalid Date';
-      const date = new Date(this.datetime);
-      return date.toLocaleString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true,
-      });
-    },
-    formattedAmount() {
-      const sign = this.amount >= 0 ? '+' : '-';
-      return `${sign}$${Math.abs(this.amount).toFixed(2)}`;
-    },
-    amountColor() {
-      return this.amount >= 0 ? 'success' : 'danger';
-    },
-    statusColor() {
-      return this.status.toLowerCase() === 'sent' ? 'success' : 'danger';
-    },
-  },
-  methods: {
-    isValidDate(date) {
-      if (!date) return false;
-      const parsed = new Date(date);
-      return parsed instanceof Date && !isNaN(parsed);
-    },
-  },
-};
+});
+const { clientName, accountNumber, datetime, amount, status } = props;
+
+// Methods
+function isValidDate(date) {
+  if (!date) return false;
+  const parsed = new Date(date);
+  return parsed instanceof Date && !isNaN(parsed);
+}
+
+// Computed properties
+const isValidData = computed(() => {
+  return (
+      clientName &&
+      accountNumber &&
+      datetime &&
+      isValidDate(datetime) &&
+      status
+  );
+});
+
+const formattedDatetime = computed(() => {
+  if (!isValidDate(datetime)) return 'Invalid Date';
+  const date = new Date(datetime);
+  return date.toLocaleString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  });
+});
+
+const formattedAmount = computed(() => {
+  const sign = amount >= 0 ? '+' : '-';
+  return `${sign}$${Math.abs(amount).toFixed(2)}`;
+});
+
+const amountColor = computed(() => {
+  return amount >= 0 ? 'success' : 'danger';
+});
+
+const statusColor = computed(() => {
+  return status.toLowerCase() === 'sent' ? 'success' : 'danger';
+});
 </script>

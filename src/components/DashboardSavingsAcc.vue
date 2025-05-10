@@ -39,8 +39,6 @@ defineProps({
     }),
   },
 });
-
-const chevronForwardIcon = chevronForward;
 </script>
 
 <style scoped>

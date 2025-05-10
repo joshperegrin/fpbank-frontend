@@ -6,11 +6,11 @@
     >
       <DashboardHeader
           :account="account"
-          :show_acc_number="true"
+          :acc_details="true"
       />
     </GenericHeader>
     <ion-content class="ion-padding">
-      <DashboardSavingsDetails />
+      <DashboardSavingsDetails/>
       <HistoryPreview/>
     </ion-content>
   </ion-page>
