@@ -31,27 +31,6 @@
       </ion-col>
     </ion-row>
 
-    <!-- Row 3: Incoming and Outgoing Funds -->
-    <ion-row class="funds-flow-row">
-      <ion-col size="6" class="incoming-col">
-        <ion-text class="label">
-          <ion-icon :icon="arrowDownOutline" aria-label="Arrow going down"></ion-icon>
-          Incoming
-        </ion-text>
-        <ion-text color="success" class="value">
-          <h2>+{{ incoming }} <small>{{ currency }}</small></h2>
-        </ion-text>
-      </ion-col>
-      <ion-col size="6" class="outgoing-col">
-        <ion-text class="label">
-          <ion-icon :icon="arrowUpOutline" aria-label="Arrow going up"></ion-icon>
-          Outgoing
-        </ion-text>
-        <ion-text color="danger" class="value">
-          <h2>-{{ outgoing }} <small>{{ currency }}</small></h2>
-        </ion-text>
-      </ion-col>
-    </ion-row>
   </ion-grid>
 
   <!-- Popover for Interest Rate Information -->
@@ -145,8 +124,6 @@ import {
   trendingUpOutline,
   informationCircleOutline,
   alertCircleOutline,
-  arrowDownOutline,
-  arrowUpOutline,
 } from 'ionicons/icons';
 import { ref } from 'vue';
 
@@ -156,8 +133,6 @@ defineProps({
   interestEarned: { type: String, default: '0.00' },
   holdDays: { type: Number, default: 5 },
   fundsOnHold: { type: String, default: '0.00' },
-  incoming: { type: String, default: '0.00' },
-  outgoing: { type: String, default: '0.00' },
   currency: { type: String, default: 'PHP' },
 });
 

@@ -1,8 +1,4 @@
 <template>
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Recent Transactions</ion-card-title>
-    </ion-card-header>
     <ion-list>
       <ion-item v-for="(transaction, index) in transactions.slice(0, 3)" :key="index">
         <ion-label>
@@ -12,11 +8,10 @@
       </ion-item>
     </ion-list>
     <ion-button expand="block" :router-link= "{ name: 'history_page_1' }" router-direction="forward">View transaction history</ion-button>
-  </ion-card>
 </template>
 
 <script setup>
-import { IonCard, IonCardHeader, IonCardTitle, IonList, IonItem, IonLabel, IonButton } from '@ionic/vue';
+import { IonList, IonItem, IonLabel, IonButton } from '@ionic/vue';
 
 defineProps({
   transactions: {

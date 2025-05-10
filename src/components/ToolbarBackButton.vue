@@ -10,7 +10,6 @@
 <script setup>
 import { IonButton, IonIcon, IonToolbar } from '@ionic/vue';
 import { returnDownBackOutline } from 'ionicons/icons';
-import { defineProps, defineEmits } from 'vue';
 
 defineProps({
   toolbar_color: { type: String, default: 'primary' },

@@ -145,7 +145,7 @@ ion-title {
   }
 }
 
-.content-body {
+.content-body { /*Note: Only applies to Marco's Style, doesn't work with josh's for nowww*/
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
