@@ -52,33 +52,50 @@ ion-item {
 import { IonList, IonListHeader, IonLabel, IonItem } from '@ionic/vue';
 import { computed } from 'vue';
 
-// Sample transaction data (replace with database fetch)
-const transaction = {
-  transactionName: 'Grocery Payment',
-  transactionDate: '2025-05-10T14:30:00Z',
-  transferFrom: 'Savings Account (****1234)',
-  transferTo: 'Merchant (****5678)',
-  recipientName: 'SuperMart',
-  amount: 150.75,
-  note: 'Weekly groceries',
-};
+// Define props
+const props = defineProps({
+  Transaction: {
+    type: Object,
+    required: true,
+    default: () => ({
+      transactionName: '',
+      transactionDate: '',
+      transferFrom: '',
+      transferTo: '',
+      recipientName: '',
+      amount: 0,
+      note: '',
+    }),
+    validator: (transaction) => {
+      return typeof transaction.transactionName === 'string' &&
+          (typeof transaction.transactionDate === 'string' || transaction.transactionDate instanceof Date) &&
+          typeof transaction.transferFrom === 'string' &&
+          typeof transaction.transferTo === 'string' &&
+          typeof transaction.recipientName === 'string' &&
+          typeof transaction.amount === 'number' &&
+          (typeof transaction.note === 'string' || transaction.note === undefined);
+    },
+  },
+});
 
 // Format transaction data for display
 const formattedTransaction = computed(() => ({
-  transactionName: transaction.transactionName,
-  transactionDate: new Date(transaction.transactionDate).toLocaleString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: true,
-  }),
-  transferFrom: transaction.transferFrom,
-  transferTo: transaction.transferTo,
-  recipientName: transaction.recipientName,
-  amount: `$${transaction.amount.toFixed(2)}`,
-  note: transaction.note || 'None',
+  transactionName: props.Transaction.transactionName || 'Unnamed Transaction',
+  transactionDate: isValidDate(props.Transaction.transactionDate)
+      ? new Date(props.Transaction.transactionDate).toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+      })
+      : 'Invalid Date',
+  transferFrom: props.Transaction.transferFrom || 'Unknown Account',
+  transferTo: props.Transaction.transferTo || 'Unknown Recipient',
+  recipientName: props.Transaction.recipientName || 'Unknown',
+  amount: `$${Math.abs(props.Transaction.amount).toFixed(2)}`,
+  note: props.Transaction.note || 'None',
 }));
 
 // Convert camelCase keys to human-readable labels
@@ -93,5 +110,12 @@ function formatLabel(key) {
     note: 'Note',
   };
   return labelMap[key] || key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+}
+
+// Validate date
+function isValidDate(date) {
+  if (!date) return false;
+  const parsed = new Date(date);
+  return parsed instanceof Date && !isNaN(parsed);
 }
 </script>

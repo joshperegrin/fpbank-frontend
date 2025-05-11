@@ -1,17 +1,15 @@
 <template>
-  <ion-toolbar>
-    <ion-segment class="ion-padding" :value="activeFilter" @ionChange="setFilter($event.detail.value)">
-      <ion-segment-button value="all">
-        <ion-label>All</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="received">
-        <ion-label>Received</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="sent">
-        <ion-label>Sent</ion-label>
-      </ion-segment-button>
-    </ion-segment>
-  </ion-toolbar>
+  <ion-segment class="ion-padding" :value="activeFilter" @ionChange="setFilter($event.detail.value)">
+    <ion-segment-button value="all" content-id="all">
+      <ion-label>All</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="received" content-id="received">
+      <ion-label>Received</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="sent" content-id="sent">
+      <ion-label>Sent</ion-label>
+    </ion-segment-button>
+  </ion-segment>
 </template>
 
 <style scoped>
@@ -42,7 +40,7 @@ ion-segment-button {
 
 <script setup>
 import { ref } from 'vue';
-import { IonToolbar, IonSegment, IonSegmentButton, IonLabel } from '@ionic/vue';
+import { IonSegment, IonSegmentButton, IonLabel } from '@ionic/vue';
 
 const activeFilter = ref('all');
 const emit = defineEmits(['filter-changed']);
@@ -51,4 +49,6 @@ function setFilter(value) {
   activeFilter.value = value;
   emit('filter-changed', value);
 }
+
+
 </script>

@@ -34,7 +34,7 @@ const routes = [
         component: () => import('@/views/HistoryPage2.vue')
       },
       {
-        path: 'HistoryPage3',
+        path: '/history-page-3/:id',
         name: 'history_page_3',
         component: () => import('@/views/HistoryPage3.vue')
       },
