@@ -1,48 +1,89 @@
 <template>
   <ion-page>
-    <ion-content>
-      <GenericHeader
-          title="Download your Statements"
-          :icon_src="downloadOutline"
-      />
-      <div class="content-body">
-        <ion-list>
-          <ion-label>History</ion-label>
-          <ion-select label-placement="floating" fill="outline" placeholder="Choose range" interface="popover">
-            <ion-select-option value="3">3 months</ion-select-option>
-            <ion-select-option value="6">6 months</ion-select-option>
-            <ion-select-option value="12">12 months</ion-select-option>
-          </ion-select>
-        </ion-list>
-          <ion-list>
-            <ion-label>Select Custom Date</ion-label>
-            <ion-input label="Start Date" label-placement="floating" fill='outline' placeholder="Start date"></ion-input>
-            <ion-input label="End Date" label-placement="floating" fill='outline' placeholder="End date"></ion-input>
-          </ion-list>
+    <GenericHeader
+        title="Download Your Statements"
+        :icon_src="downloadOutline"
+    />
+    <ion-content class="ion-padding">
+      <div>
+        <form @submit.prevent>
+          <CSVMonthRange @date-range-selected="setDateRange" />
+          <CSVCustomRange :start-date="dateRange.startDate" :end-date="dateRange.endDate" @date-range-selected="setDateRange" />
+          <ion-buttons>
+            <ion-button expand="block" @click="downloadCSV" :disabled="!dateRange.startDate || !dateRange.endDate">Download CSV</ion-button>
+            <ion-button expand="block" @click="sendEmail" :disabled="!dateRange.startDate || !dateRange.endDate">Send via Email</ion-button>
+          </ion-buttons>
+        </form> <!--Submitting an empty calendar or list causes: 'Uncaught (in promise) RangeError: invalid date'-->
 
-        <ion-text>Your transaction history will be sent to the email address connected to your account, or can be downloaded as a CSV file. All transactions are in PH time (GMT+8)</ion-text>
-        <ion-buttons>
-          <ion-button color="primary" fill="outline" shape='round' size="small">Send Me an Email</ion-button>
-          <ion-button color="primary" fill="solid" shape='round' size="small">Download as CSV</ion-button>
-        </ion-buttons>
+        <ion-modal :is-open="isModalOpen" @didDismiss="isModalOpen = false">
+          <ion-header>
+            <ion-toolbar>
+              <ion-title>Transaction Details</ion-title>
+              <ion-buttons slot="end">
+                <ion-button @click="isModalOpen = false">Close</ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+
+          <ion-content>
+            <ion-list>
+              <ion-item v-for="transaction in filteredTransactions" :key="transaction.id">
+                {{ transaction.date.toDateString() }} - ${{ transaction.amount.toFixed(2) }} - {{ transaction.status }}
+              </ion-item>
+            </ion-list>
+          </ion-content>
+        </ion-modal>
+
+        <ion-toast
+            :is-open="isToastOpen"
+            message="Email sent successfully"
+            :duration="2000"
+            @didDismiss="isToastOpen = false"
+        />
       </div>
-
     </ion-content>
   </ion-page>
 </template>
 
 <script setup>
-import { IonPage, IonContent, IonButton, IonButtons } from '@ionic/vue';
-import { downloadOutline } from 'ionicons/icons';
+import { ref, computed } from 'vue';
+import CSVMonthRange from '@/components/CSVMonthRange.vue';
+import CSVCustomRange from '@/components/CSVCustomRange.vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonModal, IonList, IonItem, IonToast, IonButtons } from '@ionic/vue';
 import GenericHeader from "@/components/GenericHeader.vue";
+import {downloadOutline} from "ionicons/icons";
+
+const dateRange = ref({ startDate: null, endDate: null });
+const isModalOpen = ref(false);
+const isToastOpen = ref(false);
+
+const sampleTransactions = [
+  { id: 'tx1', date: new Date('2023-01-15'), amount: 100.00, status: 'sent' },
+  { id: 'tx2', date: new Date('2023-03-20'), amount: -50.25, status: 'pending' },
+  { id: 'tx3', date: new Date('2023-06-10'), amount: 200.75, status: 'sent' },
+  { id: 'tx4', date: new Date('2023-09-05'), amount: -75.00, status: 'pending' },
+];
+
+const filteredTransactions = computed(() => {
+  if (!dateRange.value.startDate || !dateRange.value.endDate) return [];
+  return sampleTransactions.filter(t => t.date >= dateRange.value.startDate && t.date <= dateRange.value.endDate);
+});
+
+function setDateRange({ startDate, endDate }) {
+  dateRange.value = { startDate, endDate };
+}
+
+function downloadCSV() {
+  isModalOpen.value = true;
+}
+
+function sendEmail() {
+  isToastOpen.value = true;
+}
 </script>
 
 <style scoped>
-.content-body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 1em;
+ion-button {
+  margin-top: 10px;
 }
 </style>

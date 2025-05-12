@@ -10,6 +10,7 @@
           />
           <ion-button
               :router-link="{ name: 'history_page_2' }"
+              router-direction="forward"
               size="large"
               fill="solid"
               shape="round"

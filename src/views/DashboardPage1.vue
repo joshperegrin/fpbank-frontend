@@ -6,7 +6,7 @@
       </GenericHeader>
       <div class="content-body">
         <GenericCardWidgets title="Favorite Accounts">
-            <item-grid :items="favoriteAccounts"/>
+            <item-grid :items="favoriteAccounts"/> <!--TODO: Property '$slots' was accessed via 'this'. Avoid using 'this' in templates.-->
         </GenericCardWidgets>
 
         <GenericCardWidgets title="Favorite Billers">
