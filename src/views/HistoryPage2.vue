@@ -10,6 +10,7 @@
           <CSVMonthRange @date-range-selected="setDateRange" />
           <CSVCustomRange :start-date="dateRange.startDate" :end-date="dateRange.endDate" @date-range-selected="setDateRange" />
           <ion-buttons class="ion-justify-content-between ion-margin-vertical">
+            <ion-label></ion-label>
             <ion-button expand="block" size="medium" fill="outline" color="primary" shape="round" @click="downloadCSV"
                         :disabled="!dateRange.startDate || !dateRange.endDate">Download CSV
             </ion-button>
@@ -53,7 +54,7 @@
 import { ref, computed } from 'vue';
 import CSVMonthRange from '@/components/CSVMonthRange.vue';
 import CSVCustomRange from '@/components/CSVCustomRange.vue';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonModal, IonList, IonItem, IonToast, IonButtons } from '@ionic/vue';
+import { IonPage, IonLabel, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonModal, IonList, IonItem, IonToast, IonButtons } from '@ionic/vue';
 import GenericHeader from "@/components/GenericHeader.vue";
 import {downloadOutline} from "ionicons/icons";
 
