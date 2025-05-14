@@ -9,9 +9,13 @@
         <form @submit.prevent>
           <CSVMonthRange @date-range-selected="setDateRange" />
           <CSVCustomRange :start-date="dateRange.startDate" :end-date="dateRange.endDate" @date-range-selected="setDateRange" />
-          <ion-buttons>
-            <ion-button expand="block" @click="downloadCSV" :disabled="!dateRange.startDate || !dateRange.endDate">Download CSV</ion-button>
-            <ion-button expand="block" @click="sendEmail" :disabled="!dateRange.startDate || !dateRange.endDate">Send via Email</ion-button>
+          <ion-buttons class="ion-justify-content-between ion-margin-vertical">
+            <ion-button expand="block" size="medium" fill="outline" color="primary" shape="round" @click="downloadCSV"
+                        :disabled="!dateRange.startDate || !dateRange.endDate">Download CSV
+            </ion-button>
+            <ion-button expand="block" size="medium" fill="solid" color="primary" shape="round" @click="sendEmail"
+                        :disabled="!dateRange.startDate || !dateRange.endDate">Send via Email
+            </ion-button>
           </ion-buttons>
         </form> <!--Submitting an empty calendar or list causes: 'Uncaught (in promise) RangeError: invalid date'-->
 
@@ -85,5 +89,6 @@ function sendEmail() {
 <style scoped>
 ion-button {
   margin-top: 10px;
+  width: 45%;
 }
 </style>

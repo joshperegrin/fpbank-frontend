@@ -12,6 +12,8 @@
       </GenericHeader>
       <div class="content-body">
         <!--<DashboardSavingsDetails/>--> <!--NOTE: Backlogged-->
+        <CreditCard :card-details="cardDetails" />
+
         <GenericCardWidgets title="Recent Transactions">
           <HistoryPreview :Transactions="transactions" />
           <ion-button expand="block" shape="round" :router-link="{ name: 'history_page_1' }" router-direction="forward">
@@ -34,11 +36,21 @@ import DashboardHeader from "@/components/DashboardHeader.vue";
 import HistoryPreview from "@/components/HistoryPreview.vue";
 import { ref } from "vue";
 import GenericCardWidgets from "@/components/GenericCardWidgets.vue";
+import CreditCard from "@/components/DashboardCC.vue";
 
 const account = {
   amount: '370,740.21',
   number: '002376543210',
   currency: 'PHP',
+};
+
+const cardDetails = {
+  type: 'Visa',
+  number: '1234567890123456',
+  name: 'Juan Dela Cruz',
+  expiry: '12/25',
+  cvv: '123',
+  logo: 'src/assets/svgs/logo.svg',
 };
 
 const transactions = ref([

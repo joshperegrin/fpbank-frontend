@@ -1,18 +1,24 @@
 <template>
   <div class="custom-selector">
-    <ion-label>Custom Date Range</ion-label>
+    <ion-label color="primary" class="ion-padding-top"><h1>Custom Date Range</h1></ion-label>
     <ion-input
         readonly
+        fill="outline"
         :value="localStartDate ? localStartDate.toDateString() : ''"
         placeholder="Start Date"
         @click="openStartDatePopover"
-    />
+    >
+      <ion-icon color="medium" slot="end" :src="calendarClear" aria-hidden="true"/>
+    </ion-input>
     <ion-input
         readonly
+        fill="outline"
         :value="localEndDate ? localEndDate.toDateString() : ''"
         placeholder="End Date"
         @click="openEndDatePopover"
-    />
+    >
+      <ion-icon color="medium" slot="end" :src="calendarClear" aria-hidden="true"/>
+    </ion-input>
     <ion-popover :is-open="isStartPopoverOpen" alignment="center" @didDismiss="isStartPopoverOpen = false">
       <ion-content>
         <ion-datetime
@@ -42,7 +48,8 @@
 
 <script setup>
 import { ref, watch } from 'vue';
-import { IonLabel, IonInput, IonPopover, IonDatetime, IonButton, IonContent } from '@ionic/vue';
+import { IonLabel, IonInput, IonPopover, IonDatetime, IonButton, IonContent, IonIcon } from '@ionic/vue';
+import { calendarClear } from 'ionicons/icons'
 
 const props = defineProps({
   startDate: Date,

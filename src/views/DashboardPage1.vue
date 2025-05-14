@@ -13,8 +13,6 @@
           <item-grid :items="favoriteBillers"/>
         </GenericCardWidgets>
 
-        <CreditCard :card-details="cardDetails" />
-
         <GenericCardWidgets title="Services">
           <item-grid :items="services"/>
         </GenericCardWidgets>
@@ -33,7 +31,6 @@ import {
 import { homeOutline, personOutline, settingsOutline, walletOutline, helpCircleOutline, logOutOutline, searchOutline } from 'ionicons/icons';
 import ItemGrid from '@/components/ItemGrid.vue';
 import DashboardHeader from '@/components/DashboardHeader.vue';
-import CreditCard from '@/components/DashboardCC.vue';
 import FeaturedArticle from '@/components/DashboardArticle.vue';
 import GenericCardWidgets from "@/components/GenericCardWidgets.vue";
 import GenericHeader from "@/components/GenericHeader.vue";
@@ -57,15 +54,6 @@ const favoriteBillers = [
   { name: 'Biller 3', avatar: 'src/assets/imgs/angry.jpg' },
   { name: 'Pay Billers', icon: 'src/assets/svgs/bank.svg' },
 ];
-
-const cardDetails = {
-  type: 'Visa',
-  number: '1234567890123456',
-  name: 'Juan Dela Cruz',
-  expiry: '12/25',
-  cvv: '123',
-  logo: 'src/assets/svgs/logo.svg',
-};
 
 const services = [
   { name: 'Service 1', icon: homeOutline },

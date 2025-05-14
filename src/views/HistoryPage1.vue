@@ -27,7 +27,7 @@
           </ion-text>
           <ion-list v-else v-for="[month, transactions] in groupedTransactions.all" :key="month">
             <ion-list-header>
-              <ion-label>
+              <ion-label color="primary">
                 <h2>Month of {{ month }}</h2>
               </ion-label>
             </ion-list-header>
