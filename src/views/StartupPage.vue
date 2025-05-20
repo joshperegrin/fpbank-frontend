@@ -36,7 +36,7 @@
   };
 
   const goToLogin = () => {
-    router.push("/login");
+    router.push("/credentials");
   };
 </script>
 

@@ -4,7 +4,7 @@
         <div class="container">
           <ion-toolbar>
             <ion-buttons slot="start">
-              <ion-back-button text="" default-href="/startup"></ion-back-button>
+              <ion-back-button text="" default-href="/openAccount"></ion-back-button>
             </ion-buttons>
           </ion-toolbar>
           <div class="logo-title-container">
@@ -52,7 +52,7 @@
   const router = useRouter(); 
   
   const goRegister = () => {
-  router.push("/register"); //last
+  router.push("/register"); 
   }
 
 </script>

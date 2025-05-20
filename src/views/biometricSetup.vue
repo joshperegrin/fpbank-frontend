@@ -4,7 +4,7 @@
       <div class="container">
         <ion-toolbar>
           <ion-buttons slot="start">
-            <ion-back-button text="" default-href="/credentials"></ion-back-button>
+            <ion-back-button text="" default-href="/number"></ion-back-button>
           </ion-buttons>
         </ion-toolbar>
         <div class="logo-title-container">
@@ -17,7 +17,7 @@
         <div class="message-area">
           <ion-card-header class="aligned-content">
             <ion-card-title>Enter OTP</ion-card-title>
-            <ion-card-subtitle>sent  to your registered email (w*******@gmail.com)</ion-card-subtitle>
+            <ion-card-subtitle style="font-weight:normal;">{{ subtitle }}</ion-card-subtitle>
           </ion-card-header>
           <div class="input-container">
             <div><ion-input label-placement="floating" fill="outline"></ion-input></div>
@@ -27,6 +27,7 @@
             <div><ion-input label-placement="floating" fill="outline"></ion-input></div>
             <div><ion-input label-placement="floating" fill="outline"></ion-input></div>
           </div>
+          <ion-card-subtitle style="text-align: center; margin-top: 20px; font-weight:normal; cursor: pointer;" @click="resendOTP">Resend OTP</ion-card-subtitle>
         </div>
         <div class="button-container">
           <ion-button expand="block" shape="round" size="large" @click="goToTabs">Confirm</ion-button>
@@ -39,6 +40,8 @@
 <script setup>
   import {arrowBack } from 'ionicons/icons';
   import logo from "@/assets/imgs/logo.png";
+  import { ref } from "vue";
+  import { useRouter } from "vue-router";
   import {
     IonPage,
     IonToolbar,
@@ -52,16 +55,15 @@
     IonButton,
   } from "@ionic/vue";
 
-  const icon = {
-    arrowBack
-  }
-  import { useRouter } from "vue-router";
-
+  const icon = { arrowBack }
   const router = useRouter();
-
+  const subtitle = ref("sent  to your registered number (+639*******89)");
   const goToTabs = () => {
-    router.push("/tabs");
+    router.push("/gsdf");
   };
+  function resendOTP() {
+  subtitle.value = "We have resent the OTP to your mobile number";
+}
 </script>
   
 <style scoped>

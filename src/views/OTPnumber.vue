@@ -1,23 +1,17 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true" class="background no-scroll">
-      <div class="container">
         <ion-toolbar>
-          <ion-buttons slot="start">
-            <ion-back-button text="" default-href="/credentials"></ion-back-button>
-          </ion-buttons>
+            <ion-buttons slot="start">
+                <ion-back-button text="" default-href="number"></ion-back-button>
+            </ion-buttons>
         </ion-toolbar>
-        <div class="logo-title-container">
-          <img :src="logo" alt="Full Port Bank Logo" class="logo"/>
-          <div class="title-container">
-            <span class="title-line">Full Port</span>
-            <span class="title-line">Bank</span>
-          </div>
-        </div>
+        <h3 class="page-title">Register</h3>
+      <div class="container">
         <div class="message-area">
           <ion-card-header class="aligned-content">
             <ion-card-title>Enter OTP</ion-card-title>
-            <ion-card-subtitle>sent  to your registered email (w*******@gmail.com)</ion-card-subtitle>
+            <ion-card-subtitle style="font-weight:normal;">{{ subtitle }}</ion-card-subtitle>
           </ion-card-header>
           <div class="input-container">
             <div><ion-input label-placement="floating" fill="outline"></ion-input></div>
@@ -27,6 +21,7 @@
             <div><ion-input label-placement="floating" fill="outline"></ion-input></div>
             <div><ion-input label-placement="floating" fill="outline"></ion-input></div>
           </div>
+          <ion-card-subtitle style="text-align: center; margin-top: 20px; font-weight:normal; cursor: pointer;" @click="resendOTP">Resend OTP</ion-card-subtitle>
         </div>
         <div class="button-container">
           <ion-button expand="block" shape="round" size="large" @click="goToTabs">Confirm</ion-button>
@@ -39,6 +34,8 @@
 <script setup>
   import {arrowBack } from 'ionicons/icons';
   import logo from "@/assets/imgs/logo.png";
+  import { ref } from "vue";
+  import { useRouter } from "vue-router";
   import {
     IonPage,
     IonToolbar,
@@ -52,78 +49,62 @@
     IonButton,
   } from "@ionic/vue";
 
-  const icon = {
-    arrowBack
-  }
-  import { useRouter } from "vue-router";
-
+  const icon = { arrowBack }
   const router = useRouter();
-
+  const subtitle = ref("sent  to your registered number (+639*******89)");
   const goToTabs = () => {
     router.push("/tabs");
   };
+  function resendOTP() {
+  subtitle.value = "We have resent the OTP to your mobile number";
+}
 </script>
   
 <style scoped>
-  .background {
-    --background: linear-gradient(to top, #5c55c9, white 60%);
-    display: flex; /*new*/
-    flex-direction: column; /*new*/
-    height: 100vh;/*new*/
-    overflow: hidden; /*new*/
-  }
-  
-  .no-scroll {
-    overflow: hidden !important; /*new*/
-  }
-
+  ion-content {
+        --background: linear-gradient(to top, #5c55c9, white 40%);; /* Ensure the page background is set */
+        display: flex; /* Use flexbox to control layout */
+        flex-direction: column; /* Stack children vertically */
+        justify-content: flex-start; /* Align content at the top */
+        align-items: stretch; 
+}
   .container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    height: 100%;
-    padding: 16px;
-    box-sizing: border-box;
+    flex: 1;
+    --background: transparent;
+    color:#5C5C99;
+    margin: 0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding-inline-start: 3%;
+    padding-inline-end: 3%;
+    text-align: justify;
+    height: fit-content;
+    box-shadow: none;
   }
 
   ion-toolbar {
-    --background: transparent;
-    color: #292966;
-  }
-  
-  .logo-title-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-  }
+    --background: #292966;
+    color: white;
+    padding: 10px;
+}
 
-  .logo {
-    width: 15%; 
-    height: auto;
-  }
-
-  .title-container {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-  }
-
-  .title-line {
-    font-size: 1.5rem;
-    font-weight:800;
-    color: #292966;
-    font-style: italic;
-    line-height: 1;
-  }
+h3.page-title {
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    background: #292966;
+    margin-top: -1px;
+    padding-bottom: 20px;
+    border: transparent;
+}
 
   .message-area {
     width: 100%;
     text-align: center;
-    padding: 18px;
+    padding: 0px;
     flex-grow: 1;
-    margin-top: 35px;
+    margin-top: 50px;
+    margin-bottom: 1rem;
   }
 
   ion-input{
@@ -139,14 +120,14 @@
   }
 
   ion-card-title {
-    color: #292966;
-    font-size: 2rem;
+    color: #5c5c99;
+    font-size: 1.5rem;
     font-weight: bold;
     text-align: left;
   }
 
   ion-card-subtitle {
-    color: #292966;
+    color: #5c5c99;
     text-align: left;
     font-size: medium;
     font-weight: bold;
@@ -157,7 +138,7 @@
     display: flex;
     gap: 9px;
     justify-content: center;
-    margin-top: 16px;
+    margin-top: 50px;
   }
 
   .button-container {
@@ -165,7 +146,8 @@
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    margin-bottom: 10%;
+    margin-top: 429px;
+    margin-bottom: 25px;
   }
 
   ion-button {

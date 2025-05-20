@@ -35,6 +35,30 @@ const routes = [
   path: '/imAFilipino',
   component: () => import('@/views/imAFilipino.vue')
  },
+ {
+  path: '/register',
+  component: () => import('@/views/RegisterInformation.vue')
+},
+{
+  path: '/uploadID',
+  component: () => import('@/views/uploadID.vue')
+},
+{
+  path: '/enterPW',
+  component: () => import('@/views/EnterPassword.vue')
+},
+{
+  path: '/number',
+  component: () => import('@/views/number.vue')
+},
+{
+  path: '/otpnum',
+  component: () => import('@/views/OTPnumber.vue')
+},
+{
+  path: '/bioSetup',
+  component: () => import('@/views/biometricSetup.vue')
+},
   {
     path: '/tabs/',
     component: TabsPage,
@@ -70,7 +94,11 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    // Always scroll to top
+    return { top: 0 };
+  }
 })
 
 export default router
