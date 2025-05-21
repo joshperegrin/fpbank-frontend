@@ -13,12 +13,12 @@
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding">
       <div class="content-body">
-        <CustomButton01 :icon_name="personCircleOutline"> Personal Info </CustomButton01>
-        <CustomButton01 :icon_name="walletOutline"> Manage Accounts </CustomButton01>
-        <CustomButton01 :icon_name="settingsOutline"> Settings </CustomButton01>
-        <CustomButton01 :icon_name="searchCircleOutline"> Find Us </CustomButton01>
-        <CustomButton01 :icon_name="helpCircleOutline"> Contact Us </CustomButton01>
-        <CustomButton01 :icon_name="logOutOutline"> Log out </CustomButton01>
+        <CustomButton01 :icon_name="personCircleOutline" @click="goToPersonalInfo"> Personal Info </CustomButton01>
+        <CustomButton01 :icon_name="walletOutline" @click="goToManageAccounts"> Manage Accounts </CustomButton01>
+        <CustomButton01 :icon_name="settingsOutline" @click="goToSettings"> Settings </CustomButton01>
+        <CustomButton01 :icon_name="searchCircleOutline" @click="goToFindUs"> Find Us </CustomButton01>
+        <CustomButton01 :icon_name="helpCircleOutline" @click="goToContactUs"> Contact Us </CustomButton01>
+        <CustomButton01 :icon_name="logOutOutline" @click="logout"> Log out </CustomButton01>
       </div>
     </ion-content>
   </ion-page>
@@ -92,6 +92,26 @@ export default {
       searchCircleOutline,
       helpCircleOutline,
       logOutOutline,
+    }
+  },
+  methods: {
+    goToPersonalInfo() {
+      this.$router.push('/personal-info');
+    },
+    goToManageAccounts() {
+      this.$router.push('/manage-accounts');
+    },
+    goToSettings() {
+      this.$router.push('/settings');
+    },
+    goToFindUs() {
+      this.$router.push('/find-us');
+    },
+    goToContactUs() {
+      this.$router.push('/contact-us');
+    },
+    logout() {
+      this.$router.push('/login');
     }
   },
 }

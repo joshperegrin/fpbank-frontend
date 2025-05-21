@@ -34,12 +34,48 @@ const routes = [
         path: 'componentslibrarysample',
         component: () => import('@/views/ComponentLibrarySample.vue')
       },
+      {
+        path: '/manage-accounts',
+        component: () => import('@/views/ManageMyAccount.vue') 
+      },
+      {
+      path: '/settings',
+      component: () => import('@/views/Settings.vue') 
+      },
+      {
+      path: '/personal-info',
+      component: () => import('@/views/PersonalInfo.vue') 
+      },
+      {
+      path: '/contact-us',
+      component: () => import('@/views/ContactUs.vue') 
+      },
     ]
   },
   {
     path: '/portfolio',
-    component: () => import('@/views/PortfolioPage.vue') // Add route for PortfolioPage
-  }
+    component: () => import('@/views/PortfolioPage.vue')
+  },
+  {
+    path: '/registered-devices',
+    component: () => import('@/views/RegisteredDevices.vue')
+    },
+  {
+    path: '/change-password',
+    component: () => import('@/views/ChangePassword.vue')
+    },
+  {
+    path: '/request-physical-card',
+    component: () => import('@/views/RequestPhysicalCard.vue')
+    },
+  {
+    path: '/card',
+    component: () => import('@/views/Card.vue')
+    },  
+  {
+    path: '/request-physical-card2',
+    component: () => import('@/views/RequestPhysicalCard2.vue')
+    },  
 ];
 
 const router = createRouter({
