@@ -1,7 +1,7 @@
 <template>
   <div class="ion-activatable ripple-parent" ref="div">
     <ion-icon :size='icon_size' :src='icon_src'></ion-icon>
-    <ion-label :style="{fontSize: text_size}"><slot>Icon Button</slot></ion-label>
+    <ion-label class="ion-text-center" :style="{fontSize: text_size}"><slot>Icon Button</slot></ion-label>
     <ion-ripple-effect></ion-ripple-effect>
   </div>
 </template>

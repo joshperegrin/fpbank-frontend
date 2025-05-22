@@ -45,7 +45,7 @@
 
         <ion-input fill='outline'></ion-input>
 
-        <ion-input label="Enter Email" label-placement="floating"fill='outline'></ion-input>
+        <ion-input label="Enter Email" label-placement="floating" fill='outline'></ion-input>
 
         <ion-button shape='round' size="large"> Open an Account  </ion-button>
 
