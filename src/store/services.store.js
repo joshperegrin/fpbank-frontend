@@ -43,7 +43,28 @@ export const useServicesStore = defineStore(
   actions: {
     async fetchBanks(){
       if(false){
-        throw new Error("Failed to fetch list of banks");
+        try {
+          const response = await fetch('https://mybackend.com/api/endpoint', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Session-ID': this.session_id
+            },
+            body: JSON.stringify({
+              name: 'John Doe',
+              email: 'john@example.com'
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          console.log('Success:', data);
+        } catch (error) {
+          console.error('Error:', error.message);
+        }
       }
       this.listOfBanks = ['LMAO', 'BPI', 'BDO', 'CHINA BANK', 'CIMB BANK', 'CITIBANK', 'EAST WEST BANK', 'GCASH', 'GOTYME BANK'];
     },
