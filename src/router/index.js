@@ -53,7 +53,7 @@ const routes = [
       {
         path: 'componentslibrarysample',
         component: () => import('@/views/ComponentLibrarySample.vue')
-      }
+      },
     ]
   },
   {
@@ -80,7 +80,7 @@ const routes = [
     path: '/tabs/tab2/transfer/:transfertype/transferResult',
     component: () => import('@/views/TransferPage06.vue')
   }
-]
+];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
