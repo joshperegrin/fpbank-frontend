@@ -243,6 +243,15 @@ export default {
 </script>
 
 <style scoped>
+
+.content-body {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 1em;
+}
+
 .content-center {
   display: flex;
   flex-direction: column;

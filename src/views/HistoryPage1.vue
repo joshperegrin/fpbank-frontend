@@ -81,6 +81,14 @@
 </template>
 
 <style scoped>
+.content-body {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 1em;
+}
+
 ion-searchbar {
   --border-radius: 100px;
 }

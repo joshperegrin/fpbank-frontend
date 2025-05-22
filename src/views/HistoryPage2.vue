@@ -88,6 +88,14 @@ function sendEmail() {
 </script>
 
 <style scoped>
+.content-body {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 1em;
+}
+
 ion-button {
   margin-top: 10px;
   width: 45%;
