@@ -70,6 +70,8 @@ ion-avatar {
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonAvatar } from '@ionic/vue';
 import CustomButton01 from '../components/CustomButton01.vue'
 import { personCircleOutline, walletOutline, settingsOutline, searchCircleOutline, helpCircleOutline, logOutOutline } from 'ionicons/icons';
+import { useRouter } from "vue-router";
+
 export default {
   components: {
     IonPage,
@@ -110,8 +112,8 @@ export default {
     goToContactUs() {
       this.$router.push('/contact-us');
     },
-    logout() {
-      this.$router.push('/login');
+    logout(){
+      this.$router.push("/loginBio"); 
     }
   },
 }
