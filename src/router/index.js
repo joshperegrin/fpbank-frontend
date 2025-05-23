@@ -69,7 +69,27 @@ const routes = [
       },
       {
         path: 'tab1',
-        component: () => import('@/views/Tab1Page.vue')
+        component: () => import('@/views/DashboardPage1.vue')
+      },
+      {
+        path: 'DashboardPage2',
+        name: 'dashboard_page_2',
+        component: () => import('@/views/DashboardPage2.vue')
+      },
+      {
+        path: 'HistoryPage1',
+        name: 'history_page_1',
+        component: () => import('@/views/HistoryPage1.vue')
+      },
+      {
+        path: 'HistoryPage2',
+        name: 'history_page_2',
+        component: () => import('@/views/HistoryPage2.vue')
+      },
+      {
+        path: '/history-page-3/:id',
+        name: 'history_page_3',
+        component: () => import('@/views/HistoryPage3.vue')
       },
       {
         path: 'tab2',
@@ -86,11 +106,73 @@ const routes = [
       {
         path: 'componentslibrarysample',
         component: () => import('@/views/ComponentLibrarySample.vue')
-      }
+      },
+      {
+        path: '/manage-accounts',
+        component: () => import('@/views/ManageMyAccount.vue') 
+      },
+      {
+      path: '/settings',
+      component: () => import('@/views/Settings.vue') 
+      },
+      {
+      path: '/personal-info',
+      component: () => import('@/views/PersonalInfo.vue') 
+      },
+      {
+      path: '/contact-us',
+      component: () => import('@/views/ContactUs.vue') 
+      },
     ]
+  },
+  {
+    path: '/portfolio',
+    component: () => import('@/views/PortfolioPage.vue')
+  },
+  {
+    path: '/registered-devices',
+    component: () => import('@/views/RegisteredDevices.vue')
+    },
+  {
+    path: '/change-password',
+    component: () => import('@/views/ChangePassword.vue')
+    },
+  {
+    path: '/request-physical-card',
+    component: () => import('@/views/RequestPhysicalCard.vue')
+    },
+  {
+    path: '/card',
+    component: () => import('@/views/Card.vue')
+    },  
+  {
+    path: '/request-physical-card2',
+    component: () => import('@/views/RequestPhysicalCard2.vue')
+    },  
+    path: '/tabs/tab2/transfer/:transfertype',
+    component: () => import('@/views/TransferPage01.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/:transfertype/destinationSelect',
+    component: () => import('@/views/TransferPage02.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/:transfertype/destinationSelect/bankSelect',
+    component: () => import('@/views/TransferPage03.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/:transfertype/transferChannel',
+    component: () => import('@/views/TransferPage04.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/:transfertype/confirmation',
+    component: () => import('@/views/TransferPage05.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/:transfertype/transferResult',
+    component: () => import('@/views/TransferPage06.vue')
   }
 ];
-
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
