@@ -103,7 +103,8 @@ function enterPassword() {
     return;
   }
   console.log("Passed validation");
-  router.push("/number"); // Replace with your actual route
+  //router.push("/number"); // Replace with your actual route
+  router.push("/tabs/tab1")
 }
 
 </script>

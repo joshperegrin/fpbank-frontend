@@ -17,8 +17,8 @@ const routes = [
   },
   {
     path: '/otp',
-    component: () => import('@/views/EnterOTPPage.vue')
-  }, 
+    component: () => import('@/views/enterOTPpage.vue')
+  },
   {
    path: '/loginBio',
    component: () => import('@/views/LoginBiometrics.vue')
@@ -47,14 +47,14 @@ const routes = [
   path: '/enterPW',
   component: () => import('@/views/EnterPassword.vue')
 },
-{
-  path: '/number',
-  component: () => import('@/views/number.vue')
-},
-{
-  path: '/otpnum',
-  component: () => import('@/views/OTPnumber.vue')
-},
+//{
+  //path: '/number',
+  //component: () => import('@/views/number.vue')
+//},
+//{
+  //path: '/otpnum',
+  //component: () => import('@/views/OTPnumber.vue')
+//},
 {
   path: '/bioSetup',
   component: () => import('@/views/biometricSetup.vue')

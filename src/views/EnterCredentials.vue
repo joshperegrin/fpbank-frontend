@@ -114,7 +114,7 @@ function sanitizePassword(password) {
 const validateAndProceed = () => {
   if (validateEmail(email.value) && sanitizePassword(password.value)) {
     // If email and password are valid, navigate to the OTP page
-    router.push("/otp");
+    router.push("/tabs/tab1");
   }
 };
 
