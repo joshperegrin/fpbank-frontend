@@ -148,7 +148,8 @@ const routes = [
   {
     path: '/request-physical-card2',
     component: () => import('@/views/RequestPhysicalCard2.vue')
-    },  
+  },  
+  {
     path: '/tabs/tab2/transfer/:transfertype',
     component: () => import('@/views/TransferPage01.vue')
   },
