@@ -51,6 +51,11 @@ const routes = [
   {
     path: "/crypto-transactions",
     component: () => import('@/views/CryptoTransactions.vue'),
+  },
+  {
+    path: '/coin/:coinId',
+    name: 'CoinPage',
+    component: () => import('@/views/CoinPage.vue'),
   }
 ];
 

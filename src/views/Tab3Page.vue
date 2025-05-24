@@ -77,6 +77,7 @@
               :key="index" 
               button 
               class="coin-item"
+              @click="goToCoin(coin.name)"
             >
               <ion-icon slot="start" :icon="helpCircle" class="coin-icon"></ion-icon>
               <ion-label>
@@ -152,6 +153,11 @@ export default {
     },
     goToTransactions() {
       this.$router.push("/crypto-transactions");
+    },
+    goToCoin(coinName) {
+  // Convert coin name to lowercase for the route (e.g., "Bitcoin" -> "bitcoin")
+      const coinId = coinName.toLowerCase();
+      this.$router.push({ name: 'CoinPage', params: { coinId } });
     },
   },
 };
