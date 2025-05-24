@@ -19,25 +19,23 @@
       </div>
       <div class="portfolio-breakdown">
         <div class="chart">
-          <div class="chart-bar bitcoin"></div>
-          <div class="chart-bar ethereum"></div>
-          <div class="chart-bar dogecoin"></div>
+          <div 
+            v-for="(asset, index) in breakdown" 
+            :key="index" 
+            class="chart-bar" 
+            :class="asset.class"
+            :style="{ width: asset.percentage + '%' }"
+          ></div>
         </div>
         <div class="breakdown-details">
-          <div class="breakdown-item">
-            <span class="dot bitcoin"></span>
-            <ion-text slot="start">Bitcoin BTC</ion-text>
-            <span>PHP 1,000.00</span>
-          </div>
-          <div class="breakdown-item">
-            <span class="dot ethereum"></span>
-            <ion-text>Ethereum ETH</ion-text>
-            <span>PHP 25,000.00</span>
-          </div>
-          <div class="breakdown-item">
-            <span class="dot dogecoin"></span>
-            <ion-text>Dogecoin DOGE</ion-text>
-            <span>PHP 1,800.00</span>
+          <div 
+            v-for="(asset, index) in breakdown" 
+            :key="index" 
+            class="breakdown-item"
+          >
+            <span class="dot" :class="asset.class"></span>
+            <ion-text>{{ asset.name }}</ion-text>
+            <span>{{ asset.value }}</span>
           </div>
         </div>
       </div>
@@ -99,9 +97,14 @@
         returnDownBackOutline,
         helpCircle,
         tokens: [
-          { name: "Bitcoin", amount: "0.01 BTC", value: "$82,391.53", change: -3.88 },
+          { name: "Bitcoin", amount: "0.01 BTC", value: "$1,064.86", change: -3.88 },
           { name: "Solana", amount: "0.204 SOL", value: "$25.53", change: -1.25 },
           { name: "Ethereum", amount: "0.74 ETH", value: "$1,391.53", change: -1.12 },
+        ],
+        breakdown: [
+          { name: "Bitcoin BTC", value: "PHP 1,000.00", percentage: 10, class: "bitcoin" },
+          { name: "Ethereum ETH", value: "PHP 25,000.00", percentage: 70, class: "ethereum" },
+          { name: "Dogecoin DOGE", value: "PHP 1,800.00", percentage: 20, class: "dogecoin" },
         ],
       };
     },
@@ -262,7 +265,7 @@
   .coin-value p {
     margin: 0;
     font-size: 14px;
-    color: var(--ion-color-danger);
+    color: var (--ion-color-danger);
   }
   .negative {
     color: var(--ion-color-danger);

@@ -9,24 +9,24 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
-      <ion-card class="portfolio-section" @click="goToPortfolio">
-        <ion-card class="portfolio-info">
+      <ion-card class="portfolio-section">
+        <ion-card class="portfolio-info" @click="goToPortfolio">
           <ion-card-header>
             <ion-card-title class="portfolio-title">Portfolio</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <ion-card class="portfolio-amount-container">
-              <ion-text class="portfolio-amount">Php 20,000.00</ion-text>
+              <ion-text class="portfolio-amount">PHP 20,000.00</ion-text>
               <ion-text class="portfolio-change">+2.4%</ion-text>
               <ion-icon :icon="chevronForward" class="portfolio-chevron"></ion-icon>
             </ion-card>
           </ion-card-content>
         </ion-card>
         <ion-card class="portfolio-button-section">
-          <ion-button fill="clear" class="portfolio-button">
+          <ion-button fill="clear" class="portfolio-button" @click="goToBuy">
             Buy
           </ion-button>
-          <ion-button fill="clear" class="portfolio-button">
+          <ion-button fill="clear" class="portfolio-button" @click="goToConvert">
             Convert
           </ion-button>
         </ion-card>
@@ -44,14 +44,14 @@
           <ion-button class="tab-buttons" fill="clear">
             <ion-icon slot="icon-only" :icon="searchOutline"></ion-icon>
           </ion-button>
-          <ion-button class="tab-buttons" fill="clear">
+          <ion-button class="tab-buttons" fill="clear" @click="goToTransactions">
             <ion-icon slot="icon-only" :icon="timeOutline"></ion-icon>
           </ion-button>
         </ion-card>
       </div>
       <ion-segment-view>
         <ion-segment-content id="watchlist">
-          <ion-list class="coin-list">
+          <ion-list class="coin-list" lines="none">
             <ion-item 
               v-for="(coin, index) in watchlistCoins" 
               :key="index" 
@@ -134,7 +134,7 @@ export default {
         { name: "Eliza", amount: "30,081.71 ELIZA", value: "-$8.53", change: -0.45 },
       ],
       coins: [
-        { name: "Bitcoin", amount: "0.01 BTC", value: "$82,391.53", change: -3.88 },
+        { name: "Bitcoin", amount: "0.01 BTC", value: "$1,064.86", change: -3.88 },
         { name: "Solana", amount: "0.204 SOL", value: "$25.53", change: -1.25 },
         { name: "Ethereum", amount: "0.74 ETH", value: "$1,391.53", change: -2.88 },
       ],
@@ -143,6 +143,15 @@ export default {
   methods: {
     goToPortfolio() {
       this.$router.push('/portfolio'); // Redirect to the portfolio page
+    },
+    goToConvert() {
+      this.$router.push("/convert");
+    },
+    goToBuy() {
+      this.$router.push("/buy");
+    },
+    goToTransactions() {
+      this.$router.push("/crypto-transactions");
     },
   },
 };

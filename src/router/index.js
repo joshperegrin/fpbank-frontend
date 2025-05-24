@@ -38,7 +38,19 @@ const routes = [
   },
   {
     path: '/portfolio',
-    component: () => import('@/views/PortfolioPage.vue') // Add route for PortfolioPage
+    component: () => import('@/views/PortfolioPage.vue')
+  },
+  {
+    path: "/convert",
+    component: () => import('@/views/ConvertPage.vue'),
+  },
+  {
+    path: "/buy",
+    component: () => import('@/views/BuyPage.vue'),
+  },
+  {
+    path: "/crypto-transactions",
+    component: () => import('@/views/CryptoTransactions.vue'),
   }
 ];
 
