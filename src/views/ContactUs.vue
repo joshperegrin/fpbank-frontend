@@ -120,6 +120,7 @@
   import CustomButton01 from '../components/CustomButton01.vue'
   import { IonButton } from '@ionic/vue';
   import { callOutline } from 'ionicons/icons';
+  import { useAccountStore } from '../stores/accounts.store';
   export default {
     components: {
       IonPage,
@@ -135,15 +136,27 @@
     data(){
       return {
         avatar_src: "src/assets/imgs/angry.jpg",
-        user_name: "Washing Machine",
-        user_email: "washing.machine@gmail.com",
         number_CCC: "(+123) 12345-0987",
         number_DTF: "1-0987-123-6543",
         care_center: "Customer Care Center",
         toll_free: "Domestic Toll-Free",
-        callOutline
+        callOutline,
+        accountstore: useAccountStore()
+
       }
     },
+    computed: {
+      user_name(){
+        return this.accountstore.user.firstname + ' ' + this.accountstore.user.middlename + ' ' + this.accountstore.user.lastname
+      },
+      user_email(){
+        return this.accountstore.user.email
+      },
+      user_mobile(){
+        return this.accountstore.user.mobile
+      }
+    }
+
   }
   </script>
   
