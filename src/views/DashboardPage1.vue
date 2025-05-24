@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
-      <GenericHeader title="FPBANK Dashboard" :root_page="true">
+      <GenericHeader title="FP Bank" :root_page="true">
         <DashboardHeader :account="account"/>
       </GenericHeader>
       <div class="content-body">
@@ -24,6 +24,7 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
 import {
   IonPage,
   IonContent,
@@ -34,12 +35,15 @@ import DashboardHeader from '@/components/DashboardHeader.vue';
 import FeaturedArticle from '@/components/DashboardArticle.vue';
 import GenericCardWidgets from "@/components/GenericCardWidgets.vue";
 import GenericHeader from "@/components/GenericHeader.vue";
+import { useAccountStore } from '../stores/accounts.store';
 
-const account = {
-  amount: '370,740.21',
-  number: '002376543210',
+const accountStore = useAccountStore()
+
+const account = computed(() => ({
+  amount: accountStore.accountInfo.balance,
+  number: accountStore.accountInfo.accountNumber,
   currency: 'PHP',
-};
+}));
 
 const favoriteAccounts = [
   { name: 'Juan Dela Cruz', avatar: 'src/assets/imgs/angry.jpg' },

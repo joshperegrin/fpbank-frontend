@@ -6,14 +6,6 @@ export const useAccountStore = defineStore(
         state: () => {
             return {
                 session_id: "",
-                personalInfo: {
-                    user_name: 'Marky',
-                    user_mobile: '+639123456789',
-                    user_email: 'washing.machine@agmail.com',
-                    user_birthdate: 'February 28, 1990',
-                    user_nationality: 'FILIPINO',
-                    user_address: 'BLK 78 LOT 99 STREET ST., BRGY 7, NAIC CITY CAVITE, PHILIPPINES, 4102'
-                },
                 user: {
                     firstname: '',
                     middlename: '',
@@ -28,7 +20,8 @@ export const useAccountStore = defineStore(
                     accountNumber: '',
                     debitCardCVV: '',
                     debitCardExpiry: '',
-                    debitCardNumber: ''
+                    debitCardNumber: '',
+                    balance: 0
                 }
             }
         },
@@ -101,7 +94,7 @@ export const useAccountStore = defineStore(
             async fetchBalance(){
                 
             },
-            async fetchUserTransactionHistory(){
+            async fetchUserTransactionHistory(page, limit){
                 
             },
 
