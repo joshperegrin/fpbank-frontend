@@ -91,7 +91,7 @@ ion-icon{
 </style>
 <script>
 import { IonSpinner, IonButton, IonFooter, IonIcon, IonPage, IonHeader, IonToolbar, IonTitle, IonContent} from '@ionic/vue';
-import { useServicesStore } from '../store/services.store.js'
+import { useServicesStore } from '../stores/services.store'
 import { closeCircle, checkmarkCircle } from 'ionicons/icons';
 export default {
   components: {

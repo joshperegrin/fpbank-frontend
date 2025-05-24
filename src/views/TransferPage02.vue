@@ -70,7 +70,7 @@ ion-input {
 </style>
 <script>
 import { toastController, IonRippleEffect, IonButton, IonInput, IonToggle, IonContent, IonFooter, IonPage, IonHeader, IonToolbar, IonTitle, IonBackButton, IonButtons } from '@ionic/vue';
-import { useServicesStore } from '../store/services.store.js'
+import { useServicesStore } from '../stores/services.store'
 import { chevronForwardOutline } from 'ionicons/icons';
 export default {
   components: {

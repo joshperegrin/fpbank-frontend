@@ -52,7 +52,7 @@ ion-input {
 <script>
 import { IonItemGroup, IonItemDivider, IonItem, IonLabel, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonContent, IonInput } from '@ionic/vue';
 import { searchOutline } from 'ionicons/icons';
-import { useServicesStore } from '../store/services.store.js'
+import { useServicesStore } from '../stores/services.store'
 export default {
   components: {
     IonPage,

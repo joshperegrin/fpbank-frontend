@@ -115,7 +115,7 @@ ion-input {
 
 <script>
 import { toastController, alertController, IonRippleEffect, IonButton, IonIcon, IonInput, IonToggle, IonContent, IonFooter, IonPage, IonHeader, IonToolbar, IonTitle, IonBackButton, IonButtons } from '@ionic/vue';
-import { useServicesStore } from '../store/services.store.js'
+import { useServicesStore } from '../stores/services.store'
 import { chevronForwardOutline } from 'ionicons/icons';
 import instapayImage from '../assets/imgs/instapay.png';
 import pesonetImage from '../assets/imgs/PESONet.png';
