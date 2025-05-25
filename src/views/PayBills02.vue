@@ -17,9 +17,6 @@
             <ion-icon :icon="this.chevronForwardOutline"></ion-icon>
         </div>
         <ion-input maxlength="15" v-model="this.refNumber" ref="refNumber" label="Reference Number*" label-placement="stacked" fill='outline'></ion-input>
-        <div>
-          <ion-toggle>Save to Favorites</ion-toggle>
-        </div>
       </div>
     </ion-content>
     <ion-footer><ion-button shape='round' size="large" @click="confirm" id="confirm"> Confirm </ion-button></ion-footer>

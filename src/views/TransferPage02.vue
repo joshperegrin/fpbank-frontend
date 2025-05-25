@@ -18,9 +18,6 @@
         </div>
         <ion-input maxlength="10" @ionInput="edited('number', $event)" v-model="this.receivingAccountNumber" ref="accountnumber" label="Account Number*" label-placement="stacked" fill='outline'></ion-input>
         <ion-input maxlength="35" @ionInput="edited('name', $event)" v-model="this.receivingAccountName" ref="accountname" label="Receiver Name*" label-placement="stacked" fill='outline'></ion-input>
-        <div>
-          <ion-toggle>Save to Favorites</ion-toggle>
-        </div>
       </div>
     </ion-content>
     <ion-footer><ion-button shape='round' size="large" @click="confirm" id="confirm"> Confirm </ion-button></ion-footer>

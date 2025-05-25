@@ -11,9 +11,6 @@
     <ion-content class="ion-padding">
       <div class="content-container">
         <ion-input maxlength="10" @ionInput="edited('number', $event)" v-model="this.receivingAccountNumber" ref="accountnumber" label="Account Number*" label-placement="stacked" fill='outline'></ion-input>
-        <div>
-          <ion-toggle>Save to Favorites</ion-toggle>
-        </div>
       </div>
     </ion-content>
     <ion-footer><ion-button shape='round' size="large" @click="confirm" id="confirm"> Confirm </ion-button></ion-footer>
