@@ -1,126 +1,136 @@
 <template>
-    <ion-page>
-        <ion-content class="custom-content">
-            <ion-toolbar>
-                <ion-buttons slot="start">
-                    <ion-back-button text="" default-href="RegisterInformation"></ion-back-button>
-                </ion-buttons>
-            </ion-toolbar>
-            <h3 class="page-title">Register</h3>
-            <div class="card-wrapper">
-                <ion-card class="main-card">
-                    <div class="card-content-wrapper">
-                        <p>
-                        <strong>II. Upload Valid ID</strong><br><br>    
-                        1. Your valid ID photo should be aligned within the guideline border.<br>
-                        2. Your valid ID photo should be original and not tampered/modified in any form.<br>
-                        3. Your valid ID photo should be clear and readable.<br>
-                        4. Expired, blurry, dark, and with glare will not be accepted.
-                        </p>
-                        <div class="valid-ids-1">
-                            <img :src="expired" alt="Not Valid 1" class="not-valid-id" /> 
-                            <img :src="blurry" alt="Not Valid 2" class="not-valid-id" /> 
-                            <img :src="dark" alt="Not Valid 3" class="not-valid-id" />
-                            <img :src="glare" alt="Not Valid 4" class="not-valid-id" /> 
-                        </div>
-                        <div class="valid-ids-2">
-                        </div> 
-                        <ion-input id="select-id" fill="outline" placeholder="Select ID Type" readonly :value="selectedID">
-                            <ion-icon id="ID-chev" slot="end" :icon="chevronDown" size="small"></ion-icon>
-                        </ion-input>
-                        <ion-card class="uploadID-card">
-                            <img :src="IDupload" alt="Upload ID" class="IDupload"/>
-                            <p>Upload your ID</p>
-                        </ion-card>
-                        <ion-card class="checkbox-card">
-                            <ion-checkbox label-placement="end" justify="start"></ion-checkbox>
-                            <p>
-                                I have read and I accept the <strong>FPBank Terms and Conditions</strong> and 
-                                <strong>FPBank Privacy Policy</strong>. I authorize FPBank to use and share my data with 
-                                compliance Data Privacy Act of 2012.
-                            </p>
-                        </ion-card>
-                        <div class="button-container">
-                            <ion-button expand="block" shape="round" size="large" @click="enterPassword">Confirm</ion-button>
-                        </div> 
-                    </div>
-                    <ion-popover id="ID-popover" trigger="select-id" ref="idPopover" size="cover" readonly>
-                        <ion-list class="ID-list">
-                            <ion-item 
-                                class="id-item"
-                                v-for="(id, index) in ids" 
-                                :key="index" 
-                                button 
-                                @click="selectID(id)"
-                            >
-                                {{ id}}
-                            </ion-item>
-                        </ion-list>
-                    </ion-popover>
-                </ion-card>
+  <ion-page>
+    <ion-content class="custom-content">
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-back-button text="" default-href="RegisterInformation"></ion-back-button>
+        </ion-buttons>
+      </ion-toolbar>
+      <h3 class="page-title">Register</h3>
+      <div class="card-wrapper">
+        <ion-card class="main-card">
+          <div class="card-content-wrapper">
+            <p>
+              <strong>II. Upload Valid ID</strong><br><br />
+              1. Your valid ID photo should be aligned within the guideline border.<br />
+              2. Your valid ID photo should be original and not tampered/modified in any form.<br />
+              3. Your valid ID photo should be clear and readable.<br />
+              4. Expired, blurry, dark, and with glare will not be accepted.
+            </p>
+            <div class="valid-ids-1">
+              <img :src="expired" alt="Not Valid 1" class="not-valid-id" />
+              <img :src="blurry" alt="Not Valid 2" class="not-valid-id" />
+              <img :src="dark" alt="Not Valid 3" class="not-valid-id" />
+              <img :src="glare" alt="Not Valid 4" class="not-valid-id" />
             </div>
-        </ion-content>
-    </ion-page>
+            <div class="valid-ids-2"></div>
+            <ion-input v-model="selectedID" id="select-id" fill="outline" placeholder="Select ID Type" readonly>
+              <ion-icon slot="end" :icon="chevronDown" size="small"></ion-icon>
+            </ion-input>
+            <ion-card class="uploadID-card">
+              <img :src="IDupload" alt="Upload ID" class="IDupload" />
+              <input type="file" @change="handleFile" accept="image/*" />
+              <p>Upload your ID</p>
+            </ion-card>
+            <ion-card class="checkbox-card">
+              <ion-checkbox label-placement="end" justify="start"></ion-checkbox>
+              <p>
+                I have read and I accept the <strong>FPBank Terms and Conditions</strong> and
+                <strong>FPBank Privacy Policy</strong>. I authorize FPBank to use and share my data with compliance Data
+                Privacy Act of 2012.
+              </p>
+            </ion-card>
+            <div class="button-container">
+              <ion-button expand="block" shape="round" size="large" @click="enterPassword">Confirm</ion-button>
+            </div>
+          </div>
+          <ion-popover id="ID-popover" trigger="select-id" size="cover">
+            <ion-list class="ID-list">
+              <ion-item v-for="(id, index) in ids" :key="index" button @click="selectID(id)">
+                {{ id }}
+              </ion-item>
+            </ion-list>
+          </ion-popover>
+        </ion-card>
+      </div>
+    </ion-content>
+  </ion-page>
 </template>
 
 <script setup>
-  import {arrowBack, chevronDown} from 'ionicons/icons';
-  import blurry from "@/assets/imgs/blurry.jpg";
-  import dark from "@/assets/imgs/dark.jpg";
-  import glare from "@/assets/imgs/with glare.jpg";
-  import expired from "@/assets/imgs/expired.jpg";
-  import IDupload from "@/assets/imgs/IDupload.jpg";
-  import { useRouter } from "vue-router";
-  import { ref } from "vue";
+  import { chevronDown } from 'ionicons/icons';
+  import blurry from '@/assets/imgs/blurry.jpg';
+  import dark from '@/assets/imgs/dark.jpg';
+  import glare from '@/assets/imgs/with glare.jpg';
+  import expired from '@/assets/imgs/expired.jpg';
+  import IDupload from '@/assets/imgs/IDupload.jpg';
+  import { useRouter } from 'vue-router';
+  import { ref } from 'vue';
+  import { useRegistrationStore } from '../stores/registration.store';
+  import { popoverController, toastController } from '@ionic/vue';
   import {
     IonPage,
-    IonHeader,
     IonToolbar,
-    IonTitle,
     IonContent,
     IonCard,
-    IonCardHeader,
-    IonCardTitle,
-    IonCardContent,
     IonCheckbox,
     IonItem,
-    IonLabel,
     IonInput,
     IonButton,
     IonButtons,
     IonBackButton,
-  } from "@ionic/vue";
-  
+    IonPopover,
+    IonList,
+  } from '@ionic/vue';
+
   const ids = [
-    "Passport",
+    'Passport',
     "Driver's License",
-    "National ID",
+    'National ID',
     "Voter's ID",
-    "SSS ID",
-    "PhilHealth ID",
-    "Postal ID",
-    "PRC ID",
-    "Other"
-];
+    'SSS ID',
+    'PhilHealth ID',
+    'Postal ID',
+    'PRC ID',
+    'Other',
+  ];
 
-    const icons = {
-        arrowBack
+  const router = useRouter();
+  const registrationStore = useRegistrationStore();
+  const selectedID = ref('');
+  const validID = ref(null);
+
+  function selectID(id) {
+    selectedID.value = id;
+    popoverController.dismiss(null, null, 'ID-popover');
+  }
+
+  function handleFile(event) {
+    validID.value = event.target.files[0];
+  }
+
+  async function showToast(message) {
+    const toast = await toastController.create({
+      message,
+      duration: 2000,
+      position: 'top',
+    });
+    await toast.present();
+  }
+
+  function enterPassword() {
+    if (!selectedID.value) {
+      showToast('Please select an ID type.');
+      return;
     }
-    const enterPassword = () => {
-        router.push("/enterPW");
-    };
-
-    const router = useRouter(); 
-    const selectedID = ref("");
-    const idPopover = ref(null); 
-
-    function selectID(id) {
-        selectedID.value = id;
-        idPopover.value.dismiss();
+    if (!validID.value) {
+      showToast('Please upload a valid ID file.');
+      return;
     }
-
-
-</script>   
+    registrationStore.setIDInfo({ idType: selectedID.value, validID: validID.value });
+    router.push('/enterPW');
+  }
+</script>
 
 <style scoped>
     ion-content.custom-content {

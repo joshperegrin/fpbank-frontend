@@ -20,6 +20,12 @@
         <CustomButton01 :icon_name="helpCircleOutline" @click="goToContactUs"> Contact Us </CustomButton01>
         <CustomButton01 :icon_name="logOutOutline" @click="logout"> Log out </CustomButton01>
       </div>
+      <ion-toast
+          :is-open="isToastOpen"
+          :message="toastMessage"
+          :duration="3000"
+          @didDismiss="isToastOpen = false"
+      />
     </ion-content>
   </ion-page>
 </template>
@@ -67,7 +73,7 @@ ion-avatar {
 </style>
 
 <script>
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonAvatar } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonAvatar, IonToast } from '@ionic/vue';
 import CustomButton01 from '../components/CustomButton01.vue'
 import { personCircleOutline, walletOutline, settingsOutline, searchCircleOutline, helpCircleOutline, logOutOutline } from 'ionicons/icons';
 import { useRouter } from "vue-router";
@@ -81,6 +87,7 @@ export default {
     IonContent,
     IonAvatar,
     CustomButton01,
+    IonToast,
   },
   data(){
     return {
@@ -94,7 +101,9 @@ export default {
       searchCircleOutline,
       helpCircleOutline,
       logOutOutline,
-      accountstore: useAccountStore()
+      accountstore: useAccountStore(),
+      isToastOpen: false,
+      toastMessage: ''
     }
   },
   methods: {
@@ -113,8 +122,14 @@ export default {
     goToContactUs() {
       this.$router.push('/contact-us');
     },
-    logout(){
-      this.$router.push("/loginBio"); 
+    async logout() {
+      const success = await this.accountstore.requestLogout();
+      if (success) {
+        this.$router.push("/loginBio");
+      } else {
+        this.toastMessage = 'Logout failed. Please try again.';
+        this.isToastOpen = true;
+      }
     }
   },
   computed: {

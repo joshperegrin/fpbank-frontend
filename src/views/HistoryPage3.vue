@@ -26,62 +26,31 @@ import { checkmark } from 'ionicons/icons';
 import HistoryTransactionDetails from '@/components/HistoryTransactionDetails.vue';
 import HistoryCopyableCard from '@/components/HistoryCopyableCard.vue';
 import { useRoute } from 'vue-router';
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import { useAccountStore } from '../stores/accounts.store';
 
-// Get route parameter
 const route = useRoute();
+const accountStore = useAccountStore();
 const transactionId = route.params.id;
+const selectedTransaction = ref(null);
 
-// Sample transaction details with id
-const sampleTransactionDetails = [
-  {
-    id: 'tx1',
-    transactionNumber: 'MBCACC241222075807865447777',
-    transactionName: 'Payment to John Doe',
-    transactionDate: new Date().toISOString(),
-    transferFrom: 'SA:Jude Tabuzo (****5678)',
-    transferTo: 'SA:John Doe (****1234)',
-    recipientName: 'John Doe',
-    amount: 100.0,
-    note: 'Sent payment for services',
-  },
-  {
-    id: 'tx2',
-    transactionNumber: 'NBCACC241222075807865447778',
-    transactionName: 'Jollibee Order',
-    transactionDate: '2023-11-01T10:30:00Z',
-    transferFrom: 'SA:Jane Smith (****5432)',
-    transferTo: 'Jollibee inc. (****9876)',
-    recipientName: 'Jollibee inc.',
-    amount: -50.25,
-    note: 'Yumburger original',
-  },
-  {
-    id: 'tx3',
-    transactionNumber: 'OBCACC241222075807865447779',
-    transactionName: 'Payment from Employer Wilson',
-    transactionDate: '2023-10-15T14:45:00Z',
-    transferFrom: 'CA:Wilson (****5678)',
-    transferTo: 'SA:Alice Johnson (****1234)',
-    recipientName: 'Alice Johnson',
-    amount: 200.75,
-    note: 'Received payment for invoice #123',
-  },
-  {
-    id: 'tx4',
-    transactionNumber: 'PBCACC241222075807865447770',
-    transactionName: 'Payment to Megamart',
-    transactionDate: '2023-09-20T08:15:00Z',
-    transferFrom: 'SA:Bob Brown (****8765)',
-    transferTo: 'Megamart inc. (****4321)',
-    recipientName: 'Megamart inc.',
-    amount: -75.0,
-    note: 'Sent payment for goods',
-  },
-];
-// Find the transaction by id
-const selectedTransaction = computed(() => {
-  return sampleTransactionDetails.find(t => t.id === transactionId) || null;
+onMounted(async () => {
+  const rawTransactions = await accountStore.fetchUserTransactionHistory(1, 20);
+  const transaction = rawTransactions.find(t => t.transactionReferenceNumber === transactionId);
+  if (transaction) {
+    selectedTransaction.value = {
+      transactionNumber: transaction.transactionReferenceNumber,
+      transactionName: transaction.transactionName,
+      transactionDate: transaction.transactionDate,
+      transferFrom: `SA:${accountStore.user.firstname} ${accountStore.user.lastname} (****${accountStore.accountInfo.accountNumber.slice(-4)})`,
+      transferTo: transaction.transactionDetails?.recipientAccount
+          ? `SA:${transaction.transactionName.split(' to ')[1]} (****${transaction.transactionDetails.recipientAccount.slice(-4)})`
+          : transaction.transactionName.split(' to ')[1] || 'N/A',
+      recipientName: transaction.transactionName.split(' to ')[1] || 'N/A',
+      amount: transaction.transferAmount,
+      note: transaction.note || 'No note provided'
+    };
+  }
 });
 </script>
 
