@@ -110,6 +110,7 @@ ion-input {
 import { toastController, alertController, IonRippleEffect, IonButton, IonIcon, IonInput, IonToggle, IonContent, IonFooter, IonPage, IonHeader, IonToolbar, IonTitle, IonBackButton, IonButtons } from '@ionic/vue';
 import { useServicesStore } from '../stores/services.store'
 import { chevronForwardOutline } from 'ionicons/icons';
+import { useAccountStore } from '../stores/accounts.store';
 import instapayImage from '../assets/imgs/instapay.png';
 import pesonetImage from '../assets/imgs/PESONet.png';
 export default {
@@ -132,12 +133,19 @@ export default {
     return {
       toastPresented: false,
       amount: '',
-      accountNumber: '1234 123 1234',
-      accountBalance: 100000.00,
       servicesStore: useServicesStore(),
+      accountStore: useAccountStore(),
       chevronForwardOutline,
       instapayImage,
       pesonetImage,
+    }
+  },
+  computed: {
+    accountNumber(){
+      return this.accountStore.accountInfo.accountNumber;
+    },
+    accountBalance(){
+      return this.accountStore.accountInfo.balance;
     }
   },
   methods: {

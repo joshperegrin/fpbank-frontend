@@ -14,6 +14,7 @@
         <div class="detail-list"><div> Transaction Name</div> <div>{{this.transactionDetails.transactionName}}</div></div>
         <div class="detail-list"><div> Transaction Date <br/>and Time</div> <div>{{new Intl.DateTimeFormat('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(this.transactionDetails.transactionDateTime)}} <br/> {{new Intl.DateTimeFormat('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }).format(this.transactionDetails.transactionDateTime)}} </div></div>
         <div class="detail-list"><div> Transfer From</div> <div> SA: {{this.transactionDetails.transferFrom}}</div></div>
+        <div class="detail-list"><div> Transfer To</div> <div> SA: {{this.transactionDetails.transfer_ReceivingAccountNumber}}</div></div>
         <div class="detail-list"><div> Amount</div> <div> {{this.transactionDetails.amount}}</div></div>
         <div class="detail-list"><div> Note</div> <div> {{this.transactionDetails.notes}}</div></div>
       </div>
@@ -91,6 +92,7 @@ ion-icon{
 import { IonSpinner, IonButton, IonFooter, IonIcon, IonPage, IonHeader, IonToolbar, IonTitle, IonContent} from '@ionic/vue';
 import { useServicesStore } from '../stores/services.store'
 import { closeCircle, checkmarkCircle } from 'ionicons/icons';
+import { useAccountStore } from '../stores/accounts.store';
 export default {
   components: {
     IonPage,
@@ -109,7 +111,6 @@ export default {
   data(){
     return {
       loaded: false,
-      accountNumber: '1234 123 1234',
       transactionDetails: {
         transactionName: '',
         transactionDateTime: null,
@@ -126,7 +127,13 @@ export default {
       checkmarkCircle,
       closeCircle,
       servicesStore: useServicesStore(),
+      accountStore: useAccountStore(),
     }
+  },
+  computed: {
+    accountNumber(){
+      return this.accountStore.accountInfo.accountNumber;
+    },
   },
   methods: {
     async processTransaction(){

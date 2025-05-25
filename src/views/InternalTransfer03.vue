@@ -140,6 +140,7 @@ ion-button{
 <script>
 import { IonCheckbox, IonButton, IonContent, IonFooter, IonPage, IonHeader, IonToolbar, IonTitle, IonBackButton, IonButtons } from '@ionic/vue';
 import { useServicesStore } from '../stores/services.store'
+import { useAccountStore } from '../stores/accounts.store';
 import instapayImage from '../assets/imgs/instapay.png';
 import pesonetImage from '../assets/imgs/PESONet.png';
 export default {
@@ -157,13 +158,18 @@ export default {
 },
   data(){
     return {
-      accountNumber: '1234 123 1234',
       confirmationChecked: false,
       confirmationCheckbox: 'I hereby confirm that the transaction details above are correct and understand that refund or reversal of the transaction amount and service charge will not be allowed.',
+      accountStore: useAccountStore(),
       servicesStore: useServicesStore(),
       instapayImage,
       pesonetImage,
     }
+  },
+  computed: {
+    accountNumber(){
+      return this.accountStore.accountInfo.accountNumber;
+    },
   },
   methods: {
     confirm(){

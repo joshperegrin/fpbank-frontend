@@ -92,6 +92,7 @@ ion-icon{
 import { IonSpinner, IonButton, IonFooter, IonIcon, IonPage, IonHeader, IonToolbar, IonTitle, IonContent} from '@ionic/vue';
 import { useServicesStore } from '../stores/services.store'
 import { closeCircle, checkmarkCircle } from 'ionicons/icons';
+import { useAccountStore } from '../stores/accounts.store';
 export default {
   components: {
     IonPage,
@@ -110,7 +111,6 @@ export default {
   data(){
     return {
       loaded: false,
-      accountNumber: '1234 123 1234',
       transactionDetails: {
         transactionName: '',
         transactionDateTime: null,
@@ -127,7 +127,13 @@ export default {
       checkmarkCircle,
       closeCircle,
       servicesStore: useServicesStore(),
+      accountStore: useAccountStore(),
     }
+  },
+  computed: {
+    accountNumber(){
+      return this.accountStore.accountInfo.accountNumber;
+    },
   },
   methods: {
     async processTransaction(){

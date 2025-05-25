@@ -23,7 +23,6 @@
           <div v-if="(this.servicesStore.serviceDetails.biller_RefNumber && this.servicesStore.serviceDetails.biller_RefNumber.trim() !== '')"> {{this.servicesStore.serviceDetails.biller_RefNumber}} </div>
         </div>
         <ion-input ref="amountTextbox" :disabled="!(this.servicesStore.serviceDetails.biller_BillerName && this.servicesStore.serviceDetails.biller_BillerName.trim() !== '')" label="Amount*" type="number" inputmode="decimal" step="0.01" min="0"  v-model="amount" @input="validateInput" label-placement="stacked" fill='outline'></ion-input>
-        <ion-input ref="noteTextbox" label="Notes" label-placement="stacked" fill='outline'></ion-input>
       </div>
     </ion-content>
     <ion-footer id="footer"><ion-button shape='round' size="large" @click="confirm" id="confirm"> Proceed </ion-button></ion-footer>
@@ -111,6 +110,7 @@ ion-input {
 import { toastController, alertController, IonRippleEffect, IonButton, IonIcon, IonInput, IonToggle, IonContent, IonFooter, IonPage, IonHeader, IonToolbar, IonTitle, IonBackButton, IonButtons } from '@ionic/vue';
 import { useServicesStore } from '../stores/services.store'
 import { chevronForwardOutline } from 'ionicons/icons';
+import { useAccountStore } from '../stores/accounts.store';
 import instapayImage from '../assets/imgs/instapay.png';
 import pesonetImage from '../assets/imgs/PESONet.png';
 export default {
@@ -133,12 +133,19 @@ export default {
     return {
       toastPresented: false,
       amount: '',
-      accountNumber: '1234 123 1234',
-      accountBalance: 100000.00,
       servicesStore: useServicesStore(),
+      accountStore: useAccountStore(),
       chevronForwardOutline,
       instapayImage,
       pesonetImage,
+    }
+  },
+  computed: {
+    accountNumber(){
+      return this.accountStore.accountInfo.accountNumber;
+    },
+    accountBalance(){
+      return this.accountStore.accountInfo.balance;
     }
   },
   methods: {
