@@ -53,80 +53,21 @@
   </ion-list>
 </template>
 
-<style scoped>
-.transaction-list {
-  margin: 0;
-  padding: 0;
-  background: var(--ion-background-color, #fff);
-}
-
-ion-item {
-  --padding-start: 16px;
-  --padding-end: 16px;
-  --inner-padding-end: 0;
-}
-
-.transaction-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-
-.left-section,
-.right-section {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.left-section h3 {
-  font-size: 1.1rem;
-  margin: 0;
-}
-
-.datetime {
-  font-size: 0.8rem;
-  margin: 0;
-}
-
-.right-section {
-  align-items: flex-end;
-}
-
-.amount {
-  font-size: 1.1rem;
-  font-weight: bold;
-  margin: 0;
-}
-
-.status {
-  font-size: 0.8rem;
-  text-transform: capitalize;
-  margin: 0;
-}
-
-.placeholder {
-  opacity: 0.6;
-}
-</style>
-
 <script setup>
 import { IonList, IonItem, IonLabel, IonText } from '@ionic/vue';
 import { computed } from 'vue';
 
-// Define props
 const props = defineProps({
   Transactions: {
     type: Array,
     required: true,
     default: () => [],
     validator: (transactions) => transactions.every(t =>
-        typeof t.clientName === 'string' &&
-        (typeof t.datetime === 'string' || t.datetime instanceof Date) &&
-        typeof t.amount === 'number' &&
-        typeof t.status === 'string' &&
-        typeof t.detailId === 'string'
+        typeof t.transactionName === 'string' &&
+        (typeof t.transactionDate === 'string' || t.transactionDate instanceof Date) &&
+        typeof t.transferAmount === 'number' &&
+        typeof t.transactionStatus === 'string' &&
+        typeof t.transactionReferenceNumber === 'string'
     ),
   },
 });
@@ -147,9 +88,15 @@ function isValidData(transaction) {
   );
 }
 
-// Computed properties
 const sortedTransactions = computed(() => {
   return [...props.Transactions]
+      .map(t => ({
+        clientName: t.transactionName,
+        datetime: t.transactionDate,
+        amount: t.transferAmount,
+        status: t.transactionStatus.toLowerCase(),
+        detailId: t.transactionReferenceNumber
+      }))
       .sort((a, b) => new Date(b.datetime) - new Date(a.datetime))
       .slice(0, 3);
 });
@@ -180,3 +127,61 @@ function statusColor(status) {
   return status.toLowerCase() === 'sent' ? 'success' : 'danger';
 }
 </script>
+
+<style scoped>
+.transaction-list {
+  margin: 0;
+  padding: 0;
+  background: var(--ion-background-color, #fff);
+}
+
+ion-item {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --inner-padding-end: 0;
+}
+
+.transaction-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.left-section,
+.right-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.left-section h3 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.datetime {
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.right-section {
+  align-items: flex-end;
+}
+
+.amount {
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.status {
+  font-size: 0.8rem;
+  text-transform: capitalize;
+  margin: 0;
+}
+
+.placeholder {
+  opacity: 0.6;
+}
+</style>

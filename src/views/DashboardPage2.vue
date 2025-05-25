@@ -38,7 +38,8 @@ import GenericCardWidgets from "@/components/GenericCardWidgets.vue";
 import CreditCard from "@/components/DashboardCC.vue";
 import { useAccountStore } from "../stores/accounts.store";
 
-const accountStore = useAccountStore()
+const accountStore = useAccountStore();
+const transactions = ref([]);
 
 const account = computed(() => ({
   amount: accountStore.accountInfo.balance,
@@ -59,12 +60,18 @@ const cardDetails = computed(() => ({
   logo: 'src/assets/svgs/logo.svg'
 }));
 
-const transactions = ref([]);
-
 onMounted(async () => {
   const balanceSuccess = await accountStore.fetchBalance();
   if (!balanceSuccess) alert('Failed to load balance');
-  transactions.value = await accountStore.fetchUserTransactionHistory(1, 20);
+  const rawTransactions = await accountStore.fetchUserTransactionHistory(1, 3);
+  transactions.value = rawTransactions.map(t => ({
+    transactionName: t.transactionName,
+    transactionDate: t.transactionDate,
+    transferAmount: t.transferAmount,
+    transactionStatus: t.transactionStatus,
+    transactionReferenceNumber: t.transactionReferenceNumber
+  }));
+  console.log('Mapped transactions:', transactions.value); // Debug log
   if (!transactions.value.length) alert('No transactions found');
 });
 </script>

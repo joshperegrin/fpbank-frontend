@@ -99,16 +99,16 @@ export const useAccountStore = defineStore(
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'X-Session-ID': this.session_id // Match backend expectation
+                            'X-Session-ID': this.session_id
                         }
                     });
                     let body;
                     try {
                         body = await response.json();
                     } catch (parseError) {
-                        throw new Error(`Invalid JSON response from server: ${await response.text()}`);
+                        console.warn('Invalid JSON response from logout:', await response.text());
                     }
-                    if (!response.ok) {
+                    if (!response.ok && response.status !== 404) {
                         throw new Error(body?.message || `Server returned ${response.status}`);
                     }
                     this.session_id = '';
@@ -199,7 +199,7 @@ export const useAccountStore = defineStore(
             },
             async fetchUserTransactionHistory(page, limit) {
                 try {
-                    const response = await fetch(`http://${server_address}/transactions/history?page=${page}&limit=${limit}`, {
+                    const response = await fetch(`http://${server_address}/account/transactions?page=${page}&limit=${limit}`, {
                         method: 'GET',
                         headers: {
                             'X-Session-ID': this.session_id // Match backend expectation
@@ -210,6 +210,7 @@ export const useAccountStore = defineStore(
                         throw new Error(body?.message || `Server returned ${response.status}`);
                     }
                     const data = await response.json();
+                    console.log(data)
                     return data.transactions;
                 } catch (error) {
                     console.error('Failed to fetch transaction history:', error);

@@ -80,32 +80,6 @@
   </ion-page>
 </template>
 
-<style scoped>
-.content-body {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	padding: 1em;
-}
-
-ion-searchbar {
-  --border-radius: 100px;
-}
-
-.no-transactions {
-  display: block;
-  text-align: center;
-  padding: 20px;
-  color: var(--ion-color-medium);
-}
-
-ion-list-header {
-  padding: 10px 16px;
-  background: var(--ion-background-color, #fff);
-}
-</style>
-
 <script setup>
 import {
   IonPage,
@@ -123,46 +97,25 @@ import { downloadOutline } from 'ionicons/icons';
 import GenericHeader from '@/components/GenericHeader.vue';
 import HistoryFilters from '@/components/HistoryFilters.vue';
 import HistoryTransactionCards from '@/components/HistoryTransactionCards.vue';
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
+import { useAccountStore } from '../stores/accounts.store';
 
-// Sample transaction data with detailId
-const transactions = ref([
-  {
-    clientName: 'John Doe',
-    accountNumber: '1234-5678',
-    datetime: new Date(),
-    amount: 100.0,
-    status: 'sent',
-    detailId: 'tx1',
-  },
-  {
-    clientName: 'Jane Smith',
-    accountNumber: '9876-5432',
-    datetime: new Date('2023-11-01T10:30:00Z'),
-    amount: -50.25,
-    status: 'pending',
-    detailId: 'tx2',
-  },
-  {
-    clientName: 'Alice Johnson',
-    accountNumber: '5678-1234',
-    datetime: new Date('2023-10-15T14:45:00Z'),
-    amount: 200.75,
-    status: 'sent',
-    detailId: 'tx3',
-  },
-  {
-    clientName: 'Bob Brown',
-    accountNumber: '4321-8765',
-    datetime: new Date('2023-09-20T08:15:00Z'),
-    amount: -75.0,
-    status: 'pending',
-    detailId: 'tx4',
-  },
-]);
-
-// Search query
+const accountStore = useAccountStore();
+const transactions = ref([]);
 const searchQuery = ref('');
+
+onMounted(async () => {
+  const rawTransactions = await accountStore.fetchUserTransactionHistory(1, 20);
+  transactions.value = rawTransactions.map(t => ({
+    clientName: t.transactionName,
+    accountNumber: accountStore.accountInfo.accountNumber || 'N/A',
+    datetime: t.transactionDate,
+    amount: t.transferAmount,
+    status: t.transactionStatus.toLowerCase(),
+    detailId: t.transactionReferenceNumber
+  }));
+  if (!transactions.value.length) console.log('No transactions fetched');
+});
 
 // Filtered transactions based on search query
 const filteredTransactions = computed(() => {
@@ -191,7 +144,7 @@ const groupedTransactions = computed(() => {
   return {
     all: groupByMonth(filteredTransactions.value),
     received: groupByMonth(filteredTransactions.value.filter(t => t.amount > 0)),
-    sent: groupByMonth(filteredTransactions.value.filter(t => t.amount < 0)),
+    sent: groupByMonth(filteredTransactions.value.filter(t => t.amount < 0))
   };
 });
 
@@ -213,3 +166,29 @@ function handleFilterChange(filter) {
   console.log('Filter changed to:', filter);
 }
 </script>
+
+<style scoped>
+.content-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1em;
+}
+
+ion-searchbar {
+  --border-radius: 100px;
+}
+
+.no-transactions {
+  display: block;
+  text-align: center;
+  padding: 20px;
+  color: var(--ion-color-medium);
+}
+
+ion-list-header {
+  padding: 10px 16px;
+  background: var(--ion-background-color, #fff);
+}
+</style>
