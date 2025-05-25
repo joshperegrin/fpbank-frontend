@@ -28,8 +28,6 @@
           @click="this.$router.push('/tabs/tab2/transfer/internal')">
           Transfer to Other FullPort
         </ServicesPageButton>
-        <ServicesPageButton :icon_name="cashOutline"> Cardless Withdrawal </ServicesPageButton>
-        <ServicesPageButton :icon_name="qrCodeOutline"> Generate QR Code </ServicesPageButton>
       </div>
     </ion-content>
   </ion-page>
@@ -67,7 +65,7 @@ ion-header span.greetings:first-of-type {
 }
 .content-body {
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: 1fr 1fr;
   gap: 15px;
 }
 
@@ -79,6 +77,7 @@ import CustomButton01 from '../components/CustomButton01.vue';
 import ServicesPageButton from '../components/ServicesPageButton.vue'
 import { cashOutline, walletOutline, sendOutline, receiptOutline, qrCodeOutline } from 'ionicons/icons';
 import { useRouter } from 'vue-router'
+import { useAccountStore } from '../stores/accounts.store';
 export default {
   components: {
     IonPage,
@@ -93,7 +92,7 @@ export default {
   data(){
     return {
       avatar_src: "src/assets/imgs/angry.jpg",
-      first_name: "Washing",
+      accountStore: useAccountStore(),
       receiptOutline,
       qrCodeOutline,
       sendOutline,
@@ -101,5 +100,10 @@ export default {
       cashOutline
     }
   },
+  computed: {
+    first_name(){
+      return this.accountStore.user.firstname;
+    }
+  }
 }
 </script>
