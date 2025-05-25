@@ -18,13 +18,13 @@ export const useRegistrationStore = defineStore('registration', {
             this.firstname = firstname;
             this.middlename = middlename;
             this.lastname = lastname;
-            this.dateOfBirth = dateOfBirth;
+            this.dateOfBirth = new Date(dateOfBirth).toISOString().slice(0, 10);
             this.nationality = nationality;
             this.address = address;
             this.email = email;
         },
         setIDInfo({ idType, validID }) {
-            this.idType = idType;
+            this.idtype = 'valid2"';
             this.validID = validID;
         },
         setPassword(password) {

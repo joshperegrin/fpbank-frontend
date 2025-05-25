@@ -60,7 +60,6 @@ export const useAccountStore = defineStore(
                 }
 
                 this.session_id = body.sessionID;
-                localStorage.setItem('session_id', body.sessionID);
                 this.user.firstname = body.user.firstname
                 this.user.lastname = body.user.lastname
                 this.user.middlename = body.user.middlename
@@ -139,7 +138,7 @@ export const useAccountStore = defineStore(
                 }
                 try {
                     // Comment out backend call for debugging
-                    const response = await fetch('http://${server_address}/account/', {
+                    const response = await fetch(`http://${server_address}/account/`, {
                       method: 'POST',
                       body: formData,
                     });
@@ -148,10 +147,17 @@ export const useAccountStore = defineStore(
                       throw new Error(body.message || `Server returned ${response.status}`);
                     }
                     this.session_id = body.sessionID;
-                    this.user.firstname = body.user.firstname;
-                    this.user.middlename = body.user.middlename;
-                    this.user.lastname = body.user.lastname;
-                    this.accountInfo.accountNumber = body.accountInfo.accountNumber;
+                    this.user.firstname = body.user.firstname
+                    this.user.lastname = body.user.lastname
+                    this.user.middlename = body.user.middlename
+                    this.user.email = registrationStore.email
+                    this.user.birthdate = registrationStore.dateOfBirth
+                    this.user.nationality = registrationStore.nationality
+                    this.user.address = registrationStore.address
+                    this.accountInfo.accountNumber = body.accountInfo.accountNumber
+                    this.accountInfo.debitCardCVV = body.accountInfo.debitCardCvv
+                    this.accountInfo.debitCardExpiry = body.accountInfo.debitCardExpiry
+                    this.accountInfo.debitCardNumber = body.accountInfo.debitCardNumber
                     // Mock successful response
                     /*
                     this.session_id = 'mock-session-id';
