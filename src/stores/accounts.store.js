@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { useRegistrationStore } from './registration.store';
 const server_address = '157.245.207.138'
 export const useAccountStore = defineStore(
     'accounts',
@@ -121,53 +122,49 @@ export const useAccountStore = defineStore(
                     throw error;
                 }
             },
-            async signup(firstname, middlename, lastname, email, mobile, birthdate, nationality, address, password) {
+            async signup() {
+                const registrationStore = useRegistrationStore();
+                const formData = new FormData();
+                formData.append('firstname', registrationStore.firstname);
+                formData.append('middlename', registrationStore.middlename);
+                formData.append('lastname', registrationStore.lastname);
+                formData.append('dateOfBirth', registrationStore.dateOfBirth);
+                formData.append('nationality', registrationStore.nationality);
+                formData.append('address', registrationStore.address);
+                formData.append('email', registrationStore.email);
+                formData.append('idtype', registrationStore.idType);
+                formData.append('password', registrationStore.password);
+                if (registrationStore.validID) {
+                    formData.append('validid', registrationStore.validID);
+                }
                 try {
-                    const response = await fetch(`http://${server_address}/auth/signup`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            firstname,
-                            middlename,
-                            lastname,
-                            email,
-                            mobile,
-                            birthdate,
-                            nationality,
-                            address,
-                            password
-                        })
+                    // Comment out backend call for debugging
+                    const response = await fetch('http://${server_address}/account/open-account', {
+                      method: 'POST',
+                      body: formData,
                     });
-                    let body;
-                    try {
-                        body = await response.json();
-                    } catch (parseError) {
-                        throw new Error(`Invalid JSON response from server: ${await response.text()}`);
-                    }
+                    const body = await response.json();
                     if (!response.ok) {
-                        throw new Error(body?.message || `Server returned ${response.status}`);
+                      throw new Error(body.message || `Server returned ${response.status}`);
                     }
                     this.session_id = body.sessionID;
-                    localStorage.setItem('session_id', body.sessionID);
                     this.user.firstname = body.user.firstname;
                     this.user.middlename = body.user.middlename;
                     this.user.lastname = body.user.lastname;
-                    this.user.email = body.user.email;
-                    this.user.mobile = body.user.mobile;
-                    this.user.birthdate = body.user.birthdate;
-                    this.user.nationality = body.user.nationality;
-                    this.user.address = body.user.address;
                     this.accountInfo.accountNumber = body.accountInfo.accountNumber;
-                    this.accountInfo.debitCardCVV = body.accountInfo.accountCvv;
-                    this.accountInfo.debitCardExpiry = body.accountInfo.debitCardExpiry;
-                    this.accountInfo.debitCardNumber = body.accountInfo.debitCardNumber;
-                    this.accountInfo.balance = body.accountInfo.balance || 0;
+                    // Mock successful response
+                    /*
+                    this.session_id = 'mock-session-id';
+                    this.user.firstname = registrationStore.firstname;
+                    this.user.middlename = registrationStore.middlename;
+                    this.user.lastname = registrationStore.lastname;
+                    this.accountInfo.accountNumber = 'mock-account-number';
+                    */
+                    registrationStore.clear();
                     return true;
                 } catch (error) {
                     console.error('Signup failed:', error);
-                    return false;
+                    throw error; // Let the caller handle the error
                 }
             },
             async fetchBalance() {
