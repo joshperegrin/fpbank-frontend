@@ -27,6 +27,7 @@ export const useServicesStore = defineStore(
       },
       listOfBanks: [],
       listOfBillers: [],
+      listOfEWallet: [],
       transferLimit: {
         instapay: 50000.00,
         pesonet: 500000.00,
@@ -93,6 +94,33 @@ export const useServicesStore = defineStore(
         }
 
         this.listOfBillers = body.billers
+      } catch (error) {
+        console.error('Error:', error.message);
+      }
+    
+    },
+    async fetchEWallets(){
+      let response;
+      try {
+        response = await fetch('http://' + server_address + '/transfer/ewallets', {
+          method: 'GET',
+          headers: {
+            'X-Session-ID': accountStore.session_id
+          },
+        });
+
+        let body;
+        try {
+            body = await response.json();
+        } catch (parseError) {
+            throw new Error(`Invalid JSON response from server: ${await response.text()}`);
+        }
+
+        if (!response.ok) {
+            throw new Error(body?.message || `Server returned ${response.status}`);
+        }
+
+        this.listOfEWallet = body.ewallets
       } catch (error) {
         console.error('Error:', error.message);
       }
@@ -229,6 +257,40 @@ export const useServicesStore = defineStore(
         referenceNumber: body.transactionReferenceNumber,
         transactionStatus: body.transactionStatus,
       }
+    },
+    async loadEwallet(){
+      const request_body = {
+        amount: this.serviceDetails.ewallet_Amount,
+        ewalletName: this.serviceDetails.ewallet_EWalletName,
+        referenceNumber: this.serviceDetails.ewallet_WalletNumber
+      }
+      
+      const response = await fetch("http://" + server_address + "/transfer/ewallet", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Session-ID': accountStore.session_id
+        },
+        body: JSON.stringify(request_body)
+      })
+
+      let body;
+      try {
+          body = await response.json();
+      } catch (parseError) {
+          throw new Error(`Invalid JSON response from server: ${await response.text()}`);
+      }
+
+      if (!response.ok) {
+          throw new Error(body?.message || `Server returned ${response.status}`);
+      }
+      return {
+        transactionDateTime: body.transactionDate,
+        transactionName: body.transactionName,
+        referenceNumber: body.transactionReferenceNumber,
+        transactionStatus: body.transactionStatus,
+      }
+
     },
     async loadEWallet(){
       console.log(this.serviceDetails.ewallet_EWalletName)

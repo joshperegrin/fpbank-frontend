@@ -19,7 +19,10 @@
           @click="this.$router.push('/tabs/tab2/transfer/external')">
           Transfer to Other Banks
         </ServicesPageButton>
-        <ServicesPageButton :icon_name="walletOutline"> Topup eWallet </ServicesPageButton>
+        <ServicesPageButton :icon_name="walletOutline"
+          @click="this.$router.push('/tabs/tab2/transfer/ewallet')">
+          Topup eWallet
+        </ServicesPageButton>
         <ServicesPageButton
           :icon_name="sendOutline"
           @click="this.$router.push('/tabs/tab2/transfer/internal')">

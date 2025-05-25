@@ -209,6 +209,26 @@ const routes = [
     path: '/tabs/tab2/transfer/bills/transferResult',
     component: () => import('@/views/PayBills05.vue')
   },
+  {
+    path: '/tabs/tab2/transfer/ewallet',
+    component: () => import('@/views/LoadEWallet01.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/ewallet/destinationSelect',
+    component: () => import('@/views/LoadEWallet02.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/ewallet/destinationSelect/ewalletSelect',
+    component: () => import('@/views/LoadEWallet03.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/ewallet/confirmation',
+    component: () => import('@/views/LoadEWallet04.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/ewallet/transferResult',
+    component: () => import('@/views/LoadEWallet05.vue')
+  },
 ];
 
 const router = createRouter({
