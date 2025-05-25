@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { useAccountStore } from '../stores/account.store';
 
-const API_URL = 'http://localhost:3000';
-
+const API_URL = 'http://157.245.207.138';
+const accountStore = useAccountStore();
 // Create axios instance with default config
 const api = axios.create({
   baseURL: API_URL,
@@ -12,7 +13,7 @@ const api = axios.create({
 
 // Add request interceptor to add session ID to all requests
 api.interceptors.request.use((config) => {
-  const sessionId = localStorage.getItem('sessionId');
+  const sessionId = accountStore.session_id;
   if (sessionId) {
     config.headers['X-Session-ID'] = sessionId;
   }

@@ -145,22 +145,23 @@ const routes = [
     path: '/coin/:coinId',
     name: 'CoinPage',
     component: () => import('@/views/CoinPage.vue'),
-  }
+  },
+  {
     path: '/registered-devices',
     component: () => import('@/views/RegisteredDevices.vue')
-    },
+  },
   {
     path: '/change-password',
     component: () => import('@/views/ChangePassword.vue')
-    },
+  },
   {
     path: '/request-physical-card',
     component: () => import('@/views/RequestPhysicalCard.vue')
-    },
+  },
   {
     path: '/card',
     component: () => import('@/views/Card.vue')
-    },  
+  },  
   {
     path: '/request-physical-card2',
     component: () => import('@/views/RequestPhysicalCard2.vue')
