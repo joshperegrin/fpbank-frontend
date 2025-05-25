@@ -155,13 +155,15 @@ export const useServicesStore = defineStore(
     async externalTransfer(){
       const request_body = {
         amount: this.serviceDetails.transfer_Amount,
-        note: this.serviceDetails.transfer_Note,
         recipient_AccountNumber: this.serviceDetails.transfer_ReceivingAccountNumber,
         recipient_Bank: this.serviceDetails.transfer_ReceivingBank,
         recipient_AccountName: this.serviceDetails.transfer_ReceivingAccountName,
         transferChannel: this.serviceDetails.transfer_Channel,
       }
       
+      if(this.serviceDetails.transfer_Note){
+        request_body["note"] = this.serviceDetails.transfer_Note
+      }
       const response = await fetch("http://" + server_address + "/transfer/external", {
         method: 'POST',
         headers: {
@@ -194,10 +196,12 @@ export const useServicesStore = defineStore(
     async internalTransfer(){
       const request_body = {
         amount: this.serviceDetails.transfer_Amount,
-        note: this.serviceDetails.transfer_Note,
         destination_AccountNumber: this.serviceDetails.transfer_ReceivingAccountNumber,
       }
       
+      if(this.serviceDetails.transfer_Note){
+        request_body["note"] = this.serviceDetails.transfer_Note
+      }
       const response = await fetch("http://" + server_address + "/transfer/internal", {
         method: 'POST',
         headers: {
