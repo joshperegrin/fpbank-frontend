@@ -1,7 +1,7 @@
 <template>
   <div class="avatar-button ion-activatable ripple-parent" @click="handle_click">
     <ion-avatar :style="{ width: computed_avatar_size, height: computed_avatar_size }" :src="effective_avatar_src">
-      <img :src="effective_avatar_src" :alt="`Avatar image for ${this.$slots.default ? this.$slots.default()[0].text : 'Avatar Button'}`" />
+      <img :src="effective_avatar_src" :alt="altText" />
     </ion-avatar>
     <ion-label :style="{ fontSize: text_size }"><slot>Avatar Button</slot></ion-label>
     <ion-ripple-effect></ion-ripple-effect>
@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, useSlots } from 'vue';
 import { IonAvatar, IonLabel, IonRippleEffect } from '@ionic/vue';
 
 const props = defineProps({
@@ -33,6 +33,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['click']);
+const slots = useSlots();
 
 const computed_avatar_size = computed(() => {
   const sizes = {
@@ -44,13 +45,17 @@ const computed_avatar_size = computed(() => {
 });
 
 const effective_avatar_src = computed(() => {
-  const placeholder = 'https://ionicframework.com/docs/img/demos/avatar.svg'; /*TODO: Fix Placeholder not passing*/
+  const placeholder = 'https://ionicframework.com/docs/img/demos/avatar.svg';
   if (!props.avatar_src) {
     console.warn('AvatarButton: avatar_src is empty, using placeholder:', placeholder);
     return placeholder;
   }
   console.log('AvatarButton: loading avatar_src:', props.avatar_src);
   return props.avatar_src;
+});
+
+const altText = computed(() => {
+  return `Avatar image for ${slots.default && slots.default()[0]?.text ? slots.default()[0].text : 'Avatar Button'}`;
 });
 
 function handle_click() {
@@ -82,7 +87,7 @@ ion-avatar {
 
 ion-label {
   font-weight: 500;
-  color: var(--ion-color-primary); /*Causes color changes when an avatar is set.*/
+  color: var(--ion-color-primary);
   text-align: center;
 }
 </style>

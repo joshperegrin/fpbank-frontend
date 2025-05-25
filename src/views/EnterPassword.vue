@@ -37,81 +37,109 @@
 </template>
 
 <script setup>
-import { arrowBack } from 'ionicons/icons';
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import {
-    IonPage,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonCard,
-    IonCardHeader,
-    IonCardTitle,
-    IonCardContent,
-    IonItem,
-    IonLabel,
-    IonInput,
-    IonButton,
-    IonButtons,
-    IonBackButton,
-} from "@ionic/vue";
+  import { ref } from "vue";
+  import { useRouter } from "vue-router";
+  import {
+      IonPage,
+      toastController,
+      IonToolbar,
+      IonContent,
+      IonCard,
+      IonCardTitle,
+      IonCardContent,
+      IonInput,
+      IonButton,
+      IonButtons,
+      IonBackButton,
+  } from "@ionic/vue";
+  import { useAccountStore } from '../stores/accounts.store.js';
+  import { useRegistrationStore } from '../stores/registration.store.js';
 
-const icons = {
-    arrowBack
-}
+  const password = ref('');
+  const confirmPassword = ref('');
+  const router = useRouter();
+  const accountStore = useAccountStore();
+  const registrationStore = useRegistrationStore();
 
-const password = ref("");
-const confirmPassword = ref("");
-const router = useRouter();
+  function validatePassword(password) {
+    if (!password) {
+      alert('Password is required');
+      return false;
+    }
+    if (password.length < 7 || password.length > 15) {
+      alert('Password must be between 7 and 15 characters.');
+      return false;
+    }
+    if (!/[A-Z]/.test(password)) {
+      alert('Password must have at least one uppercase letter.');
+      return false;
+    }
+    if (!/[a-z]/.test(password)) {
+      alert('Password must have at least one lowercase letter.');
+      return false;
+    }
+    if (!/[0-9]/.test(password)) {
+      alert('Password must have at least one number.');
+      return false;
+    }
+    if (/[^A-Za-z0-9]/.test(password)) {
+      alert('Password must not contain special characters.');
+      return false;
+    }
+    return true;
+  }
 
-function validatePassword(password) {
-  if (!password) {
-    alert("Password is required");
-    return false;
+  async function showToast(message) {
+    const toast = await toastController.create({
+      message,
+      duration: 2000,
+      position: 'top',
+    });
+    await toast.present();
   }
-  if (password.length < 7 || password.length > 15) {
-    alert("Password must be between 7 and 15 characters.");
-    return false;
-  }
-  if (!/[A-Z]/.test(password)) {
-    alert("Password must have at least one uppercase letter.");
-    return false;
-  }
-  if (!/[a-z]/.test(password)) {
-    alert("Password must have at least one lowercase letter.");
-    return false;
-  }
-  if (!/[0-9]/.test(password)) {
-    alert("Password must have at least one number.");
-    return false;
-  }
-  if (/[^A-Za-z0-9]/.test(password)) {
-    alert("Password must not contain special characters.");
-    return false;
-  }
-  return true;
-}
 
-function enterPassword() {
-  if (!validatePassword(password.value)) {
-    return;
+  async function enterPassword() {
+    if (!validatePassword(password.value)) return;
+    if (password.value !== confirmPassword.value) {
+      showToast('Passwords do not match.');
+      return;
+    }
+    try {
+      registrationStore.setPassword(password.value);
+      console.log('Registration Data:', {
+        firstname: registrationStore.firstname,
+        middlename: registrationStore.middlename,
+        lastname: registrationStore.lastname,
+        dateOfBirth: registrationStore.dateOfBirth,
+        nationality: registrationStore.nationality,
+        address: registrationStore.address,
+        email: registrationStore.email,
+        idType: registrationStore.idType,
+        validID: registrationStore.validID ? registrationStore.validID.name : null,
+        password: registrationStore.password,
+      });
+      console.log('Before signup, current route:', router.currentRoute.value.path);
+      await accountStore.signup();
+      if (!accountStore.session_id) {
+        throw new Error('Session not established');
+      }
+      // Persist session_id
+      localStorage.setItem('session_id', accountStore.session_id);
+      console.log('After signup, session_id:', accountStore.session_id, 'Navigating to /tabs/tab1');
+      await showToast('Signup successful!');
+      router.replace('/tabs/tab1');
+      // Log post-navigation route after a delay
+      setTimeout(() => {
+        console.log('Post-navigation route:', router.currentRoute.value.path);
+      }, 1000);
+    } catch (error) {
+      console.error('Signup error:', error);
+      showToast(`Signup failed: ${error.message}`);
+    }
   }
-  if (password.value !== confirmPassword.value) {
-    alert("Passwords do not match.");
-    return;
-  }
-  console.log("Passed validation");
-  //router.push("/number"); // Replace with your actual route
-  router.push("/tabs/tab1")
-}
-
 </script>
 
-
 <style scoped>
-
 ion-content {
         --background: linear-gradient(to top, #5c55c9, white 40%); /* Ensure the page background is set */
         display: flex; /* Use flexbox to control layout */

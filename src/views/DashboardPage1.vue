@@ -24,10 +24,12 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, onMounted, ref } from "vue";
+import { useRouter } from 'vue-router';
 import {
   IonPage,
   IonContent,
+  IonToast,
 } from '@ionic/vue';
 import { homeOutline, personOutline, settingsOutline, walletOutline, helpCircleOutline, logOutOutline, searchOutline } from 'ionicons/icons';
 import ItemGrid from '@/components/ItemGrid.vue';
@@ -37,13 +39,42 @@ import GenericCardWidgets from "@/components/GenericCardWidgets.vue";
 import GenericHeader from "@/components/GenericHeader.vue";
 import { useAccountStore } from '../stores/accounts.store';
 
-const accountStore = useAccountStore()
+const accountStore = useAccountStore();
+const router = useRouter();
+const isToastOpen = ref(false);
+const toastMessage = ref('');
 
 const account = computed(() => ({
   amount: accountStore.accountInfo.balance,
   number: accountStore.accountInfo.accountNumber,
   currency: 'PHP',
 }));
+
+onMounted(async () => {
+  try {
+    if (!accountStore.session_id) {
+      toastMessage.value = 'No session found. Please log in.';
+      isToastOpen.value = true;
+      setTimeout(() => router.push('/login'), 3000);
+      return;
+    }
+    const isValid = await accountStore.verifySession();
+    if (!isValid) {
+      toastMessage.value = 'Session expired. Please log in again.';
+      isToastOpen.value = true;
+      setTimeout(() => router.push('/login'), 3000);
+      return;
+    }
+    await accountStore.fetchBalance();
+    console.log(accountStore.accountInfo);
+  } catch (error) {
+    toastMessage.value = `Failed to load balance: ${error.message}`;
+    isToastOpen.value = true;
+    if (error.message.includes('session')) {
+      setTimeout(() => router.push('/login'), 3000);
+    }
+  }
+});
 
 const favoriteAccounts = [
   { name: 'Juan Dela Cruz', avatar: 'src/assets/imgs/angry.jpg' },
