@@ -9,24 +9,24 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
-      <ion-card class="portfolio-section" @click="goToPortfolio">
-        <ion-card class="portfolio-info">
+      <ion-card class="portfolio-section">
+        <ion-card class="portfolio-info" @click="goToPortfolio">
           <ion-card-header>
             <ion-card-title class="portfolio-title">Portfolio</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <ion-card class="portfolio-amount-container">
-              <ion-text class="portfolio-amount">Php 20,000.00</ion-text>
+              <ion-text class="portfolio-amount">${{ portfolio.totalValue.toFixed(2) }}</ion-text>
               <ion-text class="portfolio-change">+2.4%</ion-text>
               <ion-icon :icon="chevronForward" class="portfolio-chevron"></ion-icon>
             </ion-card>
           </ion-card-content>
         </ion-card>
         <ion-card class="portfolio-button-section">
-          <ion-button fill="clear" class="portfolio-button">
+          <ion-button fill="clear" class="portfolio-button" @click="goToBuy">
             Buy
           </ion-button>
-          <ion-button fill="clear" class="portfolio-button">
+          <ion-button fill="clear" class="portfolio-button" @click="goToConvert">
             Convert
           </ion-button>
         </ion-card>
@@ -44,71 +44,49 @@
           <ion-button class="tab-buttons" fill="clear">
             <ion-icon slot="icon-only" :icon="searchOutline"></ion-icon>
           </ion-button>
-          <ion-button class="tab-buttons" fill="clear">
+          <ion-button class="tab-buttons" fill="clear" @click="goToTransactions">
             <ion-icon slot="icon-only" :icon="timeOutline"></ion-icon>
           </ion-button>
         </ion-card>
       </div>
       <ion-segment-view>
         <ion-segment-content id="watchlist">
-          <ion-list class="coin-list">
-            <ion-item button class="coin-item">
+          <ion-list class="coin-list" lines="none">
+            <ion-item 
+              v-for="(coin, index) in watchlistCoins" 
+              :key="index" 
+              button 
+              class="coin-item"
+            >
               <ion-icon slot="start" :icon="helpCircle" class="coin-icon"></ion-icon>
               <ion-label>
-                <h2>Agency</h2>
-                <p>136,534.02 AGENCY</p>
+                <h2>{{ coin.name }}</h2>
+                <p>{{ coin.amount }}</p>
               </ion-label>
               <ion-text slot="end" class="coin-value">
-                <h3>-$12.53</h3>
-                <p class="negative">-0.88%</p>
-              </ion-text>
-            </ion-item>
-            <ion-item button class="coin-item">
-              <ion-icon slot="start" :icon="helpCircle" class="coin-icon"></ion-icon>
-              <ion-label>
-                <h2>Eliza</h2>
-                <p>30,081.71 ELIZA</p>
-              </ion-label>
-              <ion-text slot="end" class="coin-value">
-                <h3>-$8.53</h3>
-                <p class="negative">-0.45%</p>
+                <h3>{{ coin.value }}</h3>
+                <p :class="{ negative: coin.change < 0 }">{{ coin.change }}%</p>
               </ion-text>
             </ion-item>
           </ion-list>
         </ion-segment-content>
         <ion-segment-content id="coins">
           <ion-list class="coin-list" lines="none">
-            <ion-item button class="coin-item">
-              <ion-icon slot="start" :icon="helpCircle" class="coin-icon"></ion-icon>
+            <ion-item 
+              v-for="(coin, index) in coins" 
+              :key="index" 
+              button 
+              class="coin-item"
+              @click="goToCoin(coin.code)"
+            >
+              <img :src="getCoinLogo(coin.code)" class="coin-icon" alt="logo" />
               <ion-label>
-                <h2>Bitcoin</h2>
-                <p>0.01 BTC</p>
+                <h2>{{ coin.name }}</h2>
+                <p>{{ coin.amount }}</p>
               </ion-label>
               <ion-text slot="end" class="coin-value">
-                <h3>$82,391.53</h3>
-                <p class="negative">-3.88%</p>
-              </ion-text>
-            </ion-item>
-            <ion-item button class="coin-item">
-              <ion-icon slot="start" :icon="helpCircle" class="coin-icon"></ion-icon>
-              <ion-label>
-                <h2>Solana</h2>
-                <p>0.204 SOL</p>
-              </ion-label>
-              <ion-text slot="end" class="coin-value">
-                <h3>$25.53</h3>
-                <p class="negative">-1.25%</p>
-              </ion-text>
-            </ion-item>
-            <ion-item button class="coin-item">
-              <ion-icon slot="start" :icon="helpCircle" class="coin-icon"></ion-icon>
-              <ion-label>
-                <h2>Ethereum</h2>
-                <p>0.74 ETH</p>
-              </ion-label>
-              <ion-text slot="end" class="coin-value">
-                <h3>$1,391.53</h3>
-                <p class="negative">-2.88%</p>
+                <h3>{{ coin.value }}</h3>
+                <p :class="{ negative: coin.change < 0 }">{{ coin.change }}%</p>
               </ion-text>
             </ion-item>
           </ion-list>
@@ -121,6 +99,11 @@
 <script>
 import { IonIcon, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonAvatar, IonButton, IonSegment, IonSegmentButton, IonSegmentContent, IonSegmentView, IonList, IonItem, IonLabel, IonText, IonCard, IonCardHeader, IonCardTitle, IonCardContent } from "@ionic/vue";
 import { searchOutline, timeOutline, helpCircle, chevronForward } from 'ionicons/icons';
+import { cryptoService } from '@/services/crypto.service';
+import { onIonViewWillEnter } from '@ionic/vue';
+import btcLogo from '@/assets/svgs/btc.svg';
+import ethLogo from '@/assets/svgs/eth.svg';
+import solLogo from '@/assets/svgs/sol.svg';
 
 export default {
   components: {
@@ -152,12 +135,73 @@ export default {
       timeOutline,
       helpCircle,
       chevronForward,
+      btcLogo,
+      ethLogo,
+      solLogo,
+      watchlistCoins: [],
+      coins: [],
+      portfolio: {
+        totalValue: 0,
+        change: 0
+      }
     };
   },
+  async created() {
+    await this.loadPortfolio();
+  },
+  mounted() {
+    onIonViewWillEnter(this.loadPortfolio);
+  },
   methods: {
-    goToPortfolio() {
-      this.$router.push('/portfolio'); // Redirect to the portfolio page
+    async loadPortfolio() {
+      try {
+        const portfolioData = await cryptoService.getPortfolio();
+        this.portfolio = {
+          totalValue: portfolioData.portfolio?.totalValue || 0,
+          change: portfolioData.portfolio?.change || 0
+        };
+        const holdings = (portfolioData.portfolio && Array.isArray(portfolioData.portfolio.holdings))
+          ? portfolioData.portfolio.holdings
+          : [];
+        this.coins = holdings.map(holding => ({
+          name: holding.coin_code,
+          code: holding.coin_code,
+          amount: this.formatAmount(holding.coin_amount, holding.coin_code),
+          value: `$${holding.total_value?.toFixed(2) ?? '0.00'}`,
+          change: holding.change || 0
+        }));
+        this.watchlistCoins = [];
+      } catch (error) {
+        console.error('Error fetching portfolio:', error);
+      }
     },
+    goToPortfolio() {
+      this.$router.push('/portfolio');
+    },
+    goToConvert() {
+      this.$router.push("/convert");
+    },
+    goToBuy() {
+      this.$router.push("/buy");
+    },
+    goToTransactions() {
+      this.$router.push("/crypto-transactions");
+    },
+    goToCoin(coinCode) {
+      const coinId = coinCode.toLowerCase();
+      this.$router.push({ name: 'CoinPage', params: { coinId } });
+    },
+    formatAmount(amount, code) {
+      if (typeof amount !== 'number') return amount;
+      return `${amount.toFixed(3)} ${code}`;
+    },
+    getCoinLogo(coinCode) {
+      const code = coinCode.toLowerCase();
+      if (code === 'btc') return this.btcLogo;
+      if (code === 'eth') return this.ethLogo;
+      if (code === 'sol') return this.solLogo;
+      return '';
+    }
   },
 };
 </script>
@@ -291,10 +335,17 @@ ion-segment-content {
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
 }
 .coin-icon {
-  font-size: 45px;
-  color: var(--ion-text-color);
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  max-width: 36px;
+  max-height: 36px;
+  object-fit: contain;
+  display: inline-block;
   margin-left: 8px;
   margin-right: 15px;
+  vertical-align: middle;
 }
 .coin-item h2 {
   margin: 0;

@@ -130,6 +130,22 @@ const routes = [
     component: () => import('@/views/PortfolioPage.vue')
   },
   {
+    path: "/convert",
+    component: () => import('@/views/ConvertPage.vue'),
+  },
+  {
+    path: "/buy",
+    component: () => import('@/views/BuyPage.vue'),
+  },
+  {
+    path: "/crypto-transactions",
+    component: () => import('@/views/CryptoTransactions.vue'),
+  },
+  {
+    path: '/coin/:coinId',
+    name: 'CoinPage',
+    component: () => import('@/views/CoinPage.vue'),
+  }
     path: '/registered-devices',
     component: () => import('@/views/RegisteredDevices.vue')
     },

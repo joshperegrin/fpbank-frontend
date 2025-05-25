@@ -14,76 +14,63 @@
           <h2>Total Value</h2>
         </ion-label>
         <ion-text>
-          <h1>PHP 20,000.00</h1>
+          <h1>${{ totalValue.toFixed(2) }}</h1>
         </ion-text>
       </div>
       <div class="portfolio-breakdown">
         <div class="chart">
-          <div class="chart-bar bitcoin"></div>
-          <div class="chart-bar ethereum"></div>
-          <div class="chart-bar dogecoin"></div>
+          <template v-if="breakdown.length > 0">
+            <div 
+              v-for="(asset, index) in breakdown" 
+              :key="index" 
+              class="chart-bar" 
+              :class="asset.class"
+              :style="{ width: asset.percentage + '%', minWidth: '5px', background: getColor(asset.class) }"
+            ></div>
+          </template>
+          <template v-else>
+            <div class="chart-placeholder">No assets to display</div>
+          </template>
         </div>
         <div class="breakdown-details">
-          <div class="breakdown-item">
-            <span class="dot bitcoin"></span>
-            <ion-text slot="start">Bitcoin BTC</ion-text>
-            <span>PHP 1,000.00</span>
-          </div>
-          <div class="breakdown-item">
-            <span class="dot ethereum"></span>
-            <ion-text>Ethereum ETH</ion-text>
-            <span>PHP 25,000.00</span>
-          </div>
-          <div class="breakdown-item">
-            <span class="dot dogecoin"></span>
-            <ion-text>Dogecoin DOGE</ion-text>
-            <span>PHP 1,800.00</span>
+          <div 
+            v-for="(asset, index) in breakdown" 
+            :key="index" 
+            class="breakdown-item"
+          >
+            <span class="dot" :style="{ background: getColor(asset.class) }"></span>
+            <ion-text>{{ asset.name }}</ion-text>
+            <span>{{ asset.value }}</span>
           </div>
         </div>
       </div>
       <div class="investment-summary">
         <div class="summary-item">
           <span>This Month Earnings</span>
-          <span class="earnings">+PHP 400.00</span>
+          <span class="earnings">+${{ monthlyEarnings.toFixed(2) }}</span>
         </div>
         <div class="summary-item">
           <span>Total Investment</span>
-          <span>PHP 25,000.00</span>
+          <span>${{ totalInvestment.toFixed(2) }}</span>
         </div>
       </div>
       <div class="tokens-list">
         <ion-list class="coin-list" lines="none">
-          <ion-item button class="coin-item">
-            <ion-icon slot="start" :icon="helpCircle" class="coin-icon"></ion-icon>
+          <ion-item 
+            v-for="(token, index) in tokens" 
+            :key="index" 
+            button 
+            class="coin-item"
+            @click="goToCoin(token.name)"
+          >
+            <img :src="getCoinLogo(token.name)" class="coin-icon" alt="logo" />
             <ion-label>
-              <h2>Bitcoin </h2>
-              <p>0.01 BTC</p>
+              <h2>{{ token.name }}</h2>
+              <p>{{ formatAmount(token.amount) }}</p>
             </ion-label>
             <ion-text slot="end" class="coin-value">
-              <h3>$82,391.53</h3>
-              <p class="negative">-3.88%</p>
-            </ion-text>
-          </ion-item>
-          <ion-item button class="coin-item">
-            <ion-icon slot="start" :icon="helpCircle" class="coin-icon"></ion-icon>
-            <ion-label>
-              <h2>Solana</h2>
-              <p>0.204 SOL</p>
-            </ion-label>
-            <ion-text slot="end" class="coin-value">
-              <h3>$25.53</h3>
-              <p class="negative">-1.25%</p>
-            </ion-text>
-          </ion-item>
-          <ion-item button class="coin-item">
-            <ion-icon slot="start" :icon="helpCircle" class="coin-icon"></ion-icon>
-            <ion-label>
-              <h2>Ethereum</h2>
-              <p>0.74 ETH</p>
-            </ion-label>
-            <ion-text slot="end" class="coin-value">
-              <h3>$1,391.53</h3>
-              <p class="negative">-1.12%</p>
+              <h3>{{ token.value }}</h3>
+              <p :class="{ negative: token.change < 0 }">{{ token.change }}%</p>
             </ion-text>
           </ion-item>
         </ion-list>
@@ -93,11 +80,17 @@
 </template>
 
 <script>
-  import { IonText, IonLabel, IonIcon, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton } from "@ionic/vue";
+  import { IonItem, IonList, IonText, IonLabel, IonIcon, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton } from "@ionic/vue";
   import { returnDownBackOutline, helpCircle } from "ionicons/icons";
+  import { cryptoService } from '@/services/crypto.service';
+  import btcLogo from '@/assets/svgs/btc.svg';
+  import ethLogo from '@/assets/svgs/eth.svg';
+  import solLogo from '@/assets/svgs/sol.svg';
 
   export default {
     components: {
+      IonItem,
+      IonList,
       IonText,
       IonLabel,
       IonIcon,
@@ -113,12 +106,79 @@
       return {
         returnDownBackOutline,
         helpCircle,
+        btcLogo,
+        ethLogo,
+        solLogo,
+        tokens: [],
+        breakdown: [],
+        totalValue: 0,
+        monthlyEarnings: 0,
+        totalInvestment: 0
       };
+    },
+    async created() {
+      try {
+        const portfolioData = await cryptoService.getPortfolio();
+        this.totalValue = portfolioData.portfolio?.totalValue || 0;
+
+        // Defensive: handle missing/undefined holdings
+        const holdings = (portfolioData.portfolio && Array.isArray(portfolioData.portfolio.holdings))
+          ? portfolioData.portfolio.holdings
+          : [];
+        this.tokens = holdings.map(holding => ({
+          name: holding.coin_code,
+          amount: `${holding.coin_amount} ${holding.coin_code}`,
+          value: `$${holding.total_value?.toFixed(2) ?? '0.00'}`,
+          change: holding.change || 0
+        }));
+
+        this.breakdown = holdings.map(holding => ({
+          name: `${holding.coin_code}`,
+          value: `$${holding.total_value?.toFixed(2) ?? '0.00'}`,
+          percentage: this.totalValue ? (holding.total_value / this.totalValue) * 100 : 0,
+          class: holding.coin_code.toLowerCase()
+        }));
+
+        this.monthlyEarnings = 400;
+        this.totalInvestment = 25000;
+      } catch (error) {
+        console.error('Error fetching portfolio:', error);
+      }
     },
     methods: {
       goBack() {
         this.$router.push("/tabs/tab3");
       },
+      getColor(assetClass) {
+        // Assign a color for each asset class
+        const colors = {
+          bitcoin: '#a970ff',
+          eth: '#4a90e2',
+          ethereum: '#4a90e2',
+          sol: '#f5a623',
+          solana: '#f5a623',
+        };
+        return colors[assetClass] || '#888';
+      },
+      goToCoin(coinName) {
+        const coinId = coinName.toLowerCase();
+        this.$router.push({ name: 'CoinPage', params: { coinId } });
+      },
+      formatAmount(amount) {
+        // amount is a string like '0.5830322580645162 BTC'
+        if (!amount) return amount;
+        const [num, code] = amount.split(' ');
+        const n = parseFloat(num);
+        if (isNaN(n)) return amount;
+        return `${n.toFixed(3)} ${code}`;
+      },
+      getCoinLogo(coinName) {
+        const code = coinName.toLowerCase();
+        if (code === 'btc') return this.btcLogo;
+        if (code === 'eth') return this.ethLogo;
+        if (code === 'sol') return this.solLogo;
+        return '';
+      }
     },
   };
 </script>
@@ -245,10 +305,17 @@
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
   }
   .coin-icon {
-    font-size: 45px;
-    color: var(--ion-text-color);
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+    max-width: 36px;
+    max-height: 36px;
+    object-fit: contain;
+    display: inline-block;
     margin-left: 8px;
     margin-right: 15px;
+    vertical-align: middle;
   }
   .coin-item h2 {
     margin: 0;
@@ -272,9 +339,16 @@
   .coin-value p {
     margin: 0;
     font-size: 14px;
-    color: var(--ion-color-danger);
+    color: var (--ion-color-danger);
   }
   .negative {
     color: var(--ion-color-danger);
+  }
+  .chart-placeholder {
+    width: 100%;
+    text-align: center;
+    color: #888;
+    font-size: 1rem;
+    padding: 10px 0;
   }
 </style>
