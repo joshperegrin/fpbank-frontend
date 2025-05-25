@@ -13,9 +13,8 @@
         <div class="header01">Transfer Details</div>
         <div class="detail-list"><div> Transaction Name</div> <div>{{this.transactionDetails.transactionName}}</div></div>
         <div class="detail-list"><div> Transaction Date <br/>and Time</div> <div>{{new Intl.DateTimeFormat('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(this.transactionDetails.transactionDateTime)}} <br/> {{new Intl.DateTimeFormat('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }).format(this.transactionDetails.transactionDateTime)}} </div></div>
-        <div class="detail-list"><div> Transfer From</div> <div> SA: {{this.transactionDetails.transferFrom}}</div></div>
-        <div class="detail-list"><div> Transfer To</div> <div> {{this.transactionDetails.transfer_ReceivingBank}}: {{this.transactionDetails.transfer_ReceivingAccountNumber}}</div></div>
-        <div class="detail-list"><div> Recipient Name</div> <div> {{this.transactionDetails.transfer_ReceivingAccountName}}</div></div>
+        <div class="detail-list"><div> Source Account </div> <div> SA: {{this.transactionDetails.transferFrom}}</div></div>
+        <div class="detail-list"><div> Biller Name and REF# </div> <div> {{this.transactionDetails.biller_BillerName}}: {{this.transactionDetails.biller_RefNumber}}</div></div>
         <div class="detail-list"><div> Amount</div> <div> {{this.transactionDetails.amount}}</div></div>
         <div class="detail-list"><div> Note</div> <div> {{this.transactionDetails.notes}}</div></div>
       </div>
@@ -117,8 +116,8 @@ export default {
         transactionDateTime: null,
         transferFrom: '',
         transfer_ReceivingBank: '',
-        transfer_ReceivingAccountNumber: '',
-        transfer_ReceivingAccountName: '',
+        biller_BillerName: '',
+        biller_RefNumber: '',
         amount: '',
         serviceCharge: '',
         notes: '',
@@ -138,34 +137,27 @@ export default {
   },
   methods: {
     async processTransaction(){
-      const fetchedTransactionDetails = await this.servicesStore.externalTransfer();
-      this.transactionDetails.serviceCharge = fetchedTransactionDetails.serviceCharge
+      const fetchedTransactionDetails = await this.servicesStore.payBillers();
       this.transactionDetails.transactionDateTime = new Date(fetchedTransactionDetails.transactionDateTime)
       this.transactionDetails.transactionName = fetchedTransactionDetails.transactionName
       this.transactionDetails.referenceNumber = fetchedTransactionDetails.referenceNumber
       this.transactionDetails.status = fetchedTransactionDetails.transactionStatus
-
       
-      this.transactionDetails.transfer_ReceivingBank = this.servicesStore.serviceDetails.transfer_ReceivingBank
-      this.transactionDetails.transfer_ReceivingAccountNumber = this.servicesStore.serviceDetails.transfer_ReceivingAccountNumber
-      this.transactionDetails.transfer_ReceivingAccountName = this.servicesStore.serviceDetails.transfer_ReceivingAccountName
+      this.transactionDetails.biller_BillerName = this.servicesStore.serviceDetails.biller_BillerName
+      this.transactionDetails.biller_RefNumber = this.servicesStore.serviceDetails.biller_RefNumber
 
       this.transactionDetails.transferFrom = this.accountNumber
       
-      
-      //this.transactionDetails = this.servicesStore.serviceDetails
-      this.transactionDetails.amount = this.servicesStore.serviceDetails.transfer_Amount
-      this.transactionDetails.notes = this.servicesStore.serviceDetails.transfer_Note
+      this.transactionDetails.amount = this.servicesStore.serviceDetails.biller_Amount
+      this.transactionDetails.notes = this.servicesStore.serviceDetails.biller_Note
       this.loaded = true;
       console.log(`reference number: ${this.transactionDetails.referenceNumber}`)
     },
     async confirm(){
-      this.servicesStore.serviceDetails.transfer_ReceivingBank = ''
-      this.servicesStore.serviceDetails.transfer_ReceivingAccountNumber = ''
-      this.servicesStore.serviceDetails.transfer_ReceivingAccountName = ''
-      this.servicesStore.serviceDetails.transfer_Amount = ''
-      this.servicesStore.serviceDetails.transfer_Channel = ''
-      this.servicesStore.serviceDetails.transfer_Note = ''
+      this.servicesStore.serviceDetails.biller_BillerName = ''
+      this.servicesStore.serviceDetails.biller_RefNumber = ''
+      this.servicesStore.serviceDetails.biller_Amount = ''
+      this.servicesStore.serviceDetails.biller_Note = ''
       this.$router.go(-3)
       
     }

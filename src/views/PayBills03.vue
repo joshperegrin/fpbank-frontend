@@ -5,20 +5,20 @@
         <ion-buttons slot="start">
           <ion-back-button></ion-back-button>
         </ion-buttons>
-        <ion-title>Transfer Funds</ion-title>
+        <ion-title>Pay Bills</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content>
       <div class="content-container ion-padding">
         <div class="stick">
-          <ion-input fill="outline" placeholder="Search Bank">
+          <ion-input fill="outline" placeholder="Search Biller">
             <ion-icon style="font-size: 25px;" slot="end" color="primary" :icon="searchOutline" aria-hidden="true"></ion-icon>
           </ion-input>
         </div>
-        <ion-item-group v-for="(value, key) in banksSorted" :key="key">
+        <ion-item-group v-for="(value, key) in billersSorted" :key="key">
           <ion-item-divider>{{key}}</ion-item-divider>
-          <ion-item v-for="bankname in value" :key="bankname" @click="handleClick(bankname)">
-            <ion-label>{{bankname}}</ion-label>
+          <ion-item v-for="billername in value" :key="billername" @click="handleClick(billername)">
+            <ion-label>{{billername}}</ion-label>
           </ion-item>
         </ion-item-group>
       </div>
@@ -69,21 +69,21 @@ export default {
   },
   data(){
     return {
-      banks: [],
+      billers: [],
       searchOutline,
       servicesStore: useServicesStore(),
     }
   },
   mounted(){
-    this.initBanks()
+    this.initBillers()
   },
   computed: {
-    banksSorted(){
+    billersSorted(){
       const result = {};
-      this.banks.sort()
-      this.banks.forEach(bank => {
+      this.billers.sort()
+      this.billers.forEach(biller => {
         // Get the first letter of the bank name (make sure it's uppercase)
-        const firstLetter = bank.charAt(0).toUpperCase();
+        const firstLetter = biller.charAt(0).toUpperCase();
 
         // If the first letter key doesn't exist, create an empty array
         if (!result[firstLetter]) {
@@ -91,7 +91,7 @@ export default {
         }
 
         // Push the bank name to the corresponding array
-        result[firstLetter].push(bank);
+        result[firstLetter].push(biller);
       });
 
       return result;
@@ -99,20 +99,19 @@ export default {
     }
   },
   methods: {
-    async initBanks(){
-      console.log(this.servicesStore.listOfBanks);
-      if (this.servicesStore.listOfBanks.length == 0){
+    async initBillers(){
+      if (this.servicesStore.listOfBillers.length == 0){
         try{
         debugger;
-          await this.servicesStore.fetchBanks();
+          await this.servicesStore.fetchBillers();
         } catch(e){
           console.log("do stuff");
         }
       }
-      this.banks = this.servicesStore.listOfBanks;
+      this.billers = this.servicesStore.listOfBillers;
     },
-    handleClick(receiving_bank){
-      this.servicesStore.serviceDetails.transfer_ReceivingBank = receiving_bank;
+    handleClick(biller_name){
+      this.servicesStore.serviceDetails.biller_BillerName = biller_name;
       this.$router.back();
     }
   }

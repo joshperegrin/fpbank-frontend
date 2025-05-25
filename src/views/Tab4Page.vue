@@ -71,7 +71,7 @@ import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonAvatar } from 
 import CustomButton01 from '../components/CustomButton01.vue'
 import { personCircleOutline, walletOutline, settingsOutline, searchCircleOutline, helpCircleOutline, logOutOutline } from 'ionicons/icons';
 import { useRouter } from "vue-router";
-
+import { useAccountStore } from '../stores/accounts.store';
 export default {
   components: {
     IonPage,
@@ -94,6 +94,7 @@ export default {
       searchCircleOutline,
       helpCircleOutline,
       logOutOutline,
+      accountstore: useAccountStore()
     }
   },
   methods: {
@@ -116,5 +117,16 @@ export default {
       this.$router.push("/loginBio"); 
     }
   },
+  computed: {
+    user_name(){
+      return this.accountstore.user.firstname + ' ' + this.accountstore.user.middlename + ' ' + this.accountstore.user.lastname
+    },
+    user_email(){
+      return this.accountstore.user.email
+    },
+    user_mobile(){
+      return this.accountstore.user.mobile
+    }
+  }
 }
 </script>

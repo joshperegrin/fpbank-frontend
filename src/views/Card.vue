@@ -30,15 +30,15 @@
           </div>
           <div class="card-face card-back">
             <div class="card-text">
-              <h3>Washing Delos Reyes</h3>
+              <h3>{{accountStore.user.firstname + ' ' + accountStore.user.middlename + ' ' + accountStore.user.lastname}}</h3>
               <div class="back-details">
                 <div>
                     <p> Expiry Date</p>
-                    <h3>01/01</h3>
+                    <h3>{{accountStore.accountInfo.debitCardExpiry}}</h3>
                 </div>
                 <div>
                     <p> CVV</p>
-                    <h3>011</h3>
+                    <h3>{{accountStore.accountInfo.debitCardCVV}}</h3>
                 </div>
               </div>
             </div>
@@ -199,6 +199,7 @@ ion-header {
 
 <script>
 import {IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonBackButton, IonButton, IonItem, IonLabel, IonSelect, IonSelectOption} from '@ionic/vue';
+import { useAccountStore } from '../stores/accounts.store';
 export default {
   components: {
     IonPage,
@@ -216,7 +217,8 @@ export default {
     return {
       flipped: false,
       isSubmitDisabled: false,
-      logo_src: "src/assets/imgs/image 11.jpg"
+      logo_src: "src/assets/imgs/image 11.jpg",
+      accountStore: useAccountStore()
     };
   },
     methods: {

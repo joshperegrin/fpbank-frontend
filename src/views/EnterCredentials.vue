@@ -51,8 +51,10 @@ import {arrowBack } from 'ionicons/icons';
 import logo from "@/assets/imgs/logo.png";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useAccountStore } from '../stores/accounts.store';
 
 import {
+  toastController,
   IonPage,
   IonHeader,
   IonToolbar,
@@ -76,6 +78,7 @@ const icons = {
 }
 const router = useRouter(); 
 
+const accountStore = useAccountStore()
 /*const goToOTP = () => {
 router.push("/otp"); //last
 }
@@ -111,10 +114,22 @@ function sanitizePassword(password) {
 }
 
 // Function to validate and proceed
-const validateAndProceed = () => {
+const validateAndProceed = async () => {
   if (validateEmail(email.value) && sanitizePassword(password.value)) {
     // If email and password are valid, navigate to the OTP page
-    router.push("/tabs/tab1");
+    try{
+      await accountStore.requestLogin(email.value, password.value)
+      router.push("/tabs/tab1");
+    } catch(e){
+      const toast = await toastController.create({
+        message: e.message,
+        duration: 1500,
+        position: 'bottom',
+        positionAnchor: 'confirm',
+      });
+      await toast.present();
+    }
+    
   }
 };
 

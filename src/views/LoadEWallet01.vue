@@ -5,31 +5,24 @@
         <ion-buttons slot="start">
           <ion-back-button @click="handleBackButtonClick()"></ion-back-button>
         </ion-buttons>
-        <ion-title>Transfer Funds</ion-title>
+        <ion-title>Load EWallet</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
       <div class="content-container">
         <div class="transfer">
-          <div style="border-bottom: 1px solid var(--ion-color-lightmedium); margin-bottom: 8px;"><span>Transfer From</span></div>
+          <div style="border-bottom: 1px solid var(--ion-color-lightmedium); margin-bottom: 8px;"><span>Load From</span></div>
           <div>FP BANK ACCOUNT</div>
           <div>{{accountNumber}}</div>
           <div><span>PHP</span> {{accountBalance}}</div>
         </div>
         <div class="ion-activatable transfer" @click="set">
           <ion-ripple-effect></ion-ripple-effect>
-          <div class="selectDestination" :style="(this.servicesStore.serviceDetails.transfer_ReceivingBank && this.servicesStore.serviceDetails.transfer_ReceivingBank.trim() !== '')? { borderBottom: '1px solid var(--ion-color-lightmedium)', marginBottom: '8px' } : {}"><span>Transfer To</span> <ion-icon :icon="this.chevronForwardOutline"></ion-icon></div>
-          <div v-if="(this.servicesStore.serviceDetails.transfer_ReceivingBank && this.servicesStore.serviceDetails.transfer_ReceivingBank.trim() !== '')">{{this.servicesStore.serviceDetails.transfer_ReceivingBank}}</div>
-          <div v-if="(this.servicesStore.serviceDetails.transfer_ReceivingAccountNumber && this.servicesStore.serviceDetails.transfer_ReceivingAccountNumber.trim() !== '')">{{this.servicesStore.serviceDetails.transfer_ReceivingAccountNumber}}</div>
-          <div v-if="(this.servicesStore.serviceDetails.transfer_ReceivingAccountName && this.servicesStore.serviceDetails.transfer_ReceivingAccountName.trim() !== '')"><span>{{this.servicesStore.serviceDetails.transfer_ReceivingAccountName}}</span></div>
+          <div class="selectDestination" :style="(this.servicesStore.serviceDetails.ewallet_EWalletName && this.servicesStore.serviceDetails.ewallet_EWalletName.trim() !== '')? { borderBottom: '1px solid var(--ion-color-lightmedium)', marginBottom: '8px' } : {}"><span>Load To</span> <ion-icon :icon="this.chevronForwardOutline"></ion-icon></div>
+          <div v-if="(this.servicesStore.serviceDetails.ewallet_EWalletName && this.servicesStore.serviceDetails.ewallet_EWalletName.trim() !== '')"> {{this.servicesStore.serviceDetails.ewallet_EWalletName}} </div>
+          <div v-if="(this.servicesStore.serviceDetails.ewallet_WalletNumber && this.servicesStore.serviceDetails.ewallet_WalletNumber.trim() !== '')"> {{this.servicesStore.serviceDetails.ewallet_WalletNumber}} </div>
         </div>
-        <div :class="(this.servicesStore.serviceDetails.transfer_ReceivingBank && this.servicesStore.serviceDetails.transfer_ReceivingBank.trim() !== '')?['ion-activatable', 'transfer']:['deactivated', 'transfer']" @click="handleClick()">
-          <ion-ripple-effect v-if="this.servicesStore.serviceDetails.transfer_ReceivingBank && this.servicesStore.serviceDetails.transfer_ReceivingBank.trim() !== ''"></ion-ripple-effect>
-          <img v-if="this.servicesStore.serviceDetails.transfer_Channel !== ''" :src="(this.servicesStore.serviceDetails.transfer_Channel === 'INSTAPAY')? instapayImage: (this.servicesStore.serviceDetails.transfer_Channel === 'PESONET')? pesonetImage: ''"/>
-          <div v-else class="selectDestination"><span>Transfer Channel</span> <ion-icon :icon="this.chevronForwardOutline"></ion-icon></div>
-        </div>
-        <ion-input ref="amountTextbox" :disabled="this.servicesStore.serviceDetails.transfer_Channel === ''" label="Amount*" type="number" inputmode="decimal" step="0.01" min="0"  v-model="amount" @input="validateInput" label-placement="stacked" fill='outline'></ion-input>
-        <ion-input ref="noteTextbox" label="Notes" label-placement="stacked" fill='outline'></ion-input>
+        <ion-input ref="amountTextbox" :disabled="!(this.servicesStore.serviceDetails.ewallet_EWalletName && this.servicesStore.serviceDetails.ewallet_EWalletName.trim() !== '')" label="Amount*" type="number" inputmode="decimal" step="0.01" min="0"  v-model="amount" @input="validateInput" label-placement="stacked" fill='outline'></ion-input>
       </div>
     </ion-content>
     <ion-footer id="footer"><ion-button shape='round' size="large" @click="confirm" id="confirm"> Proceed </ion-button></ion-footer>
@@ -157,14 +150,11 @@ export default {
   },
   methods: {
     async handleBackButtonClick(){
-      if(this.servicesStore.serviceDetails.transfer_ReceivingBank !== '' ||
-        this.servicesStore.serviceDetails.transfer_ReceivingAccountNumber !== '' ||
-        this.servicesStore.serviceDetails.transfer_ReceivingAccountName !== '' ||
-        this.servicesStore.serviceDetails.transfer_Amount !== '' ||
-        this.servicesStore.serviceDetails.transfer_Channel !== '' ||
-        this.servicesStore.serviceDetails.transfer_Purpose !== ''){
+      if(this.servicesStore.serviceDetails.ewallet_EWalletName !== '' ||
+        this.servicesStore.serviceDetails.ewallet_WalletNumber !== '' ||
+        this.servicesStore.serviceDetails.ewallet_Amount !== ''){
         const alert = await alertController.create({
-          header: 'Leave Transfer?',
+          header: 'Leave Payment?',
           message: 'If you leave now, all the info you’ve entered will be lost. Want to stay and finish it?',
           buttons: [
             {
@@ -175,12 +165,9 @@ export default {
               text: 'Confirm',
               role: 'confirm',
               handler: () => {
-                this.servicesStore.serviceDetails.transfer_ReceivingBank = '';
-                this.servicesStore.serviceDetails.transfer_ReceivingAccountNumber = '';
-                this.servicesStore.serviceDetails.transfer_ReceivingAccountName = '';
-                this.servicesStore.serviceDetails.transfer_Amount = '';
-                this.servicesStore.serviceDetails.transfer_Channel = '';
-                this.servicesStore.serviceDetails.transfer_Purpose = '';
+                this.servicesStore.serviceDetails.ewallet_EWalletName = '';
+                this.servicesStore.serviceDetails.ewallet_WalletNumber = '';
+                this.servicesStore.serviceDetails.ewallet_Amount = '';
                 this.$router.back()
               }
             },
@@ -194,19 +181,12 @@ export default {
     },
     set(){
       console.log(this.$router)
-      this.$router.push(`/tabs/tab2/transfer/external/destinationSelect`);
-    },
-    handleClick() {
-      const bank = this.servicesStore.serviceDetails.transfer_ReceivingBank;
-      if (bank && bank.trim() !== '') {
-        this.$router.push('/tabs/tab2/transfer/external/transferChannel');
-      }
+      this.$router.push(`/tabs/tab2/transfer/ewallet/destinationSelect`);
     },
     async confirm(){
       if(this.isFormComplete()){
-        this.servicesStore.serviceDetails.transfer_Amount = this.amount;
-        this.servicesStore.serviceDetails.transfer_Note = this.$refs.noteTextbox.$el.value || null
-        this.$router.push('/tabs/tab2/transfer/external/confirmation');
+        this.servicesStore.serviceDetails.ewallet_Amount = this.amount;
+        this.$router.push('/tabs/tab2/transfer/ewallet/confirmation');
       } else if(!this.toastPresented) {
           const toast = await toastController.create({
             message: 'Incomplete or invalid transaction details.',
@@ -222,10 +202,7 @@ export default {
     },
     isFormComplete(){
       return (
-        this.servicesStore.serviceDetails.transfer_ReceivingBank !== '' &&
-        this.servicesStore.serviceDetails.transfer_ReceivingAccountNumber !== '' &&
-        this.servicesStore.serviceDetails.transfer_ReceivingAccountName !== '' &&
-        this.servicesStore.serviceDetails.transfer_Channel !== '' &&
+        this.servicesStore.serviceDetails.ewallet_EWalletName !== '' &&
         this.amount !== '' && 
         !this.$refs.amountTextbox.$el.classList.contains('ion-invalid'))
     },
@@ -257,14 +234,6 @@ export default {
         this.$refs.amountTextbox.$el.classList.add('ion-invalid')
         this.$refs.amountTextbox.$el.classList.add('ion-touched')
         toastMessage = `Insufficient Funds`
-      } else if(this.servicesStore.serviceDetails.transfer_Channel === 'INSTAPAY' && parseFloat(this.amount) > this.servicesStore.transferLimit.instapay){
-        this.$refs.amountTextbox.$el.classList.add('ion-invalid')
-        this.$refs.amountTextbox.$el.classList.add('ion-touched')
-        toastMessage = `You are over the Instapay transfer limit: PHP${this.servicesStore.transferLimit.instapay}.00`
-      } else if (this.servicesStore.serviceDetails.transfer_Channel === 'PESONET' && parseFloat(this.amount) > this.servicesStore.transferLimit.pesonet){
-        this.$refs.amountTextbox.$el.classList.add('ion-invalid')
-        this.$refs.amountTextbox.$el.classList.add('ion-touched')
-        toastMessage = `You are over the PESONet transfer limit: PHP${this.servicesStore.transferLimit.pesonet}.00`
       } else {
         this.$refs.amountTextbox.$el.classList.remove('ion-invalid')
         this.$refs.amountTextbox.$el.classList.remove('ion-touched')

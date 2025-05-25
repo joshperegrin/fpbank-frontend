@@ -14,8 +14,7 @@
         <div class="detail-list"><div> Transaction Name</div> <div>{{this.transactionDetails.transactionName}}</div></div>
         <div class="detail-list"><div> Transaction Date <br/>and Time</div> <div>{{new Intl.DateTimeFormat('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(this.transactionDetails.transactionDateTime)}} <br/> {{new Intl.DateTimeFormat('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }).format(this.transactionDetails.transactionDateTime)}} </div></div>
         <div class="detail-list"><div> Transfer From</div> <div> SA: {{this.transactionDetails.transferFrom}}</div></div>
-        <div class="detail-list"><div> Transfer To</div> <div> {{this.transactionDetails.transfer_ReceivingBank}}: {{this.transactionDetails.transfer_ReceivingAccountNumber}}</div></div>
-        <div class="detail-list"><div> Recipient Name</div> <div> {{this.transactionDetails.transfer_ReceivingAccountName}}</div></div>
+        <div class="detail-list"><div> Transfer To</div> <div> SA: {{this.transactionDetails.transfer_ReceivingAccountNumber}}</div></div>
         <div class="detail-list"><div> Amount</div> <div> {{this.transactionDetails.amount}}</div></div>
         <div class="detail-list"><div> Note</div> <div> {{this.transactionDetails.notes}}</div></div>
       </div>
@@ -138,22 +137,16 @@ export default {
   },
   methods: {
     async processTransaction(){
-      const fetchedTransactionDetails = await this.servicesStore.externalTransfer();
-      this.transactionDetails.serviceCharge = fetchedTransactionDetails.serviceCharge
+      const fetchedTransactionDetails = await this.servicesStore.internalTransfer();
       this.transactionDetails.transactionDateTime = new Date(fetchedTransactionDetails.transactionDateTime)
       this.transactionDetails.transactionName = fetchedTransactionDetails.transactionName
       this.transactionDetails.referenceNumber = fetchedTransactionDetails.referenceNumber
       this.transactionDetails.status = fetchedTransactionDetails.transactionStatus
-
       
-      this.transactionDetails.transfer_ReceivingBank = this.servicesStore.serviceDetails.transfer_ReceivingBank
       this.transactionDetails.transfer_ReceivingAccountNumber = this.servicesStore.serviceDetails.transfer_ReceivingAccountNumber
-      this.transactionDetails.transfer_ReceivingAccountName = this.servicesStore.serviceDetails.transfer_ReceivingAccountName
 
       this.transactionDetails.transferFrom = this.accountNumber
       
-      
-      //this.transactionDetails = this.servicesStore.serviceDetails
       this.transactionDetails.amount = this.servicesStore.serviceDetails.transfer_Amount
       this.transactionDetails.notes = this.servicesStore.serviceDetails.transfer_Note
       this.loaded = true;

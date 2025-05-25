@@ -150,29 +150,85 @@ const routes = [
     component: () => import('@/views/RequestPhysicalCard2.vue')
   },  
   {
-    path: '/tabs/tab2/transfer/:transfertype',
+    path: '/tabs/tab2/transfer/external',
     component: () => import('@/views/TransferPage01.vue')
   },
   {
-    path: '/tabs/tab2/transfer/:transfertype/destinationSelect',
+    path: '/tabs/tab2/transfer/external/destinationSelect',
     component: () => import('@/views/TransferPage02.vue')
   },
   {
-    path: '/tabs/tab2/transfer/:transfertype/destinationSelect/bankSelect',
+    path: '/tabs/tab2/transfer/external/destinationSelect/bankSelect',
     component: () => import('@/views/TransferPage03.vue')
   },
   {
-    path: '/tabs/tab2/transfer/:transfertype/transferChannel',
+    path: '/tabs/tab2/transfer/external/transferChannel',
     component: () => import('@/views/TransferPage04.vue')
   },
   {
-    path: '/tabs/tab2/transfer/:transfertype/confirmation',
+    path: '/tabs/tab2/transfer/external/confirmation',
     component: () => import('@/views/TransferPage05.vue')
   },
   {
-    path: '/tabs/tab2/transfer/:transfertype/transferResult',
+    path: '/tabs/tab2/transfer/external/transferResult',
     component: () => import('@/views/TransferPage06.vue')
-  }
+  },
+  {
+    path: '/tabs/tab2/transfer/internal',
+    component: () => import('@/views/InternalTransfer01.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/internal/destinationSelect',
+    component: () => import('@/views/InternalTransfer02.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/internal/confirmation',
+    component: () => import('@/views/InternalTransfer03.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/internal/transferResult',
+    component: () => import('@/views/InternalTransfer04.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/bills',
+    component: () => import('@/views/PayBills01.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/bills/destinationSelect',
+    component: () => import('@/views/PayBills02.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/bills/destinationSelect/billerSelect',
+    component: () => import('@/views/PayBills03.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/bills/confirmation',
+    component: () => import('@/views/PayBills04.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/bills/transferResult',
+    component: () => import('@/views/PayBills05.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/ewallet',
+    component: () => import('@/views/LoadEWallet01.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/ewallet/destinationSelect',
+    component: () => import('@/views/LoadEWallet02.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/ewallet/destinationSelect/ewalletSelect',
+    component: () => import('@/views/LoadEWallet03.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/ewallet/confirmation',
+    component: () => import('@/views/LoadEWallet04.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/ewallet/transferResult',
+    component: () => import('@/views/LoadEWallet05.vue')
+  },
 ];
 
 const router = createRouter({

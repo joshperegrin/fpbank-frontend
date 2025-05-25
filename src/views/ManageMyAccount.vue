@@ -101,6 +101,7 @@
   import CustomButton01 from '../components/CustomButton01.vue'
   import ComponentLibrarySample from './ComponentLibrarySample.vue';
   import { cardOutline, personCircleOutline, walletOutline, settingsOutline, searchCircleOutline, helpCircleOutline, logOutOutline, checkbox } from 'ionicons/icons';
+  import { useAccountStore } from '../stores/accounts.store';
   export default {
     components: {
       IonPage,
@@ -116,9 +117,6 @@
     data(){
       return {
         avatar_src: "src/assets/imgs/angry.jpg",
-        user_name: "Washing Machine",
-        user_email: "washing.machine@gmail.com",
-        user_mobile: "+63-912-345-6789",
         checkbox: false,
         cardOutline,
         personCircleOutline,
@@ -127,6 +125,7 @@
         searchCircleOutline,
         helpCircleOutline,
         logOutOutline,
+        accountstore: useAccountStore()
       }
     },
     methods: {
@@ -137,6 +136,17 @@
         this.$router.push("/card")
       }
     },
+    computed: {
+      user_name(){
+        return this.accountstore.user.firstname + ' ' + this.accountstore.user.middlename + ' ' + this.accountstore.user.lastname
+      },
+      user_email(){
+        return this.accountstore.user.email
+      },
+      user_mobile(){
+        return this.accountstore.user.mobile
+      }
+    }
   }
   </script>
   

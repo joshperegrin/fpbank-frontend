@@ -5,20 +5,20 @@
         <ion-buttons slot="start">
           <ion-back-button></ion-back-button>
         </ion-buttons>
-        <ion-title>Transfer Funds</ion-title>
+        <ion-title>Load EWallet</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content>
       <div class="content-container ion-padding">
         <div class="stick">
-          <ion-input fill="outline" placeholder="Search Bank">
+          <ion-input fill="outline" placeholder="Search EWallets">
             <ion-icon style="font-size: 25px;" slot="end" color="primary" :icon="searchOutline" aria-hidden="true"></ion-icon>
           </ion-input>
         </div>
-        <ion-item-group v-for="(value, key) in banksSorted" :key="key">
+        <ion-item-group v-for="(value, key) in ewalletSorted" :key="key">
           <ion-item-divider>{{key}}</ion-item-divider>
-          <ion-item v-for="bankname in value" :key="bankname" @click="handleClick(bankname)">
-            <ion-label>{{bankname}}</ion-label>
+          <ion-item v-for="ewalletname in value" :key="ewalletname" @click="handleClick(ewalletname)">
+            <ion-label>{{ewalletname}}</ion-label>
           </ion-item>
         </ion-item-group>
       </div>
@@ -69,21 +69,21 @@ export default {
   },
   data(){
     return {
-      banks: [],
+      ewallets: [],
       searchOutline,
       servicesStore: useServicesStore(),
     }
   },
   mounted(){
-    this.initBanks()
+    this.initEWallet()
   },
   computed: {
-    banksSorted(){
+    ewalletSorted(){
       const result = {};
-      this.banks.sort()
-      this.banks.forEach(bank => {
+      this.ewallets.sort()
+      this.ewallets.forEach(ewallet => {
         // Get the first letter of the bank name (make sure it's uppercase)
-        const firstLetter = bank.charAt(0).toUpperCase();
+        const firstLetter = ewallet.charAt(0).toUpperCase();
 
         // If the first letter key doesn't exist, create an empty array
         if (!result[firstLetter]) {
@@ -91,7 +91,7 @@ export default {
         }
 
         // Push the bank name to the corresponding array
-        result[firstLetter].push(bank);
+        result[firstLetter].push(ewallet);
       });
 
       return result;
@@ -99,20 +99,19 @@ export default {
     }
   },
   methods: {
-    async initBanks(){
-      console.log(this.servicesStore.listOfBanks);
-      if (this.servicesStore.listOfBanks.length == 0){
+    async initEWallet(){
+      if (this.servicesStore.listOfEWallet.length == 0){
         try{
         debugger;
-          await this.servicesStore.fetchBanks();
+          await this.servicesStore.fetchEWallets();
         } catch(e){
           console.log("do stuff");
         }
       }
-      this.banks = this.servicesStore.listOfBanks;
+      this.ewallets = this.servicesStore.listOfEWallet;
     },
-    handleClick(receiving_bank){
-      this.servicesStore.serviceDetails.transfer_ReceivingBank = receiving_bank;
+    handleClick(ewallet_name){
+      this.servicesStore.serviceDetails.ewallet_EWalletName = ewallet_name;
       this.$router.back();
     }
   }

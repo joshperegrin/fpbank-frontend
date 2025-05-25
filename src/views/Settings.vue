@@ -69,6 +69,7 @@
   import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonAvatar, IonBackButton  } from '@ionic/vue';
   import CustomButton01 from '../components/CustomButton01.vue'
   import { keypadOutline, phonePortraitOutline } from 'ionicons/icons';
+  import { useAccountStore } from '../stores/accounts.store';
   export default {
     components: {
       IonPage,
@@ -88,6 +89,7 @@
         user_mobile: "+63-912-345-6789",
         keypadOutline,
         phonePortraitOutline,
+        accountstore: useAccountStore()
       }
     },
     methods: {
@@ -98,6 +100,18 @@
       this.$router.push('/change-password');
     },
     },
+    computed: {
+      user_name(){
+        return this.accountstore.user.firstname + ' ' + this.accountstore.user.middlename + ' ' + this.accountstore.user.lastname
+      },
+      user_email(){
+        return this.accountstore.user.email
+      },
+      user_mobile(){
+        return this.accountstore.user.mobile
+      }
+    }
+
   }
   </script>
   

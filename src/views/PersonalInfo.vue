@@ -173,22 +173,22 @@
       return useAccountStore();
     },
     user_name() {
-      return this.accountStore.personalInfo.user_name;
+      return this.accountStore.user.firstname + " " + this.accountStore.user.middlename + " " + this.accountStore.user.lastname;
     },
     user_email() {
-      return this.accountStore.personalInfo.user_email;
+      return this.accountStore.user.email;
     },
     user_mobile() {
-      return this.accountStore.personalInfo.user_mobile;
+      return this.accountStore.user.mobile;
     },
     user_birthdate() {
-      return this.accountStore.personalInfo.user_birthdate;
+      return this.accountStore.user.birthdate;
     },
     user_nationality() {
-      return this.accountStore.personalInfo.user_nationality;
+      return this.accountStore.user.nationality;
     },
     user_address() {
-      return this.accountStore.personalInfo.user_address;
+      return this.accountStore.user.address;
     }
   },
   methods: {
