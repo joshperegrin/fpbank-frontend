@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useAccountStore } from '../stores/account.store';
+import { useAccountStore } from '../stores/accounts.store';
 
 const API_URL = 'http://157.245.207.138';
 const accountStore = useAccountStore();

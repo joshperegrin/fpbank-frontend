@@ -114,7 +114,7 @@ export default {
       }
     },
     goToCoin(coinCode) {
-      this.$router.push({ name: 'CoinPage', params: { coinId: coinCode.toLowerCase() } });
+      this.$router.replace({ name: 'CoinPage', params: { coinId: coinCode.toLowerCase() } });
     }
   },
 };
