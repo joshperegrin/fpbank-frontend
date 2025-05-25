@@ -4,6 +4,11 @@ const config: CapacitorConfig = {
   appId: 'com.example.app',
   appName: 'fpbank',
   webDir: 'dist',
+  "plugins": {
+    "CapacitorHttp": {
+      "enabled": true
+    }
+  }
 };
 
 export default config;
