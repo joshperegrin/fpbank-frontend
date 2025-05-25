@@ -9,7 +9,11 @@
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding">
       <div class="content-body">
-        <ServicesPageButton :icon_name="receiptOutline"> Pay Bills </ServicesPageButton>
+        <ServicesPageButton 
+          :icon_name="receiptOutline"
+          @click="this.$router.push('/tabs/tab2/transfer/bills')">
+          Pay Bills
+        </ServicesPageButton>
         <ServicesPageButton
           icon_name="src/assets/svgs/bank.svg"
           @click="this.$router.push('/tabs/tab2/transfer/external')">

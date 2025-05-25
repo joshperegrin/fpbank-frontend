@@ -188,8 +188,27 @@ const routes = [
   {
     path: '/tabs/tab2/transfer/internal/transferResult',
     component: () => import('@/views/InternalTransfer04.vue')
-  }
-
+  },
+  {
+    path: '/tabs/tab2/transfer/bills',
+    component: () => import('@/views/PayBills01.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/bills/destinationSelect',
+    component: () => import('@/views/PayBills02.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/bills/destinationSelect/billerSelect',
+    component: () => import('@/views/PayBills03.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/bills/confirmation',
+    component: () => import('@/views/PayBills04.vue')
+  },
+  {
+    path: '/tabs/tab2/transfer/bills/transferResult',
+    component: () => import('@/views/PayBills05.vue')
+  },
 ];
 
 const router = createRouter({
