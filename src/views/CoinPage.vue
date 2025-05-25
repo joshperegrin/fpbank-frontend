@@ -1,5 +1,5 @@
 <template>
-  <ion-page v-if="currentCoin" :key="coinId">
+  <ion-page v-if="!loading && !notFound && currentCoin" :key="coinId">
     <ion-header>
       <ion-toolbar color="primary">
         <ion-buttons slot="start">
@@ -35,8 +35,8 @@
         <div class="balance-label">Your Balance</div>
         <div class="balance-value">{{ currentCoin.balance }} {{ currentCoin.symbol }} ≈${{ currentCoin.balanceUsd.toLocaleString() }}</div>
         <div class="coin-actions">
-          <ion-button fill="outline">Buy</ion-button>
-          <ion-button fill="outline">Convert</ion-button>
+          <ion-button fill="outline" @click="goToBuy">Buy</ion-button>
+          <ion-button fill="outline" @click="goToConvert">Convert</ion-button>
         </div>
       </div>
       <div class="coin-info-section">
@@ -52,7 +52,7 @@
       </div>
     </ion-content>
   </ion-page>
-  <ion-page v-else>
+  <ion-page v-else-if="loading">
     <ion-header>
       <ion-toolbar color="primary">
         <ion-title class="ion-text-center">Loading...</ion-title>
@@ -62,12 +62,23 @@
       <ion-spinner name="crescent"></ion-spinner>
     </ion-content>
   </ion-page>
+  <ion-page v-else>
+    <ion-header>
+      <ion-toolbar color="primary">
+        <ion-title class="ion-text-center">Coin Not Found</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <div style="text-align:center; margin-top: 2rem; color: #888; font-size: 1.2rem;">This coin is not available.</div>
+    </ion-content>
+  </ion-page>
 </template>
 
 <script setup>
 import { IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent, IonButton } from "@ionic/vue";
-import { useRoute } from 'vue-router';
-import { computed, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { computed, ref, onMounted } from 'vue';
+import { cryptoService } from '@/services/crypto.service';
 import chart1h from '@/assets/imgs/chart-1h.png';
 import chart1d from '@/assets/imgs/chart-1d.png';
 import chart1w from '@/assets/imgs/chart-1w.png';
@@ -75,7 +86,22 @@ import chart1m from '@/assets/imgs/chart-1m.png';
 import chart1y from '@/assets/imgs/chart-1y.png';
 
 const route = useRoute();
+const router = useRouter();
 const coinId = computed(() => route.params.coinId || 'bitcoin');
+
+// Helper to normalize coinId to match keys in coinDetails
+function normalizeCoinId(id) {
+  if (!id) return 'bitcoin';
+  const map = {
+    btc: 'bitcoin',
+    bitcoin: 'bitcoin',
+    eth: 'ethereum',
+    ethereum: 'ethereum',
+    sol: 'solana',
+    solana: 'solana',
+  };
+  return map[id.toLowerCase()] || id.toLowerCase();
+}
 
 const chartTabs = ['1 Hour', '1 Day', '1 Week', '1 Month', '1 Year'];
 const selectedTab = ref('1 Day');
@@ -102,61 +128,102 @@ const chartImg = computed(() => {
   return chartImages[suffix] || chart1d;
 });
 
-const coins = {
-  bitcoin: {
-    name: 'Bitcoin',
-    symbol: 'BTC',
-    price: 82391.53,
-    change: -3.88,
-    balance: 0.0005,
-    balanceUsd: 1050,
-    rank: 1,
-    marketCap: '$1.7T',
-    dominance: '60.04%',
-    circulation: '19.83M',
-    maxSupply: '21.00M',
-    totalSupply: '19.83M',
-    issueDate: '2009-01-03',
-    allTimeHigh: '$109,114.8848',
-    allTimeLow: '$0.048664654',
-  },
-  ethereum: {
-    name: 'Ethereum',
-    symbol: 'ETH',
-    price: 3000,
-    change: 12.5,
-    balance: 1.2,
-    balanceUsd: 3600,
-    rank: 2,
-    marketCap: '400B',
-    dominance: '18.5%',
-    circulation: '120M',
-    maxSupply: '∞',
-    totalSupply: '120M',
-    issueDate: '2015-07-30',
-    allTimeHigh: '$1,432.88',
-    allTimeLow: '$0.00218797',
-  },
-  solana: {
-    name: 'Solana',
-    symbol: 'SOL',
-    price: 150,
-    change: 2.1,
-    balance: 10,
-    balanceUsd: 1500,
-    rank: 5,
-    marketCap: '60B',
-    dominance: '2.5%',
-    circulation: '400M',
-    maxSupply: '∞',
-    totalSupply: '400M',
-    issueDate: '2020-08-26',
-    allTimeHigh: '$259.96',
-    allTimeLow: '$0.00218797',
+const currentCoin = ref(null);
+const loading = ref(true);
+const notFound = ref(false);
+
+onMounted(async () => {
+  try {
+    // For now, using mock data for coin details
+    // In a real app, you would fetch this from a crypto price API
+    const coinDetails = {
+      bitcoin: {
+        name: 'Bitcoin',
+        symbol: 'BTC',
+        price: 82391.53,
+        change: -3.88,
+        rank: 1,
+        marketCap: '$1.7T',
+        dominance: '60.04%',
+        circulation: '19.83M',
+        maxSupply: '21.00M',
+        totalSupply: '19.83M',
+        issueDate: '2009-01-03',
+        allTimeHigh: '$109,114.8848',
+        allTimeLow: '$0.048664654',
+      },
+      ethereum: {
+        name: 'Ethereum',
+        symbol: 'ETH',
+        price: 3000,
+        change: 12.5,
+        rank: 2,
+        marketCap: '400B',
+        dominance: '18.5%',
+        circulation: '120M',
+        maxSupply: '∞',
+        totalSupply: '120M',
+        issueDate: '2015-07-30',
+        allTimeHigh: '$1,432.88',
+        allTimeLow: '$0.00218797',
+      },
+      solana: {
+        name: 'Solana',
+        symbol: 'SOL',
+        price: 150,
+        change: 2.1,
+        rank: 5,
+        marketCap: '60B',
+        dominance: '2.5%',
+        circulation: '400M',
+        maxSupply: '∞',
+        totalSupply: '400M',
+        issueDate: '2020-08-26',
+        allTimeHigh: '$259.96',
+        allTimeLow: '$0.00218797',
+      }
+    };
+
+    const normalizedId = normalizeCoinId(coinId.value);
+    const coinInfo = coinDetails[normalizedId];
+    if (coinInfo) {
+      // Try to get user's holding for this coin
+      let coinHolding = null;
+      try {
+        const portfolioData = await cryptoService.getPortfolio();
+        const holdings = (portfolioData.portfolio && Array.isArray(portfolioData.portfolio.holdings))
+          ? portfolioData.portfolio.holdings
+          : [];
+        coinHolding = holdings.find(
+          h => normalizeCoinId(h.coin_code) === normalizedId
+        );
+      } catch (e) {
+        // Ignore error, just show 0 balance
+      }
+      currentCoin.value = {
+        ...coinInfo,
+        balance: coinHolding ? coinHolding.coin_amount : 0,
+        balanceUsd: coinHolding ? coinHolding.total_value : 0
+      };
+      notFound.value = false;
+    } else {
+      notFound.value = true;
+    }
+  } catch (error) {
+    notFound.value = true;
+    console.error('Error loading coin data:', error);
+  } finally {
+    loading.value = false;
   }
+});
+
+const goToBuy = () => {
+  router.push('/buy');
 };
 
-const currentCoin = computed(() => coins[coinId.value] || null);
+const goToConvert = () => {
+  router.push('/convert');
+};
 </script>
 
 <style scoped>

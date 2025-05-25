@@ -44,6 +44,7 @@
 <script>
 import { IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent, IonCard, IonCardContent, IonItem, IonButton, IonIcon, IonInput, IonLabel, IonRow, IonCol } from "@ionic/vue";
 import { helpCircle, swapVerticalOutline, backspaceOutline, logoBitcoin, logoUsd } from "ionicons/icons";
+import { cryptoService } from '@/services/crypto.service';
 
 export default {
   components: {
@@ -69,20 +70,46 @@ export default {
       logoBitcoin,
       swapVerticalOutline,
       helpCircle,
-      transactions: [
-        { btcAmount: '0.48 BTC', ethAmount: '20 ETH' },
-        { btcAmount: '0.48 BTC', ethAmount: '20 ETH' },
-        { btcAmount: '0.48 BTC', ethAmount: '20 ETH' },
-        { btcAmount: '0.48 BTC', ethAmount: '20 ETH' },
-        { btcAmount: '0.48 BTC', ethAmount: '20 ETH' },
-        { btcAmount: '0.48 BTC', ethAmount: '20 ETH' },
-      ],
+      transactions: [],
+      currentPage: 1,
+      limit: 10,
+      hasMore: true
     };
+  },
+  async created() {
+    await this.loadTransactions();
   },
   methods: {
     goBack() {
       this.$router.push("/tabs/tab3");
     },
+    async loadTransactions() {
+      try {
+        const offset = (this.currentPage - 1) * this.limit;
+        const response = await cryptoService.getTransactionHistory(this.limit, offset);
+        
+        // Transform the transactions data
+        const newTransactions = response.transactions.map(tx => ({
+          btcAmount: `${tx.from_amount} ${tx.from_currency}`,
+          ethAmount: `${tx.to_amount} ${tx.to_currency}`,
+          date: new Date(tx.created_at).toLocaleDateString(),
+          status: tx.status,
+          referenceNumber: tx.reference_number
+        }));
+
+        this.transactions = [...this.transactions, ...newTransactions];
+        this.hasMore = newTransactions.length === this.limit;
+      } catch (error) {
+        console.error('Error loading transactions:', error);
+        // You might want to show an error toast here
+      }
+    },
+    async loadMore() {
+      if (this.hasMore) {
+        this.currentPage++;
+        await this.loadTransactions();
+      }
+    }
   },
 };
 </script>

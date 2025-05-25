@@ -14,18 +14,23 @@
           <h2>Total Value</h2>
         </ion-label>
         <ion-text>
-          <h1>PHP 20,000.00</h1>
+          <h1>PHP {{ totalValue.toFixed(2) }}</h1>
         </ion-text>
       </div>
       <div class="portfolio-breakdown">
         <div class="chart">
-          <div 
-            v-for="(asset, index) in breakdown" 
-            :key="index" 
-            class="chart-bar" 
-            :class="asset.class"
-            :style="{ width: asset.percentage + '%' }"
-          ></div>
+          <template v-if="breakdown.length > 0">
+            <div 
+              v-for="(asset, index) in breakdown" 
+              :key="index" 
+              class="chart-bar" 
+              :class="asset.class"
+              :style="{ width: asset.percentage + '%', minWidth: '5px', background: getColor(asset.class) }"
+            ></div>
+          </template>
+          <template v-else>
+            <div class="chart-placeholder">No assets to display</div>
+          </template>
         </div>
         <div class="breakdown-details">
           <div 
@@ -33,7 +38,7 @@
             :key="index" 
             class="breakdown-item"
           >
-            <span class="dot" :class="asset.class"></span>
+            <span class="dot" :style="{ background: getColor(asset.class) }"></span>
             <ion-text>{{ asset.name }}</ion-text>
             <span>{{ asset.value }}</span>
           </div>
@@ -42,11 +47,11 @@
       <div class="investment-summary">
         <div class="summary-item">
           <span>This Month Earnings</span>
-          <span class="earnings">+PHP 400.00</span>
+          <span class="earnings">+PHP {{ monthlyEarnings.toFixed(2) }}</span>
         </div>
         <div class="summary-item">
           <span>Total Investment</span>
-          <span>PHP 25,000.00</span>
+          <span>PHP {{ totalInvestment.toFixed(2) }}</span>
         </div>
       </div>
       <div class="tokens-list">
@@ -76,6 +81,7 @@
 <script>
   import { IonItem, IonList, IonText, IonLabel, IonIcon, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton } from "@ionic/vue";
   import { returnDownBackOutline, helpCircle } from "ionicons/icons";
+  import { cryptoService } from '@/services/crypto.service';
 
   export default {
     components: {
@@ -96,21 +102,56 @@
       return {
         returnDownBackOutline,
         helpCircle,
-        tokens: [
-          { name: "Bitcoin", amount: "0.01 BTC", value: "$1,064.86", change: -3.88 },
-          { name: "Solana", amount: "0.204 SOL", value: "$25.53", change: -1.25 },
-          { name: "Ethereum", amount: "0.74 ETH", value: "$1,391.53", change: -1.12 },
-        ],
-        breakdown: [
-          { name: "Bitcoin BTC", value: "PHP 1,000.00", percentage: 10, class: "bitcoin" },
-          { name: "Ethereum ETH", value: "PHP 25,000.00", percentage: 70, class: "ethereum" },
-          { name: "Dogecoin DOGE", value: "PHP 1,800.00", percentage: 20, class: "dogecoin" },
-        ],
+        tokens: [],
+        breakdown: [],
+        totalValue: 0,
+        monthlyEarnings: 0,
+        totalInvestment: 0
       };
+    },
+    async created() {
+      try {
+        const portfolioData = await cryptoService.getPortfolio();
+        this.totalValue = portfolioData.portfolio?.totalValue || 0;
+
+        // Defensive: handle missing/undefined holdings
+        const holdings = (portfolioData.portfolio && Array.isArray(portfolioData.portfolio.holdings))
+          ? portfolioData.portfolio.holdings
+          : [];
+        this.tokens = holdings.map(holding => ({
+          name: holding.coin_code,
+          amount: `${holding.coin_amount} ${holding.coin_code}`,
+          value: `$${holding.total_value?.toFixed(2) ?? '0.00'}`,
+          change: holding.change || 0
+        }));
+
+        this.breakdown = holdings.map(holding => ({
+          name: `${holding.coin_code}`,
+          value: `PHP ${holding.total_value?.toFixed(2) ?? '0.00'}`,
+          percentage: this.totalValue ? (holding.total_value / this.totalValue) * 100 : 0,
+          class: holding.coin_code.toLowerCase()
+        }));
+
+        this.monthlyEarnings = 400;
+        this.totalInvestment = 25000;
+      } catch (error) {
+        console.error('Error fetching portfolio:', error);
+      }
     },
     methods: {
       goBack() {
         this.$router.push("/tabs/tab3");
+      },
+      getColor(assetClass) {
+        // Assign a color for each asset class
+        const colors = {
+          bitcoin: '#a970ff',
+          eth: '#4a90e2',
+          ethereum: '#4a90e2',
+          sol: '#f5a623',
+          solana: '#f5a623',
+        };
+        return colors[assetClass] || '#888';
       },
     },
   };
@@ -269,5 +310,12 @@
   }
   .negative {
     color: var(--ion-color-danger);
+  }
+  .chart-placeholder {
+    width: 100%;
+    text-align: center;
+    color: #888;
+    font-size: 1rem;
+    padding: 10px 0;
   }
 </style>

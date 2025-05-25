@@ -99,6 +99,7 @@
 <script>
 import { IonIcon, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonAvatar, IonButton, IonSegment, IonSegmentButton, IonSegmentContent, IonSegmentView, IonList, IonItem, IonLabel, IonText, IonCard, IonCardHeader, IonCardTitle, IonCardContent } from "@ionic/vue";
 import { searchOutline, timeOutline, helpCircle, chevronForward } from 'ionicons/icons';
+import { cryptoService } from '@/services/crypto.service';
 
 export default {
   components: {
@@ -130,20 +131,42 @@ export default {
       timeOutline,
       helpCircle,
       chevronForward,
-      watchlistCoins: [
-        { name: "Agency", amount: "136,534.02 AGENCY", value: "-$12.53", change: -0.88 },
-        { name: "Eliza", amount: "30,081.71 ELIZA", value: "-$8.53", change: -0.45 },
-      ],
-      coins: [
-        { name: "Bitcoin", amount: "0.01 BTC", value: "$1,064.86", change: -3.88 },
-        { name: "Solana", amount: "0.204 SOL", value: "$25.53", change: -1.25 },
-        { name: "Ethereum", amount: "0.74 ETH", value: "$1,391.53", change: -2.88 },
-      ],
+      watchlistCoins: [],
+      coins: [],
+      portfolio: {
+        totalValue: 0,
+        change: 0
+      }
     };
+  },
+  async created() {
+    try {
+      // Fetch portfolio data
+      const portfolioData = await cryptoService.getPortfolio();
+      this.portfolio = {
+        totalValue: portfolioData.portfolio?.totalValue || 0,
+        change: portfolioData.portfolio?.change || 0
+      };
+
+      // Defensive: handle missing/undefined holdings
+      const holdings = (portfolioData.portfolio && Array.isArray(portfolioData.portfolio.holdings))
+        ? portfolioData.portfolio.holdings
+        : [];
+      this.coins = holdings.map(holding => ({
+        name: holding.coin_code,
+        amount: `${holding.coin_amount} ${holding.coin_code}`,
+        value: `$${holding.total_value?.toFixed(2) ?? '0.00'}`,
+        change: holding.change || 0
+      }));
+
+      this.watchlistCoins = [];
+    } catch (error) {
+      console.error('Error fetching portfolio:', error);
+    }
   },
   methods: {
     goToPortfolio() {
-      this.$router.push('/portfolio'); // Redirect to the portfolio page
+      this.$router.push('/portfolio');
     },
     goToConvert() {
       this.$router.push("/convert");
@@ -155,7 +178,6 @@ export default {
       this.$router.push("/crypto-transactions");
     },
     goToCoin(coinName) {
-  // Convert coin name to lowercase for the route (e.g., "Bitcoin" -> "bitcoin")
       const coinId = coinName.toLowerCase();
       this.$router.push({ name: 'CoinPage', params: { coinId } });
     },

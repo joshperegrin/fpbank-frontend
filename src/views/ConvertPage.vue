@@ -65,6 +65,7 @@
 <script>
 import { IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent, IonCard, IonCardContent, IonItem, IonButton, IonIcon, IonInput, IonLabel } from "@ionic/vue";
 import { swapVerticalOutline, backspaceOutline, logoBitcoin, logoUsd } from "ionicons/icons";
+import { cryptoService } from '@/services/crypto.service';
 
 export default {
   components: {
@@ -88,10 +89,11 @@ export default {
       swapVerticalOutline,
       backspaceOutline,
       fromCrypto: { ticker: "BTC", icon: logoBitcoin },
-      toCrypto: { ticker: "USD", icon: logoUsd },
+      toCrypto: { ticker: "ETH", icon: logoUsd },
       fromAmount: null,
       toAmount: null,
       focusedInput: 'from',
+      exchangeRate: 0,
       numpadKeys: [
         { label: '1' }, { label: '2' }, { label: '3' },
         { label: '4' }, { label: '5' }, { label: '6' },
@@ -99,6 +101,22 @@ export default {
         { label: '.' }, { label: '0' }, { label: 'back' },
       ],
     };
+  },
+  watch: {
+    fromAmount: {
+      handler(newValue) {
+        if (newValue && this.exchangeRate) {
+          this.toAmount = (parseFloat(newValue) * this.exchangeRate).toFixed(8);
+        }
+      }
+    },
+    exchangeRate: {
+      handler(newValue) {
+        if (this.fromAmount && newValue) {
+          this.toAmount = (parseFloat(this.fromAmount) * newValue).toFixed(8);
+        }
+      }
+    }
   },
   methods: {
     goBack() {
@@ -108,9 +126,26 @@ export default {
       const temp = this.fromCrypto;
       this.fromCrypto = this.toCrypto;
       this.toCrypto = temp;
+      this.exchangeRate = 1 / this.exchangeRate;
     },
-    convert() {
-      console.log(`Converting ${this.fromAmount} ${this.fromCrypto.ticker} to ${this.toCrypto.ticker}`);
+    async convert() {
+      try {
+        const response = await cryptoService.convertCrypto(
+          this.fromCrypto.ticker,
+          this.toCrypto.ticker,
+          parseFloat(this.fromAmount),
+          this.exchangeRate
+        );
+        
+        // Show success message
+        console.log('Conversion successful:', response);
+        
+        // Navigate back to portfolio
+        this.$router.push("/portfolio");
+      } catch (error) {
+        console.error('Error converting crypto:', error);
+        // Show error message
+      }
     },
     handleNumpadInput(key) {
       let target = this.focusedInput === 'to' ? 'toAmount' : 'fromAmount';
@@ -135,6 +170,10 @@ export default {
     if (toInput) {
       toInput.addEventListener('focus', () => { this.focusedInput = 'to'; });
     }
+
+    // Fetch initial exchange rate
+    // This should be replaced with actual API call to get exchange rate
+    this.exchangeRate = 15.5; // Example rate: 1 BTC = 15.5 ETH
   },
 };
 </script>

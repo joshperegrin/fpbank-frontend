@@ -12,45 +12,29 @@
       <div class="search-bar-container">
         <ion-item class="search-bar" lines="none">
           <ion-icon :icon="searchOutline" slot="start" class="search-icon" />
-          <ion-input placeholder="Search..." class="search-input" />
+          <ion-input placeholder="Search..." class="search-input" v-model="searchQuery" />
         </ion-item>
       </div>
       <div class="section-label">Get Started</div>
       <div class="get-started-wrapper">
         <div class="get-started-row">
-          <ion-button class="get-started-card" fill="clear">
+          <ion-button class="get-started-card" fill="clear" v-for="token in getStartedTokens" :key="token.code" @click="goToCoin(token.code)">
             <div class="get-started-content">
               <ion-icon :icon="helpCircle" class="get-started-icon placeholder-icon" />
-              <span class="get-started-name">USDC</span>
-              <span class="get-started-ticker">USDC</span>
-            </div>
-          </ion-button>
-          <ion-button class="get-started-card" fill="clear">
-            <div class="get-started-content">
-              <ion-icon :icon="helpCircle" class="get-started-icon placeholder-icon" />
-              <span class="get-started-name">Solana</span>
-              <span class="get-started-ticker">SOL</span>
+              <span class="get-started-name">{{ token.name }}</span>
+              <span class="get-started-ticker">{{ token.code }}</span>
             </div>
           </ion-button>
         </div>
       </div>
       <div class="section-label">Available Tokens</div>
       <div class="token-list">
-        <ion-button class="token-card token-card-btn" fill="clear">
+        <ion-button class="token-card token-card-btn" fill="clear" v-for="token in filteredTokens" :key="token.code" @click="goToCoin(token.code)">
           <ion-item lines="none">
-            <ion-icon src="src/assets/svgs/agency.svg" slot="start" class="token-icon" />
+            <ion-icon :icon="token.icon" slot="start" class="token-icon" />
             <ion-label>
-              <h2>Agency</h2>
-              <p>AGENCY</p>
-            </ion-label>
-          </ion-item>
-        </ion-button>
-        <ion-button class="token-card token-card-btn" fill="clear">
-          <ion-item lines="none">
-            <ion-icon src="src/assets/svgs/eliza.svg" slot="start" class="token-icon" />
-            <ion-label>
-              <h2>Eliza</h2>
-              <p>ELIZA</p>
+              <h2>{{ token.name }}</h2>
+              <p>{{ token.code }}</p>
             </ion-label>
           </ion-item>
         </ion-button>
@@ -62,6 +46,7 @@
 <script>
 import { IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent, IonCard, IonCardContent, IonItem, IonButton, IonIcon, IonInput, IonLabel } from "@ionic/vue";
 import { searchOutline, helpCircle } from "ionicons/icons";
+import { cryptoService } from '@/services/crypto.service';
 
 export default {
   components: {
@@ -84,12 +69,47 @@ export default {
     return {
       searchOutline,
       helpCircle,
+      searchQuery: '',
+      availableTokens: [
+        { code: 'BTC', name: 'Bitcoin', icon: 'bitcoin' },
+        { code: 'ETH', name: 'Ethereum', icon: 'ethereum' },
+        { code: 'SOL', name: 'Solana', icon: 'solana' }
+      ],
+      getStartedTokens: [
+        { code: 'BTC', name: 'Bitcoin', icon: 'bitcoin' },
+        { code: 'ETH', name: 'Ethereum', icon: 'ethereum' }
+      ]
     };
+  },
+  computed: {
+    filteredTokens() {
+      if (!this.searchQuery) return this.availableTokens;
+      const query = this.searchQuery.toLowerCase();
+      return this.availableTokens.filter(token => 
+        token.name.toLowerCase().includes(query) || 
+        token.code.toLowerCase().includes(query)
+      );
+    }
   },
   methods: {
     goBack() {
       this.$router.push("/tabs/tab3");
     },
+    async buyCrypto(cryptoCode, amount, price) {
+      try {
+        const response = await cryptoService.buyCrypto(cryptoCode, amount, price);
+        // Show success message
+        console.log('Purchase successful:', response);
+        // Navigate back to portfolio
+        this.$router.push("/portfolio");
+      } catch (error) {
+        console.error('Error buying crypto:', error);
+        // Show error message
+      }
+    },
+    goToCoin(coinCode) {
+      this.$router.push({ name: 'CoinPage', params: { coinId: coinCode.toLowerCase() } });
+    }
   },
 };
 </script>
