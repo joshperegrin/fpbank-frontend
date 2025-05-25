@@ -35,7 +35,7 @@
               >
               <ion-input-password-toggle slot="end"></ion-input-password-toggle>
             </ion-input>
-            <ion-card-subtitle @click="goToCredentials">Forgot my account number</ion-card-subtitle>
+            <ion-card-subtitle @click="goToCredentials">Forgot my password</ion-card-subtitle>
             </div>
           </div>
           <div class="button-container">
