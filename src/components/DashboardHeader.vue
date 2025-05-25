@@ -25,7 +25,7 @@ defineProps({
     required: true,
     default: () => ({
       amount: '0.00',
-      number: '',
+      number: '123412341234',
       currency: 'PHP',
     }),
   },

@@ -116,20 +116,26 @@ function sanitizePassword(password) {
 // Function to validate and proceed
 const validateAndProceed = async () => {
   if (validateEmail(email.value) && sanitizePassword(password.value)) {
-    // If email and password are valid, navigate to the OTP page
-    try{
-      await accountStore.requestLogin(email.value, password.value)
-      router.push("/tabs/tab1");
-    } catch(e){
+    try {
+      const success = await accountStore.requestLogin(email.value, password.value);
+      if (success) {
+        router.push("/tabs/tab1");
+      } else {
+        const toast = await toastController.create({
+          message: 'Login failed. Please try again.',
+          duration: 1500,
+          position: 'bottom',
+        });
+        await toast.present();
+      }
+    } catch (e) {
       const toast = await toastController.create({
         message: e.message,
         duration: 1500,
         position: 'bottom',
-        positionAnchor: 'confirm',
       });
       await toast.present();
     }
-    
   }
 };
 
