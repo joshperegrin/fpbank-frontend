@@ -14,11 +14,9 @@
         <ion-card v-for="(tx, idx) in transactions" :key="idx" class="transaction-card">
           <ion-row class="transaction-row" align-items-center>
             <ion-col size="5" class="tx-col tx-col-left">
-              <div class="tx-icon-bg">
-                <ion-icon :icon="logoBitcoin" class="tx-icon btc"></ion-icon>
-              </div>
+              <img :src="getCoinLogo(tx.btcAmount.split(' ')[1])" class="tx-icon btc" alt="logo" />
               <div class="tx-info">
-                <div class="tx-amount btc">{{ tx.btcAmount }}</div>
+                <div :class="['tx-amount', 'btc', getAmountClass(tx.btcAmount)]">{{ tx.btcAmount }}</div>
                 <div class="tx-label">Bitcoin</div>
               </div>
             </ion-col>
@@ -27,11 +25,11 @@
             </ion-col>
             <ion-col size="5" class="tx-col tx-col-right">
               <div class="tx-info tx-info-right">
-                <div class="tx-amount eth">{{ tx.ethAmount }}</div>
+                <div :class="['tx-amount', 'eth', getAmountClass(tx.ethAmount)]">{{ tx.ethAmount }}</div>
                 <div class="tx-label">Ethereum</div>
               </div>
               <div class="tx-icon eth">
-                <img src="@/assets/svgs/eth.svg" alt="Ethereum" class="tx-icon eth-img" />
+                <img :src="getCoinLogo(tx.ethAmount.split(' ')[1])" class="tx-icon eth-img" alt="logo" />
               </div>
             </ion-col>
           </ion-row>
@@ -45,6 +43,8 @@
 import { IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent, IonCard, IonCardContent, IonItem, IonButton, IonIcon, IonInput, IonLabel, IonRow, IonCol } from "@ionic/vue";
 import { helpCircle, swapVerticalOutline, backspaceOutline, logoBitcoin, logoUsd } from "ionicons/icons";
 import { cryptoService } from '@/services/crypto.service';
+import btcLogo from '@/assets/svgs/btc.svg';
+import ethLogo from '@/assets/svgs/eth.svg';
 
 export default {
   components: {
@@ -73,7 +73,9 @@ export default {
       transactions: [],
       currentPage: 1,
       limit: 10,
-      hasMore: true
+      hasMore: true,
+      btcLogo,
+      ethLogo,
     };
   },
   async created() {
@@ -83,6 +85,11 @@ export default {
     goBack() {
       this.$router.push("/tabs/tab3");
     },
+    formatAmount(amount, code) {
+      if (typeof amount !== 'number') amount = parseFloat(amount);
+      if (isNaN(amount)) return '';
+      return `${amount.toFixed(3)} ${code}`;
+    },
     async loadTransactions() {
       try {
         const offset = (this.currentPage - 1) * this.limit;
@@ -90,8 +97,8 @@ export default {
         
         // Transform the transactions data
         const newTransactions = response.transactions.map(tx => ({
-          btcAmount: `${tx.from_amount} ${tx.from_currency}`,
-          ethAmount: `${tx.to_amount} ${tx.to_currency}`,
+          btcAmount: this.formatAmount(tx.from_amount, tx.from_currency),
+          ethAmount: this.formatAmount(tx.to_amount, tx.to_currency),
           date: new Date(tx.created_at).toLocaleDateString(),
           status: tx.status,
           referenceNumber: tx.reference_number
@@ -109,7 +116,21 @@ export default {
         this.currentPage++;
         await this.loadTransactions();
       }
-    }
+    },
+    getAmountClass(amount) {
+      // Remove code (e.g., 'BTC') and check length of number part
+      if (!amount) return '';
+      const num = amount.split(' ')[0];
+      if (num.length > 7) return 'amount-small';
+      if (num.length > 5) return 'amount-medium';
+      return 'amount-large';
+    },
+    getCoinLogo(code) {
+      code = code?.toLowerCase();
+      if (code === 'btc') return this.btcLogo;
+      if (code === 'eth') return this.ethLogo;
+      return '';
+    },
   },
 };
 </script>
@@ -168,31 +189,23 @@ ion-content {
   justify-content: flex-end;
   gap: 8px;
 }
-.tx-icon-bg {
-  background: #ff9900;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  aspect-ratio: 1/1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-}
-.tx-icon-bg svg {
-  width: 70%;
-  height: 70%;
+.tx-icon.btc,
+.tx-icon.eth-img {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
+  max-width: 28px;
+  max-height: 28px;
   object-fit: contain;
   display: block;
+  margin-right: 8px;
 }
 .tx-icon.btc {
-  color: #fff;
-  font-size: 24px;
-  line-height: 1;
+  color: #222a54;
 }
 .tx-icon.eth {
   color: #222a54;
-  font-size: 24px;
 }
 .tx-info {
   display: flex;
@@ -204,8 +217,22 @@ ion-content {
 }
 .tx-amount {
   font-weight: bold;
-  font-size: 1.1rem;
   line-height: 1.5;
+  font-size: 1.1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 100px;
+}
+.tx-amount.amount-large {
+  font-size: 1.1rem;
+}
+.tx-amount.amount-medium {
+  font-size: 1rem;
+}
+.tx-amount.amount-small {
+  font-size: 0.75rem;
 }
 .tx-amount.btc {
   color: #222a54;
@@ -220,11 +247,5 @@ ion-content {
 .swap-icon {
   color: #222a54;
   font-size: 22px;
-}
-.tx-icon.eth-img {
-  width: 30px;
-  height: 30px;
-  display: block;
-  margin-left: 7x;
 }
 </style>

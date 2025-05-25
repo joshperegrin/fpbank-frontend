@@ -16,7 +16,7 @@
           </ion-card-header>
           <ion-card-content>
             <ion-card class="portfolio-amount-container">
-              <ion-text class="portfolio-amount">PHP 20,000.00</ion-text>
+              <ion-text class="portfolio-amount">${{ portfolio.totalValue.toFixed(2) }}</ion-text>
               <ion-text class="portfolio-change">+2.4%</ion-text>
               <ion-icon :icon="chevronForward" class="portfolio-chevron"></ion-icon>
             </ion-card>
@@ -77,9 +77,9 @@
               :key="index" 
               button 
               class="coin-item"
-              @click="goToCoin(coin.name)"
+              @click="goToCoin(coin.code)"
             >
-              <ion-icon slot="start" :icon="helpCircle" class="coin-icon"></ion-icon>
+              <img :src="getCoinLogo(coin.code)" class="coin-icon" alt="logo" />
               <ion-label>
                 <h2>{{ coin.name }}</h2>
                 <p>{{ coin.amount }}</p>
@@ -100,6 +100,10 @@
 import { IonIcon, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonAvatar, IonButton, IonSegment, IonSegmentButton, IonSegmentContent, IonSegmentView, IonList, IonItem, IonLabel, IonText, IonCard, IonCardHeader, IonCardTitle, IonCardContent } from "@ionic/vue";
 import { searchOutline, timeOutline, helpCircle, chevronForward } from 'ionicons/icons';
 import { cryptoService } from '@/services/crypto.service';
+import { onIonViewWillEnter } from '@ionic/vue';
+import btcLogo from '@/assets/svgs/btc.svg';
+import ethLogo from '@/assets/svgs/eth.svg';
+import solLogo from '@/assets/svgs/sol.svg';
 
 export default {
   components: {
@@ -131,6 +135,9 @@ export default {
       timeOutline,
       helpCircle,
       chevronForward,
+      btcLogo,
+      ethLogo,
+      solLogo,
       watchlistCoins: [],
       coins: [],
       portfolio: {
@@ -140,31 +147,34 @@ export default {
     };
   },
   async created() {
-    try {
-      // Fetch portfolio data
-      const portfolioData = await cryptoService.getPortfolio();
-      this.portfolio = {
-        totalValue: portfolioData.portfolio?.totalValue || 0,
-        change: portfolioData.portfolio?.change || 0
-      };
-
-      // Defensive: handle missing/undefined holdings
-      const holdings = (portfolioData.portfolio && Array.isArray(portfolioData.portfolio.holdings))
-        ? portfolioData.portfolio.holdings
-        : [];
-      this.coins = holdings.map(holding => ({
-        name: holding.coin_code,
-        amount: `${holding.coin_amount} ${holding.coin_code}`,
-        value: `$${holding.total_value?.toFixed(2) ?? '0.00'}`,
-        change: holding.change || 0
-      }));
-
-      this.watchlistCoins = [];
-    } catch (error) {
-      console.error('Error fetching portfolio:', error);
-    }
+    await this.loadPortfolio();
+  },
+  mounted() {
+    onIonViewWillEnter(this.loadPortfolio);
   },
   methods: {
+    async loadPortfolio() {
+      try {
+        const portfolioData = await cryptoService.getPortfolio();
+        this.portfolio = {
+          totalValue: portfolioData.portfolio?.totalValue || 0,
+          change: portfolioData.portfolio?.change || 0
+        };
+        const holdings = (portfolioData.portfolio && Array.isArray(portfolioData.portfolio.holdings))
+          ? portfolioData.portfolio.holdings
+          : [];
+        this.coins = holdings.map(holding => ({
+          name: holding.coin_code,
+          code: holding.coin_code,
+          amount: this.formatAmount(holding.coin_amount, holding.coin_code),
+          value: `$${holding.total_value?.toFixed(2) ?? '0.00'}`,
+          change: holding.change || 0
+        }));
+        this.watchlistCoins = [];
+      } catch (error) {
+        console.error('Error fetching portfolio:', error);
+      }
+    },
     goToPortfolio() {
       this.$router.push('/portfolio');
     },
@@ -177,10 +187,21 @@ export default {
     goToTransactions() {
       this.$router.push("/crypto-transactions");
     },
-    goToCoin(coinName) {
-      const coinId = coinName.toLowerCase();
+    goToCoin(coinCode) {
+      const coinId = coinCode.toLowerCase();
       this.$router.push({ name: 'CoinPage', params: { coinId } });
     },
+    formatAmount(amount, code) {
+      if (typeof amount !== 'number') return amount;
+      return `${amount.toFixed(3)} ${code}`;
+    },
+    getCoinLogo(coinCode) {
+      const code = coinCode.toLowerCase();
+      if (code === 'btc') return this.btcLogo;
+      if (code === 'eth') return this.ethLogo;
+      if (code === 'sol') return this.solLogo;
+      return '';
+    }
   },
 };
 </script>
@@ -314,10 +335,17 @@ ion-segment-content {
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
 }
 .coin-icon {
-  font-size: 45px;
-  color: var(--ion-text-color);
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  max-width: 36px;
+  max-height: 36px;
+  object-fit: contain;
+  display: inline-block;
   margin-left: 8px;
   margin-right: 15px;
+  vertical-align: middle;
 }
 .coin-item h2 {
   margin: 0;

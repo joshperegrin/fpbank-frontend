@@ -20,7 +20,7 @@
         <div class="get-started-row">
           <ion-button class="get-started-card" fill="clear" v-for="token in getStartedTokens" :key="token.code" @click="goToCoin(token.code)">
             <div class="get-started-content">
-              <ion-icon :icon="helpCircle" class="get-started-icon placeholder-icon" />
+              <img :src="token.logo" class="get-started-icon" />
               <span class="get-started-name">{{ token.name }}</span>
               <span class="get-started-ticker">{{ token.code }}</span>
             </div>
@@ -31,7 +31,7 @@
       <div class="token-list">
         <ion-button class="token-card token-card-btn" fill="clear" v-for="token in filteredTokens" :key="token.code" @click="goToCoin(token.code)">
           <ion-item lines="none">
-            <ion-icon :icon="token.icon" slot="start" class="token-icon" />
+            <img :src="token.logo" class="token-icon" slot="start" />
             <ion-label>
               <h2>{{ token.name }}</h2>
               <p>{{ token.code }}</p>
@@ -47,6 +47,9 @@
 import { IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent, IonCard, IonCardContent, IonItem, IonButton, IonIcon, IonInput, IonLabel } from "@ionic/vue";
 import { searchOutline, helpCircle } from "ionicons/icons";
 import { cryptoService } from '@/services/crypto.service';
+import btcLogo from '@/assets/svgs/btc.svg';
+import ethLogo from '@/assets/svgs/eth.svg';
+import solLogo from '@/assets/svgs/sol.svg';
 
 export default {
   components: {
@@ -69,15 +72,18 @@ export default {
     return {
       searchOutline,
       helpCircle,
+      btcLogo,
+      ethLogo,
+      solLogo,
       searchQuery: '',
       availableTokens: [
-        { code: 'BTC', name: 'Bitcoin', icon: 'bitcoin' },
-        { code: 'ETH', name: 'Ethereum', icon: 'ethereum' },
-        { code: 'SOL', name: 'Solana', icon: 'solana' }
+        { code: 'BTC', name: 'Bitcoin', logo: btcLogo },
+        { code: 'ETH', name: 'Ethereum', logo: ethLogo },
+        { code: 'SOL', name: 'Solana', logo: solLogo }
       ],
       getStartedTokens: [
-        { code: 'BTC', name: 'Bitcoin', icon: 'bitcoin' },
-        { code: 'ETH', name: 'Ethereum', icon: 'ethereum' }
+        { code: 'BTC', name: 'Bitcoin', logo: btcLogo },
+        { code: 'ETH', name: 'Ethereum', logo: ethLogo }
       ]
     };
   },
@@ -181,10 +187,12 @@ ion-header {
 .token-icon {
   width: 38px;
   height: 38px;
-  border-radius: 50%;
+  object-fit: contain;
+  background: #fff;
+  display: block;
+  border-radius: 0;
   margin-right: 14px;
-  object-fit: cover;
-  background: var(--ion-color-dark);
+  padding: 3px;
 }
 .token-card h2 {
   color: var(--ion-color-primary);
@@ -230,8 +238,11 @@ ion-header {
   width: 44px;
   height: 44px;
   margin-bottom: 10px;
-  border-radius: 50%;
-  object-fit: cover;
+  object-fit: contain;
+  background: #fff;
+  display: block;
+  border-radius: 0;
+  padding: 4px;
 }
 .placeholder-icon {
   background: var(--ion-color-lightmedium);

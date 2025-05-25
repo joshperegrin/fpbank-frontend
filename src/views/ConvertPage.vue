@@ -20,7 +20,7 @@
             <ion-input 
               v-model="fromAmount" 
               placeholder="Enter amount" 
-              type="number" 
+              type="text" 
               class="crypto-input"
             ></ion-input>
           </ion-item>
@@ -36,7 +36,7 @@
             </ion-button>
             <ion-input 
               v-model="toAmount" 
-              type="number" 
+              type="text" 
               class="crypto-input"
               readonly
             ></ion-input>
@@ -64,8 +64,11 @@
 
 <script>
 import { IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent, IonCard, IonCardContent, IonItem, IonButton, IonIcon, IonInput, IonLabel } from "@ionic/vue";
-import { swapVerticalOutline, backspaceOutline, logoBitcoin, logoUsd } from "ionicons/icons";
+import { swapVerticalOutline, backspaceOutline } from "ionicons/icons";
 import { cryptoService } from '@/services/crypto.service';
+import { onIonViewWillEnter } from '@ionic/vue';
+import btcLogo from '@/assets/svgs/btc.svg';
+import ethLogo from '@/assets/svgs/eth.svg';
 
 export default {
   components: {
@@ -88,10 +91,10 @@ export default {
     return {
       swapVerticalOutline,
       backspaceOutline,
-      fromCrypto: { ticker: "BTC", icon: logoBitcoin },
-      toCrypto: { ticker: "ETH", icon: logoUsd },
-      fromAmount: null,
-      toAmount: null,
+      fromCrypto: { ticker: "BTC", icon: btcLogo },
+      toCrypto: { ticker: "ETH", icon: ethLogo },
+      fromAmount: '',
+      toAmount: '',
       focusedInput: 'from',
       exchangeRate: 0,
       numpadKeys: [
@@ -140,8 +143,12 @@ export default {
         // Show success message
         console.log('Conversion successful:', response);
         
-        // Navigate back to portfolio
-        this.$router.push("/portfolio");
+        // Navigate back to main crypto page and force reload
+        if (this.$router.currentRoute.value.path === '/tabs/tab3') {
+          this.$router.replace({ path: '/tabs/tab3', query: { reload: Date.now() } });
+        } else {
+          this.$router.push('/tabs/tab3');
+        }
       } catch (error) {
         console.error('Error converting crypto:', error);
         // Show error message
@@ -156,7 +163,12 @@ export default {
           this[target] = (this[target] ? this[target].toString() : '') + '.';
         }
       } else {
-        this[target] = (this[target] ? this[target].toString() : '') + key.label;
+        // Prevent leading zeros unless immediately followed by a dot
+        if (this[target] === '0' && key.label !== '.') {
+          this[target] = key.label;
+        } else {
+          this[target] = (this[target] ? this[target].toString() : '') + key.label;
+        }
       }
     },
   },
@@ -172,8 +184,12 @@ export default {
     }
 
     // Fetch initial exchange rate
-    // This should be replaced with actual API call to get exchange rate
     this.exchangeRate = 15.5; // Example rate: 1 BTC = 15.5 ETH
+    // Clear fields every time the page is entered
+    onIonViewWillEnter(() => {
+      this.fromAmount = '';
+      this.toAmount = '';
+    });
   },
 };
 </script>

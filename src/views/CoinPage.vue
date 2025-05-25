@@ -12,7 +12,7 @@
     </ion-header>
     <ion-content v-if="currentCoin">
       <div class="coin-chart-section">
-        <h1 class="coin-price">${{ currentCoin.price.toLocaleString() }}</h1>
+        <h1 class="coin-price">${{ formatUsd(currentCoin.price) }}</h1>
         <div class="coin-change" :class="{ negative: currentCoin.change < 0, positive: currentCoin.change > 0 }">
           {{ currentCoin.change > 0 ? '+' : '' }}{{ currentCoin.change }}$
         </div>
@@ -33,7 +33,7 @@
       </div>
       <div class="coin-balance-section">
         <div class="balance-label">Your Balance</div>
-        <div class="balance-value">{{ currentCoin.balance }} {{ currentCoin.symbol }} ≈${{ currentCoin.balanceUsd.toLocaleString() }}</div>
+        <div class="balance-value">{{ formatAmount(currentCoin.balance, currentCoin.symbol) }} ≈${{ formatUsd(currentCoin.balanceUsd) }}</div>
         <div class="coin-actions">
           <ion-button fill="outline" @click="goToBuy">Buy</ion-button>
           <ion-button fill="outline" @click="goToConvert">Convert</ion-button>
@@ -89,18 +89,17 @@ const route = useRoute();
 const router = useRouter();
 const coinId = computed(() => route.params.coinId || 'bitcoin');
 
-// Helper to normalize coinId to match keys in coinDetails
+// Map short codes to coinDetails keys
 function normalizeCoinId(id) {
-  if (!id) return 'bitcoin';
   const map = {
     btc: 'bitcoin',
-    bitcoin: 'bitcoin',
     eth: 'ethereum',
-    ethereum: 'ethereum',
     sol: 'solana',
+    bitcoin: 'bitcoin',
+    ethereum: 'ethereum',
     solana: 'solana',
   };
-  return map[id.toLowerCase()] || id.toLowerCase();
+  return map[id?.toLowerCase()] || id?.toLowerCase();
 }
 
 const chartTabs = ['1 Hour', '1 Day', '1 Week', '1 Month', '1 Year'];
@@ -224,6 +223,18 @@ const goToBuy = () => {
 const goToConvert = () => {
   router.push('/convert');
 };
+
+function formatAmount(amount, code) {
+  if (typeof amount !== 'number') amount = parseFloat(amount);
+  if (isNaN(amount)) return '0.000 ' + code;
+  return `${amount.toFixed(3)} ${code}`;
+}
+
+function formatUsd(amount) {
+  if (typeof amount !== 'number') amount = parseFloat(amount);
+  if (isNaN(amount)) return '0.00';
+  return amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
 </script>
 
 <style scoped>

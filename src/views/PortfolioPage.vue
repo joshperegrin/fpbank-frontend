@@ -14,7 +14,7 @@
           <h2>Total Value</h2>
         </ion-label>
         <ion-text>
-          <h1>PHP {{ totalValue.toFixed(2) }}</h1>
+          <h1>${{ totalValue.toFixed(2) }}</h1>
         </ion-text>
       </div>
       <div class="portfolio-breakdown">
@@ -47,11 +47,11 @@
       <div class="investment-summary">
         <div class="summary-item">
           <span>This Month Earnings</span>
-          <span class="earnings">+PHP {{ monthlyEarnings.toFixed(2) }}</span>
+          <span class="earnings">+${{ monthlyEarnings.toFixed(2) }}</span>
         </div>
         <div class="summary-item">
           <span>Total Investment</span>
-          <span>PHP {{ totalInvestment.toFixed(2) }}</span>
+          <span>${{ totalInvestment.toFixed(2) }}</span>
         </div>
       </div>
       <div class="tokens-list">
@@ -61,11 +61,12 @@
             :key="index" 
             button 
             class="coin-item"
+            @click="goToCoin(token.name)"
           >
-            <ion-icon slot="start" :icon="helpCircle" class="coin-icon"></ion-icon>
+            <img :src="getCoinLogo(token.name)" class="coin-icon" alt="logo" />
             <ion-label>
               <h2>{{ token.name }}</h2>
-              <p>{{ token.amount }}</p>
+              <p>{{ formatAmount(token.amount) }}</p>
             </ion-label>
             <ion-text slot="end" class="coin-value">
               <h3>{{ token.value }}</h3>
@@ -82,6 +83,9 @@
   import { IonItem, IonList, IonText, IonLabel, IonIcon, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton } from "@ionic/vue";
   import { returnDownBackOutline, helpCircle } from "ionicons/icons";
   import { cryptoService } from '@/services/crypto.service';
+  import btcLogo from '@/assets/svgs/btc.svg';
+  import ethLogo from '@/assets/svgs/eth.svg';
+  import solLogo from '@/assets/svgs/sol.svg';
 
   export default {
     components: {
@@ -102,6 +106,9 @@
       return {
         returnDownBackOutline,
         helpCircle,
+        btcLogo,
+        ethLogo,
+        solLogo,
         tokens: [],
         breakdown: [],
         totalValue: 0,
@@ -127,7 +134,7 @@
 
         this.breakdown = holdings.map(holding => ({
           name: `${holding.coin_code}`,
-          value: `PHP ${holding.total_value?.toFixed(2) ?? '0.00'}`,
+          value: `$${holding.total_value?.toFixed(2) ?? '0.00'}`,
           percentage: this.totalValue ? (holding.total_value / this.totalValue) * 100 : 0,
           class: holding.coin_code.toLowerCase()
         }));
@@ -153,6 +160,25 @@
         };
         return colors[assetClass] || '#888';
       },
+      goToCoin(coinName) {
+        const coinId = coinName.toLowerCase();
+        this.$router.push({ name: 'CoinPage', params: { coinId } });
+      },
+      formatAmount(amount) {
+        // amount is a string like '0.5830322580645162 BTC'
+        if (!amount) return amount;
+        const [num, code] = amount.split(' ');
+        const n = parseFloat(num);
+        if (isNaN(n)) return amount;
+        return `${n.toFixed(3)} ${code}`;
+      },
+      getCoinLogo(coinName) {
+        const code = coinName.toLowerCase();
+        if (code === 'btc') return this.btcLogo;
+        if (code === 'eth') return this.ethLogo;
+        if (code === 'sol') return this.solLogo;
+        return '';
+      }
     },
   };
 </script>
@@ -279,10 +305,17 @@
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
   }
   .coin-icon {
-    font-size: 45px;
-    color: var(--ion-text-color);
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+    max-width: 36px;
+    max-height: 36px;
+    object-fit: contain;
+    display: inline-block;
     margin-left: 8px;
     margin-right: 15px;
+    vertical-align: middle;
   }
   .coin-item h2 {
     margin: 0;
