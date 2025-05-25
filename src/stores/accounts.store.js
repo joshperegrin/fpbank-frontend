@@ -139,7 +139,7 @@ export const useAccountStore = defineStore(
                 }
                 try {
                     // Comment out backend call for debugging
-                    const response = await fetch('http://${server_address}/account/open-account', {
+                    const response = await fetch('http://${server_address}/account/', {
                       method: 'POST',
                       body: formData,
                     });
@@ -214,7 +214,7 @@ export const useAccountStore = defineStore(
                     return [];
                 }
             },
-            //DEBUG
+            //DEBUG feel free to remove, note that this is used as a function on OnMount(): in Dashboardpage1 before fetchbalance
             async verifySession() {
                 try {
                     if (!this.session_id) return false;

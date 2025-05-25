@@ -64,15 +64,20 @@ onMounted(async () => {
   const balanceSuccess = await accountStore.fetchBalance();
   if (!balanceSuccess) alert('Failed to load balance');
   const rawTransactions = await accountStore.fetchUserTransactionHistory(1, 3);
-  transactions.value = rawTransactions.map(t => ({
-    transactionName: t.transactionName,
-    transactionDate: t.transactionDate,
-    transferAmount: t.transferAmount,
-    transactionStatus: t.transactionStatus,
-    transactionReferenceNumber: t.transactionReferenceNumber
-  }));
-  console.log('Mapped transactions:', transactions.value); // Debug log
-  if (!transactions.value.length) alert('No transactions found');
+  transactions.value = rawTransactions.map(t => {
+    const mapped = {
+      transactionName: t.transactionName || 'Unknown',
+      transactionDate: t.transactionDate,
+      transferAmount: Number(t.transferAmount) || 0,
+      transactionStatus: t.transactionStatus || 'Pending',
+      transactionReferenceNumber: t.transactionReferenceNumber || '',
+      entryType: t.entryType || ''
+    };
+    console.log('Mapped raw transaction:', mapped); // Debug log
+    return mapped;
+  });
+  console.log('Mapped transactions:', transactions.value);
+  if (!transactions.value.length) console.log('No transactions found');
 });
 </script>
 

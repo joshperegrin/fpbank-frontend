@@ -21,8 +21,8 @@
           </div>
           <!-- Right Side -->
           <div class="right-section">
-            <ion-text :color="amountColor(transaction.amount)">
-              <h3 class="amount">{{ formattedAmount(transaction.amount) }}</h3>
+            <ion-text :color="amountColor(transaction.amount, transaction.transactionType)">
+              <h3 class="amount">{{ formattedAmount(transaction.amount, transaction.transactionType) }}</h3>
             </ion-text>
             <ion-text :color="statusColor(transaction.status)">
               <p class="status">{{ transaction.status }}</p>
@@ -54,8 +54,8 @@
 </template>
 
 <script setup>
-import { IonList, IonItem, IonLabel, IonText } from '@ionic/vue';
-import { computed } from 'vue';
+import {IonList, IonItem, IonLabel, IonText} from '@ionic/vue';
+import {computed} from 'vue';
 
 const props = defineProps({
   Transactions: {
@@ -67,9 +67,29 @@ const props = defineProps({
         (typeof t.transactionDate === 'string' || t.transactionDate instanceof Date) &&
         typeof t.transferAmount === 'number' &&
         typeof t.transactionStatus === 'string' &&
-        typeof t.transactionReferenceNumber === 'string'
+        typeof t.transactionReferenceNumber === 'string' &&
+        (typeof t.entryType === 'string' || t.entryType === undefined)
     ),
   },
+});
+
+const sortedTransactions = computed(() => {
+  const transactions = [...props.Transactions]
+      .map(t => {
+        console.log('Transaction:', t); // Debug log
+        return {
+          clientName: t.transactionName,
+          datetime: t.transactionDate,
+          amount: t.transferAmount,
+          status: t.transactionStatus?.toLowerCase() || 'pending',
+          detailId: t.transactionReferenceNumber,
+          entryType: t.entryType?.toUpperCase() || ''
+        };
+      })
+      .sort((a, b) => new Date(b.datetime) - new Date(a.datetime))
+      .slice(0, 3);
+  console.log('Sorted transactions:', transactions); // Debug log
+  return transactions;
 });
 
 // Methods
@@ -88,19 +108,6 @@ function isValidData(transaction) {
   );
 }
 
-const sortedTransactions = computed(() => {
-  return [...props.Transactions]
-      .map(t => ({
-        clientName: t.transactionName,
-        datetime: t.transactionDate,
-        amount: t.transferAmount,
-        status: t.transactionStatus.toLowerCase(),
-        detailId: t.transactionReferenceNumber
-      }))
-      .sort((a, b) => new Date(b.datetime) - new Date(a.datetime))
-      .slice(0, 3);
-});
-
 function formattedDatetime(datetime) {
   if (!isValidDate(datetime)) return 'Invalid Date';
   const date = new Date(datetime);
@@ -114,17 +121,22 @@ function formattedDatetime(datetime) {
   });
 }
 
-function formattedAmount(amount) {
-  const sign = amount >= 0 ? '+' : '-';
+function formattedAmount(amount, entryType) {
+  console.log('Formatting amount:', {amount, entryType}); // Debug log
+  const type = entryType?.toUpperCase().trim();
+  const sign = type === 'CREDIT' ? '+' : type === 'DEBIT' ? '-' : '';
   return `${sign}$${Math.abs(amount).toFixed(2)}`;
 }
 
-function amountColor(amount) {
-  return amount >= 0 ? 'success' : 'danger';
+function amountColor(entryType) {
+  console.log('Amount color for entryType:', entryType); // Debug log
+  const type = typeof entryType === 'string' ? entryType.toUpperCase().trim() : null;
+  return type === 'CREDIT' ? 'success' : type === 'DEBIT' ? 'danger' : 'medium';
 }
 
 function statusColor(status) {
-  return status.toLowerCase() === 'sent' ? 'success' : 'danger';
+  const validStatus = status?.toLowerCase();
+  return ['sent', 'complete', 'completed'].includes(validStatus) ? 'success' : 'danger';
 }
 </script>
 

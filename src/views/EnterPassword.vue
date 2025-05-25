@@ -118,13 +118,20 @@
         validID: registrationStore.validID ? registrationStore.validID.name : null,
         password: registrationStore.password,
       });
+      console.log('Before signup, current route:', router.currentRoute.value.path);
       await accountStore.signup();
-      // Ensure session is set
       if (!accountStore.session_id) {
         throw new Error('Session not established');
       }
+      // Persist session_id
+      localStorage.setItem('session_id', accountStore.session_id);
+      console.log('After signup, session_id:', accountStore.session_id, 'Navigating to /tabs/tab1');
       await showToast('Signup successful!');
-      router.replace('/tabs/tab1'); // Use replace to avoid back navigation issues
+      router.replace('/tabs/tab1');
+      // Log post-navigation route after a delay
+      setTimeout(() => {
+        console.log('Post-navigation route:', router.currentRoute.value.path);
+      }, 1000);
     } catch (error) {
       console.error('Signup error:', error);
       showToast(`Signup failed: ${error.message}`);
