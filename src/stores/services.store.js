@@ -135,6 +135,40 @@ export const useServicesStore = defineStore(
 
       
     },
+    async internalTransfer(){
+      const request_body = {
+        amount: this.serviceDetails.transfer_Amount,
+        note: this.serviceDetails.transfer_Note,
+        destination_AccountNumber: this.serviceDetails.transfer_ReceivingAccountNumber,
+      }
+      
+      const response = await fetch("http://" + server_address + "/transfer/internal", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Session-ID': accountStore.session_id
+        },
+        body: JSON.stringify(request_body)
+      })
+
+      let body;
+      try {
+          body = await response.json();
+      } catch (parseError) {
+          throw new Error(`Invalid JSON response from server: ${await response.text()}`);
+      }
+
+      if (!response.ok) {
+          throw new Error(body?.message || `Server returned ${response.status}`);
+      }
+      return {
+        transactionDateTime: body.transactionDate,
+        transactionName: body.transactionName,
+        referenceNumber: body.transactionReferenceNumber,
+        transactionStatus: body.transactionStatus,
+        serviceCharge: body.serviceCharge,
+      }
+    },
     async loadEWallet(){
       console.log(this.serviceDetails.ewallet_EWalletName)
       console.log(this.serviceDetails.ewallet_WalletNumber)

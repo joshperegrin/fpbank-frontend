@@ -24,8 +24,7 @@
         </div>
         <div class="detail-list"> <div> Destination Account </div>
           <div>
-            {{servicesStore.serviceDetails.transfer_ReceivingAccountName}}<br/>
-            {{servicesStore.serviceDetails.transfer_ReceivingBank}}<br/>
+            Full Port Bank<br/>
             {{servicesStore.serviceDetails.transfer_ReceivingAccountNumber}}
           </div>
         </div>
@@ -34,19 +33,9 @@
             PHP {{servicesStore.serviceDetails.transfer_Amount}}
           </div>
         </div>
-        <div class="detail-list"> <div> Transfer Channel </div>
-          <div>
-          <img v-if="this.servicesStore.serviceDetails.transfer_Channel !== ''" :src="(this.servicesStore.serviceDetails.transfer_Channel === 'instapay')? instapayImage: (this.servicesStore.serviceDetails.transfer_Channel === 'pesonet')? pesonetImage: ''"/>
-          </div>
-        </div>
         <div v-if="this.servicesStore.serviceDetails.transfer_Note !== null" class="detail-list"> <div> Notes </div>
           <div>
             {{this.servicesStore.serviceDetails.transfer_Note}}
-          </div>
-        </div>
-        <div class="detail-list"> <div> Service Charge </div>
-          <div>
-            PHP {{(this.servicesStore.serviceDetails.transfer_Channel === 'instapay')? this.servicesStore.serviceCharge.instapay : this.servicesStore.serviceCharge.pesonet }}.00
           </div>
         </div>
       </div>
@@ -178,7 +167,7 @@ export default {
   },
   methods: {
     confirm(){
-      this.$router.push(`/tabs/tab2/transfer/external/transferResult`);
+      this.$router.push(`/tabs/tab2/transfer/internal/transferResult`);
     },
   }
 }

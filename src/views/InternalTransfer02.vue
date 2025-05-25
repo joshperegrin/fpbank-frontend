@@ -10,14 +10,7 @@
     </ion-header>
     <ion-content class="ion-padding">
       <div class="content-container">
-        <div class="ion-activatable transfer" @click="this.$router.push(`/tabs/tab2/transfer/external/destinationSelect/bankSelect`)">
-          <ion-ripple-effect></ion-ripple-effect>
-            <span v-if="!(this.servicesStore.serviceDetails.transfer_ReceivingBank && this.servicesStore.serviceDetails.transfer_ReceivingBank.trim() !== '')">Select Bank</span>
-            <span v-else>{{this.servicesStore.serviceDetails.transfer_ReceivingBank}}</span>
-            <ion-icon :icon="this.chevronForwardOutline"></ion-icon>
-        </div>
         <ion-input maxlength="10" @ionInput="edited('number', $event)" v-model="this.receivingAccountNumber" ref="accountnumber" label="Account Number*" label-placement="stacked" fill='outline'></ion-input>
-        <ion-input maxlength="35" @ionInput="edited('name', $event)" v-model="this.receivingAccountName" ref="accountname" label="Receiver Name*" label-placement="stacked" fill='outline'></ion-input>
         <div>
           <ion-toggle>Save to Favorites</ion-toggle>
         </div>
@@ -138,9 +131,7 @@ export default {
       }
     },
     async confirm(){
-      if(this.servicesStore.serviceDetails.transfer_ReceivingBank !== "" &&
-        this.receivingAccountName !== "" &&
-        this.receivingAccountNumber !== "" &&
+      if(this.receivingAccountNumber !== "" &&
         this.receivingAccountNumber.length === 10) {
           this.servicesStore.serviceDetails.transfer_ReceivingAccountNumber = this.receivingAccountNumber;
           this.servicesStore.serviceDetails.transfer_ReceivingAccountName = this.receivingAccountName;
@@ -150,16 +141,12 @@ export default {
           this.$refs.accountnumber.$el.classList.add('ion-invalid')
           this.$refs.accountnumber.$el.classList.add('ion-touched')
         }
-        if(this.receivingAccountName === ""){
-          this.$refs.accountname.$el.classList.add('ion-invalid')
-          this.$refs.accountname.$el.classList.add('ion-touched')
-        }
         if(this.receivingAccountNumber === ""){
           this.$refs.accountnumber.$el.classList.add('ion-invalid')
           this.$refs.accountnumber.$el.classList.add('ion-touched')
         }
 
-        if(this.servicesStore.serviceDetails.transfer_ReceivingBank === "" || this.receivingAccountName === "" || this.receivingAccountNumber === ""){
+        if(this.receivingAccountNumber === ""){
         const toast = await toastController.create({
           message: 'Please complete all receiving bank account details.',
           duration: 1500,

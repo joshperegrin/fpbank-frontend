@@ -16,7 +16,11 @@
           Transfer to Other Banks
         </ServicesPageButton>
         <ServicesPageButton :icon_name="walletOutline"> Topup eWallet </ServicesPageButton>
-        <ServicesPageButton :icon_name="sendOutline"> Transfer to Other FullPort </ServicesPageButton>
+        <ServicesPageButton
+          :icon_name="sendOutline"
+          @click="this.$router.push('/tabs/tab2/transfer/internal')">
+          Transfer to Other FullPort
+        </ServicesPageButton>
         <ServicesPageButton :icon_name="cashOutline"> Cardless Withdrawal </ServicesPageButton>
         <ServicesPageButton :icon_name="qrCodeOutline"> Generate QR Code </ServicesPageButton>
       </div>
