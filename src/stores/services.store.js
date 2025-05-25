@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
-
+import { useAccountStore } from '../stores/accounts.store';
+const server_address = '157.245.207.138'
+const accountStore = useAccountStore()
 export const useServicesStore = defineStore(
   'services',
   {
@@ -42,31 +44,31 @@ export const useServicesStore = defineStore(
   },
   actions: {
     async fetchBanks(){
-      if(false){
+      let response;
+      try {
+        response = await fetch('http://' + server_address + '/transfer/externals', {
+          method: 'GET',
+          headers: {
+            'X-Session-ID': accountStore.session_id
+          },
+        });
+
+        let body;
         try {
-          const response = await fetch('https://mybackend.com/api/endpoint', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-Session-ID': this.session_id
-            },
-            body: JSON.stringify({
-              name: 'John Doe',
-              email: 'john@example.com'
-            })
-          });
-
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-
-          const data = await response.json();
-          console.log('Success:', data);
-        } catch (error) {
-          console.error('Error:', error.message);
+            body = await response.json();
+        } catch (parseError) {
+            throw new Error(`Invalid JSON response from server: ${await response.text()}`);
         }
+
+        if (!response.ok) {
+            throw new Error(body?.message || `Server returned ${response.status}`);
+        }
+
+        this.listOfBanks = body.banks
+      } catch (error) {
+        console.error('Error:', error.message);
       }
-      this.listOfBanks = ['LMAO', 'BPI', 'BDO', 'CHINA BANK', 'CIMB BANK', 'CITIBANK', 'EAST WEST BANK', 'GCASH', 'GOTYME BANK'];
+    
     },
     async payBills(){
       console.log(this.serviceDetails.biller_BillerName)
@@ -93,6 +95,45 @@ export const useServicesStore = defineStore(
         referenceNumber: 'MAV1234567890U8',
         transactionStatus: 'success',
       }
+    },
+    async externalTransfer(){
+      const request_body = {
+        amount: this.serviceDetails.transfer_Amount,
+        note: this.serviceDetails.transfer_Note,
+        recipient_AccountNumber: this.serviceDetails.transfer_ReceivingAccountNumber,
+        recipient_Bank: this.serviceDetails.transfer_ReceivingBank,
+        recipient_AccountName: this.serviceDetails.transfer_ReceivingAccountName,
+        transferChannel: this.serviceDetails.transfer_Channel,
+      }
+      
+      const response = await fetch("http://" + server_address + "/transfer/external", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Session-ID': accountStore.session_id
+        },
+        body: JSON.stringify(request_body)
+      })
+
+      let body;
+      try {
+          body = await response.json();
+      } catch (parseError) {
+          throw new Error(`Invalid JSON response from server: ${await response.text()}`);
+      }
+
+      if (!response.ok) {
+          throw new Error(body?.message || `Server returned ${response.status}`);
+      }
+      return {
+        transactionDateTime: body.transactionDate,
+        transactionName: body.transactionName,
+        referenceNumber: body.transactionReferenceNumber,
+        transactionStatus: body.transactionStatus,
+        serviceCharge: body.serviceCharge,
+      }
+
+      
     },
     async loadEWallet(){
       console.log(this.serviceDetails.ewallet_EWalletName)

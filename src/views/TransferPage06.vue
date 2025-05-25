@@ -3,7 +3,7 @@
     <ion-content class="ion-padding padding-top" :fullscreen="true">
       <div v-if="this.loaded" class="content-container">
         <div class="header02">
-          <ion-icon :src="(this.transactionDetails.status === 'success')? checkmarkCircle:closeCircle"></ion-icon>
+          <ion-icon :src="(this.transactionDetails.status === 'COMPLETED')? checkmarkCircle:closeCircle"></ion-icon>
           <span class="transaction-status"> {{this.transactionDetails.status.toLowerCase().replace(/^./, c => c.toUpperCase())}} </span>
         </div>
         <div class="header02">
@@ -132,9 +132,9 @@ export default {
   },
   methods: {
     async processTransaction(){
-      const fetchedTransactionDetails = await this.servicesStore.fundTransfer();
+      const fetchedTransactionDetails = await this.servicesStore.externalTransfer();
       this.transactionDetails.serviceCharge = fetchedTransactionDetails.serviceCharge
-      this.transactionDetails.transactionDateTime = fetchedTransactionDetails.transactionDateTime
+      this.transactionDetails.transactionDateTime = new Date(fetchedTransactionDetails.transactionDateTime)
       this.transactionDetails.transactionName = fetchedTransactionDetails.transactionName
       this.transactionDetails.referenceNumber = fetchedTransactionDetails.referenceNumber
       this.transactionDetails.status = fetchedTransactionDetails.transactionStatus

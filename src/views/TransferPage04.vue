@@ -10,7 +10,7 @@
     </ion-header>
     <ion-content class="ion-padding">
       <div>
-        <div class="ion-activatable transfer-channel-button" @click="set('instapay')">
+        <div class="ion-activatable transfer-channel-button" @click="set('INSTAPAY')">
           <ion-ripple-effect></ion-ripple-effect>
           <img src="../assets/imgs/instapay.png"/>
           <ul>
@@ -18,7 +18,7 @@
             <li>A PHP 15.00 fee per successful transaction shall apply.</li>
           </ul>
         </div>
-        <div class="ion-activatable transfer-channel-button" @click="set('pesonet')">
+        <div class="ion-activatable transfer-channel-button" @click="set('PESONET')">
           <ion-ripple-effect></ion-ripple-effect>
           <img src="../assets/imgs/PESONet.png"/>
           <ul>

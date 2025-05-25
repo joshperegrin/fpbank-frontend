@@ -103,6 +103,7 @@ export default {
       console.log(this.servicesStore.listOfBanks);
       if (this.servicesStore.listOfBanks.length == 0){
         try{
+        debugger;
           await this.servicesStore.fetchBanks();
         } catch(e){
           console.log("do stuff");

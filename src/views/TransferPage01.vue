@@ -25,7 +25,7 @@
         </div>
         <div :class="(this.servicesStore.serviceDetails.transfer_ReceivingBank && this.servicesStore.serviceDetails.transfer_ReceivingBank.trim() !== '')?['ion-activatable', 'transfer']:['deactivated', 'transfer']" @click="handleClick()">
           <ion-ripple-effect v-if="this.servicesStore.serviceDetails.transfer_ReceivingBank && this.servicesStore.serviceDetails.transfer_ReceivingBank.trim() !== ''"></ion-ripple-effect>
-          <img v-if="this.servicesStore.serviceDetails.transfer_Channel !== ''" :src="(this.servicesStore.serviceDetails.transfer_Channel === 'instapay')? instapayImage: (this.servicesStore.serviceDetails.transfer_Channel === 'pesonet')? pesonetImage: ''"/>
+          <img v-if="this.servicesStore.serviceDetails.transfer_Channel !== ''" :src="(this.servicesStore.serviceDetails.transfer_Channel === 'INSTAPAY')? instapayImage: (this.servicesStore.serviceDetails.transfer_Channel === 'PESONET')? pesonetImage: ''"/>
           <div v-else class="selectDestination"><span>Transfer Channel</span> <ion-icon :icon="this.chevronForwardOutline"></ion-icon></div>
         </div>
         <ion-input ref="amountTextbox" :disabled="this.servicesStore.serviceDetails.transfer_Channel === ''" label="Amount*" type="number" inputmode="decimal" step="0.01" min="0"  v-model="amount" @input="validateInput" label-placement="stacked" fill='outline'></ion-input>
@@ -249,11 +249,11 @@ export default {
         this.$refs.amountTextbox.$el.classList.add('ion-invalid')
         this.$refs.amountTextbox.$el.classList.add('ion-touched')
         toastMessage = `Insufficient Funds`
-      } else if(this.servicesStore.serviceDetails.transfer_Channel === 'instapay' && parseFloat(this.amount) > this.servicesStore.transferLimit.instapay){
+      } else if(this.servicesStore.serviceDetails.transfer_Channel === 'INSTAPAY' && parseFloat(this.amount) > this.servicesStore.transferLimit.instapay){
         this.$refs.amountTextbox.$el.classList.add('ion-invalid')
         this.$refs.amountTextbox.$el.classList.add('ion-touched')
         toastMessage = `You are over the Instapay transfer limit: PHP${this.servicesStore.transferLimit.instapay}.00`
-      } else if (this.servicesStore.serviceDetails.transfer_Channel === 'pesonet' && parseFloat(this.amount) > this.servicesStore.transferLimit.pesonet){
+      } else if (this.servicesStore.serviceDetails.transfer_Channel === 'PESONET' && parseFloat(this.amount) > this.servicesStore.transferLimit.pesonet){
         this.$refs.amountTextbox.$el.classList.add('ion-invalid')
         this.$refs.amountTextbox.$el.classList.add('ion-touched')
         toastMessage = `You are over the PESONet transfer limit: PHP${this.servicesStore.transferLimit.pesonet}.00`
