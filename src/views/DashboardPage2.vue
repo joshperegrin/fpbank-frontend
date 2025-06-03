@@ -12,7 +12,6 @@
       </GenericHeader>
       <div class="content-body">
         <!--<DashboardSavingsDetails/>--> <!--NOTE: Backlogged-->
-        <CreditCard :card-details="cardDetails" />
 
         <GenericCardWidgets title="Recent Transactions">
           <HistoryPreview :Transactions="transactions" />
@@ -40,6 +39,7 @@ import { useAccountStore } from "../stores/accounts.store";
 
 const accountStore = useAccountStore();
 const transactions = ref([]);
+
 
 const account = computed(() => ({
   amount: accountStore.accountInfo.balance,
