@@ -15,7 +15,7 @@
 <!-- TODO: Add live demo link if available -->
 <!-- [Live Demo](https://demo-link.com) -->
 
-**A modern, cross-platform mobile banking application frontend built with Ionic Vue and Capacitor.**
+**A modern, cross-platform simulated mobile banking application frontend built with Ionic Vue and Capacitor.**
 
 
 
