@@ -23,9 +23,9 @@
 
 ## 📖 Overview
 
-The FPBank Frontend is a simulated banking mobile application developed as part of an academic project. It is a client-side application designed to demonstrate modern mobile and web application development practices within a banking-inspired context. Built using Vue.js 3 and the Ionic Framework, the application provides a responsive and intuitive user interface that can be deployed across multiple platforms—including iOS, Android, and the Web (PWA)—through Capacitor.
+The Full Port Bank Frontend is a simulated banking mobile application developed as part of an academic project. It is a client-side application designed to demonstrate modern mobile and web application development practices within a banking-inspired context. Built using Vue.js 3 and the Ionic Framework, the application provides a responsive and intuitive user interface that can be deployed across multiple platforms—including iOS, Android, and the Web (PWA)—through Capacitor.
 
-This project serves as a frontend prototype for typical banking workflows, allowing users to interact with simulated features such as account viewing and transaction-related interfaces. It connects to a separate backend API (also simulated) for data handling and transaction processing, focusing on architectural design, frontend-backend integration, and user experience rather than real financial operations.
+This project serves as a frontend prototype for typical banking workflows, allowing users to interact with simulated features such as account viewing and transaction-related interfaces. It connects to a separate simulated backend API [Full Port Bank Backend](https://github.com/joshperegrin/fpbank-backend) for data handling and transaction processing, focusing on architectural design, frontend-backend integration, and user experience rather than real financial operations.
 
 **Tech Stack:**
 
